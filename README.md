@@ -25,7 +25,6 @@ Contributors:
     Erin Torbiak
     Abram Hindle
     Cody Flatla
-    Peter Maidens
-    Kevin Chow
     Brandon Cheung
-    Jonathon Machinski
+    Ji Cheng
+    Liwen Chen
