@@ -43,7 +43,6 @@
    
    - As an author I want to make posts.
    - As an author, posts I create can link to images.
-   - As a server admin, images can be hosted on my server.
    - As an author, posts I create be private to me
    - As an author, posts I create be private to another author
    - As an author, posts I create be private to my friends
@@ -53,11 +52,14 @@
    - As an author, posts I make can be in simple plain text
    - As an author, posts I make can be in markdown (commonMark is good)
    - As an author, I want a consistent identity per server
-   - As a server admin, I want to host multiple authors on my server
-   - As a server admin, I want to share or not share posts with users
-     on other servers.
-   - As a server admin, I want to share or not share images with users
-     on other servers.
+   - As an author, other authors cannot modify my data
+   - As an author, I want to comment on posts that I can access
+   - As an author, my server will know about my friends
+   - As an author, When I befriend someone it follows them, only when
+     the other authors befriends me do I count as a real friend.
+   - As an author, I want to know if I have friend requests.
+   - As an author I should be able to browse the public posts of everyone
+   - As an author I should be able to browse the posts of others depending on my status
    - As an author, I want to pull in my github activity to my "stream"
    - As an author, I want to post posts to my "stream"
    - As an author, I want to delete my own posts.
@@ -78,14 +80,6 @@
    - As a server admin, I don't want to do heavy setup to get the
      posts of my author's friends.
    - As a server admin, I want a restful interface for most operations
-   - As an author, other authors cannot modify my data
-   - As an author, I want to comment on posts that I can access
-   - As an author, my server will know about my friends
-   - As an author, When I befriend someone it follows them, only when
-     the other authors befriends me do I count as a real friend.
-   - As an author, I want to know if I have friend requests.
-   - As an author I should be able to browse the public posts of everyone
-   - As an author I should be able to browse the posts of others depending on my status
    - As a server admin, I want to be able to add nodes to share with
    - As a server admin, I want to be able to remove nodes and stop
      sharing with them.
@@ -95,6 +89,12 @@
      with HTTP Basic Auth
    - As a server admin, I can disable the node to node interfaces for
      connections that are not authenticated!
+   - As a server admin, images can be hosted on my server.
+   - As a server admin, I want to host multiple authors on my server
+   - As a server admin, I want to share or not share posts with users
+     on other servers.
+   - As a server admin, I want to share or not share images with users
+     on other servers.
 
 ** Main Concepts
    - Author
