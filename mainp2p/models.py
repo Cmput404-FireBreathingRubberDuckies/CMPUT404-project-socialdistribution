@@ -4,9 +4,9 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
-class Posts(models.Model):
+class Post(models.Model):
 	uid = models.ForeignKey(User, on_delete=models.CASCADE)
-	content = models.CharField(max_length=30)
+	markdown = models.BooleanField(default=False)
+	content = models.TextField()
 	image = models.ImageField(upload_to="images/")
-	contentType = models.TextField()
-	visibilty = models.CharField(max_length=30)
+	visibility = models.CharField(max_length=30)
