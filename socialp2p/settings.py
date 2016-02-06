@@ -77,13 +77,12 @@ WSGI_APPLICATION = 'socialp2p.wsgi.application'
 
 DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'd4ihuk572s4c8l',                      # Or path to database file if using sqlite3.
-            # The following settings are not used with sqlite3:
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'd4ihuk572s4c8l',
             'USER': 'jceokqmtcmeild',
             'PASSWORD': 'kGV18E4FOPI3S5l1e7gsk8feoV',
-            'HOST': 'ec2-54-235-152-114.compute-1.amazonaws.com',                      # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
-            'PORT': '5432',                      # Set to empty string for default.
+            'HOST': 'ec2-54-235-152-114.compute-1.amazonaws.com',
+            'PORT': '5432',
         }
 }
 
@@ -120,8 +119,12 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
-
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+)
