@@ -1,14 +1,6 @@
 import pip, os
 
-_all_ = [
-    "Django==1.9.1",
-    "gunicorn==19.4.5",
-    "whitenoise==2.0.6",
-]
-
-heroku = [
-    "psycopg2=2.6.1",
-]
+psycopg2 = "psycopg2==2.6.1"
 
 ON_PAAS = 'DATABASE_URL' in os.environ
 
@@ -17,7 +9,12 @@ def install(packages):
         pip.main(['install', package])
 
 if __name__ == '__main__':
-    install(_all_)
+    f = open('requirements.txt', 'r')
+    _all_ = [line.rstrip('\n') for line in f]
 
-    if(ON_PAAS):
-        install(heroku)
+    if(not ON_PAAS):
+        _all_.remove(psycopg2)
+
+    print "Installing: ", _all_
+
+    install(_all_)
