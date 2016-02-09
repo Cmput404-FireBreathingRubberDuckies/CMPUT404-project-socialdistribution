@@ -1,6 +1,6 @@
 import pip, os
 
-psycopg2 = "psycopg2==2.6.1"
+psycopg2 = "psycopg2"
 
 ON_PAAS = 'DATABASE_URL' in os.environ
 
@@ -10,10 +10,11 @@ def install(packages):
 
 if __name__ == '__main__':
     f = open('requirements.txt', 'r')
-    _all_ = [line.rstrip('\n') for line in f]
 
-    if(not ON_PAAS):
-        _all_.remove(psycopg2)
+    if(ON_PAAS):
+        _all_ = [line.rstrip('\n') for line in f]
+    else:
+        _all_ = [line.rstrip('\n') for line in f if not line.startswith(psycopg2)]
 
     print "Installing: ", _all_
 
