@@ -16,6 +16,9 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+# Heroku is our PaaP for now.
+ON_PAAS = 'DATABASE_URL' in os.environ
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
@@ -73,19 +76,27 @@ WSGI_APPLICATION = 'socialp2p.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
+if ON_PAAS:
+    DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+                'NAME': 'd4ihuk572s4c8l',                      # Or path to database file if using sqlite3.
+                # The following settings are not used with sqlite3:
+                'USER': 'jceokqmtcmeild',
+                'PASSWORD': 'kGV18E4FOPI3S5l1e7gsk8feoV',
+                'HOST': 'ec2-54-235-152-114.compute-1.amazonaws.com',                      # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
+                'PORT': '5432',                      # Set to empty string for default.
+            }
+    }
 
-DATABASES = {
+else:
+    # stock django, local development.
+    DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'd4ihuk572s4c8l',                      # Or path to database file if using sqlite3.
-            # The following settings are not used with sqlite3:
-            'USER': 'jceokqmtcmeild',
-            'PASSWORD': 'kGV18E4FOPI3S5l1e7gsk8feoV',
-            'HOST': 'ec2-54-235-152-114.compute-1.amazonaws.com',                      # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
-            'PORT': '5432',                      # Set to empty string for default.
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
-}
-
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
