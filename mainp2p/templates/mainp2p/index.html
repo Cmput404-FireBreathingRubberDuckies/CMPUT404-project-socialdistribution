@@ -3,6 +3,12 @@
 
 </head>
 <body>
-<p>Hello world!</p>
+<p>Username: {{Username}}</p>
+<ul>
+{% for x in name %}
+<li>{{x.friends}}</li>
+{% endfor %}
+</ul>
+
 </body>
 </html>
