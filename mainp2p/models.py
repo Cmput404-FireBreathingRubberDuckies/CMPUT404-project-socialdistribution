@@ -15,3 +15,4 @@ class Author(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	host = models.CharField(max_length=30)
 	photo = models.ImageField(upload_to="images/profile", null=True)
+	friends = models.ManyToManyField(User, related_name="friend", blank=True)
