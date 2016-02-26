@@ -12,7 +12,7 @@ class Post(models.Model):
 	user_can_view = models.ForeignKey(User, related_name='+', blank=True)
 
 class Author(models.Model):
-	username = models.OneToOneField(User, on_delete=models.CASCADE)
+	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	host = models.CharField(max_length=30)
 	photo = models.ImageField(upload_to="images/profile", null=True)
 	friends = models.ManyToManyField(User, related_name="friend", blank=True)
