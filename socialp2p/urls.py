@@ -18,6 +18,6 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
+    url(r'^', include('mainp2p.urls', namespace='mainp2p')),
     url(r'^admin/', admin.site.urls),
-    url(r'^mainp2p/', include('mainp2p.urls', namespace='mainp2p')),
 ]

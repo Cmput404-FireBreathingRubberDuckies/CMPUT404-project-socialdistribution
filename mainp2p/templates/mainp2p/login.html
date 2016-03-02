@@ -36,9 +36,10 @@ div{
 </head>
 <body>
 <div>
-<form action="{% url 'mainp2p:main' %}" method="GET">
-Username <input name="UserName"/></br>
-Password <input name="Password"/></br>
+<form action="{% url 'mainp2p:authenticate' %}" method="POST">
+{% csrf_token %}
+Username <input type="text" name="username"/></br>
+Password <input type="password" name="password"/></br>
 <input type="submit" value="Sign in" name="SignInButton" class="button"/>
 </form>
 </div>

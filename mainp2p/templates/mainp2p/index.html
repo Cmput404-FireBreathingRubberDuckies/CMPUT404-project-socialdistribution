@@ -3,12 +3,9 @@
 
 </head>
 <body>
-<p>Username: {{Username}}</p>
+<p>Username: {{user.username}}</p>
 <ul>
-{% for x in name %}
-<li>{{x.friends}}</li>
-{% endfor %}
-</ul>
+<a href="{% url 'mainp2p:logout' %}">Logout</a>
 
 </body>
 </html>
