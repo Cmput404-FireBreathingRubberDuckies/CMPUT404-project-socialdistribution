@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
-from mainp2p.models import Post, Author, Comment
+from socialp2p.models import Post, Author, Comment
 
 class AuthorInline(admin.StackedInline):
     model = Author

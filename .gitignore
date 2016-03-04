@@ -2,3 +2,5 @@ venv/
 db.sqlite3
 *.pyc
 .DS_STORE
+socialp2p/migrations/
+.iml

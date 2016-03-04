@@ -10,7 +10,7 @@
 {% for a in userid.author.friends.all %}
 <p>{{a.username}}</p>
 {% endfor %}
-<form action="{% url 'mainp2p:detail' userid.id %}" method="POST" id="add">
+<form action="{% url 'socialp2p:detail' userid.id %}" method="POST" id="add">
 	{% csrf_token %}
 	<input type="submit" value="Add Friend" />
 </form>

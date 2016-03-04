@@ -1,1 +1,1 @@
-web: gunicorn socialp2p.wsgi --log-file -
+web: gunicorn settings.wsgi --log-file -

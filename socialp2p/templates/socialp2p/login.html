@@ -1,17 +1,17 @@
 <html>
 <head>
-<title>Sign Up Page</title>
+<title>Log in Page</title>
 <style type="text/css">
 div{
-    margin: 30%;
-    text-align: center;
+	margin: 30%;
+	text-align: center;
 }
 .button{
   display: inline-block;
   padding: 15px 25px;
   font-size: 24px;
   cursor: pointer;
-  text-align: center;   
+  text-align: center;	
   text-decoration: none;
   outline: none;
   color: white;
@@ -22,8 +22,8 @@ div{
   box-shadow: 0 9px #999;
 }
 .button:hover {
-    background-color: white;
-    border: 2px solid #008CBA;
+	background-color: white;
+	border: 2px solid #008CBA;
    color: black;
 }
 
@@ -36,11 +36,11 @@ div{
 </head>
 <body>
 <div>
-<form action="{% url 'mainp2p:signup' %}" method="POST">
+<form action="{% url 'socialp2p:authenticate' %}" method="POST">
 {% csrf_token %}
 Username <input type="text" name="username"/></br>
 Password <input type="password" name="password"/></br>
-<input type="submit" value="Sign up" name="SignUpButton" class="button"/>
+<input type="submit" value="Sign in" name="SignInButton" class="button"/>
 </form>
 </div>
 

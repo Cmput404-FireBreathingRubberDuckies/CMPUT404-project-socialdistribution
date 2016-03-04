@@ -20,6 +20,7 @@ class Author(models.Model):
 	friends = models.ManyToManyField(User, related_name="friend", blank=True)
 
 class Comment(models.Model):
+	uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	post = models.ForeignKey(Post, on_delete=models.CASCADE)
 	content = models.TextField()

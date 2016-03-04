@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mainp2p'
+    'socialp2p'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -54,7 +54,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'socialp2p.urls'
+ROOT_URLCONF = 'settings.urls'
 
 TEMPLATES = [
     {
@@ -72,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'socialp2p.wsgi.application'
+WSGI_APPLICATION = 'settings.wsgi.application'
 
 
 # Database
@@ -141,4 +141,4 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
 )
 
-LOGIN_URL = 'mainp2p:login'
+LOGIN_URL = 'socialp2p:login'
