@@ -16,6 +16,12 @@
             width: 600px;
             outline-color: #eb7350;
         }
+        .search_button{
+            position: relative;
+            display: inline-block;
+            left: -30px;
+            top: 9px;
+        }
     </style>
 </head>
 <body>
@@ -24,8 +30,10 @@
             <div class="navbar-header">
                 <a style="margin-left: 20px;" href="#"><img src="img/16692583.jpg" width="50px" height="50px"></a>
             </div>
-
-            <input type="text" class="search">
+            <div >
+                <input type="text" class="search" id="search_input">
+                <a class="search_button" href="#" id="search_submit"><img src="img/search_icon.png" width="30px" height="30px"></a>
+            </div>
         </nav>
 
     </div>
