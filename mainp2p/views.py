@@ -6,6 +6,12 @@ from django.contrib.auth.models import User
 from mainp2p.models import Author
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+import json
+
+def detail(request, userid):
+	userid = User.objects.get(id=userid)
+	context = {'userid': userid}
+	return(render(request, 'mainp2p/detail.html', context))
 
 
 def login_view(request):

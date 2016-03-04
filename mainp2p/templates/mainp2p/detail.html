@@ -1,0 +1,34 @@
+<html>
+<head>
+
+</head>
+<body>
+<p>Current User: {{user.username}}</p>
+<p>Username: {{userid.username}}</p>
+<p>host: {{userid.author.host}}</p>
+<p> friends: </p> 
+{% for a in userid.author.friends.all %}
+<p>{{a.username}}</p>
+{% endfor %}
+<form action="{% url 'mainp2p:detail' userid.id %}" method="POST" id="add">
+	{% csrf_token %}
+	<input type="submit" value="Add Friend" />
+</form>
+<!--<script type="text/javascript">
+$(document).ready(function() {
+	$("#add").submit(function(event) {
+		$.ajax({
+			type:"POST",
+			url:"/porfile/"+ str(userid.id) +"/",
+			data: {"users":user}
+			success: function() {
+				console.log("success")
+			},
+		});
+		return false;
+	});
+});
+			
+</script>-->
+</body>
+</html>
