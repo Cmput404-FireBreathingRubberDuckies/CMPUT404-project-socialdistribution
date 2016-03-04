@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.db import models
+import uuid
 
 # Create your models here.
 class Post(models.Model):
@@ -12,6 +13,7 @@ class Post(models.Model):
 	user_can_view = models.ForeignKey(User, related_name='+', blank=True)
 
 class Author(models.Model):
+	uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	host = models.CharField(max_length=30)
 	photo = models.ImageField(upload_to="images/profile", default="images/profile/default-avatar.jpg", null=True, blank=True)
