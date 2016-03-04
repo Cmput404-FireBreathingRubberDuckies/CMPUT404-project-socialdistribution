@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'socialp2p',
     'cloudinary',
+    'api'
 ]
 
 MIDDLEWARE_CLASSES = [

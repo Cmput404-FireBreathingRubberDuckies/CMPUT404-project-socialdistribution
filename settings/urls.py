@@ -19,5 +19,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^', include('socialp2p.urls', namespace='socialp2p')),
+    url(r'^api/', include('api.urls', namespace='api')),
     url(r'^admin/', admin.site.urls),
 ]

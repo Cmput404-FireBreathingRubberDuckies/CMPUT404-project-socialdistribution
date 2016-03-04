@@ -19,7 +19,7 @@ class Author(models.Model):
 	uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	host = models.CharField(max_length=30)
-	#photo = models.ImageField(upload_to="images/profile", default="images/profile/default-avatar.jpg", null=True, blank=True)
+	#photo = models.ImageField(upload_to="images/profile", default="socialp2p/images/profile/default-avatar.jpg", null=True, blank=True)
 	photo = CloudinaryField('image', default='image/upload/v1457219004/default-avatar.jpg', blank=True)
 	friends = models.ManyToManyField(User, related_name="friend", blank=True)
 
