@@ -3,12 +3,14 @@ from django.contrib.auth.models import User
 from django.db import models
 import uuid
 
+
 # Create your models here.
 class Post(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	markdown = models.BooleanField(default=False)
 	content = models.TextField()
-	image = models.ImageField(upload_to="images/post", null=True, blank=True)
+	#image = models.ImageField(upload_to="images/post", null=True, blank=True)
+	image = cloudinary.models.CloudinaryField('image')
 	visibility = models.CharField(max_length=30)
 	user_can_view = models.ForeignKey(User, related_name='+', blank=True)
 
