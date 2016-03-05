@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.db import models
 import uuid
-
+from cloudinary.models import CloudinaryField
 
 # Create your models here.
 class Post(models.Model):
@@ -10,7 +10,7 @@ class Post(models.Model):
 	markdown = models.BooleanField(default=False)
 	content = models.TextField()
 	#image = models.ImageField(upload_to="images/post", null=True, blank=True)
-	image = cloudinary.models.CloudinaryField('image')
+	image = CloudinaryField('image')
 	visibility = models.CharField(max_length=30)
 	user_can_view = models.ForeignKey(User, related_name='+', blank=True)
 
