@@ -20,7 +20,7 @@ class Author(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	host = models.CharField(max_length=30)
 	#photo = models.ImageField(upload_to="images/profile", default="images/profile/default-avatar.jpg", null=True, blank=True)
-	image = CloudinaryField('image', default='image/upload/v1457219004/default-avatar.jpg', blank=True)
+	photo = CloudinaryField('image', default='image/upload/v1457219004/default-avatar.jpg', blank=True)
 	friends = models.ManyToManyField(User, related_name="friend", blank=True)
 
 class Comment(models.Model):
