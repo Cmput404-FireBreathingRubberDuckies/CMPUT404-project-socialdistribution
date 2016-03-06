@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <style type="text/css" rel="stylesheet">
-        .search{
+        .search_input{
             position: relative;
             float: left;
             width: 300px;
@@ -12,7 +12,7 @@
             background-color: #f2f2f5;
             border: 1px solid #ccc;
         }
-        .search:focus{
+        .search_input:focus{
             width: 600px;
             outline-color: #eb7350;
         }
@@ -21,6 +21,40 @@
             display: inline-block;
             left: -30px;
             top: 9px;
+        }
+        .web_content{
+            display: block;
+            position: fixed;
+            width: 800px;
+            left: 20%
+        }
+        .post_title_area{
+            position: relative;
+            overflow: hidden;
+            height: 21px;
+            display: block;
+        }
+        .post_title{
+            outline-style: none;
+            line-height: 16px;
+            font-family: Tahoma;
+            float: left;
+            width: 200px;
+            height: 21px;
+            color: #1b7fb6;
+        }
+        .post_input{
+            width: 700px;
+            height: 100px;
+            padding-left: 0;
+            padding-top: 0;
+        }
+        .post_input:focus{
+            outline-color: #eb7350;
+        }
+        .upload_area{
+            position: relative;
+            height:30px;
         }
     </style>
 </head>
@@ -31,11 +65,45 @@
                 <a style="margin-left: 20px;" href="#"><img src="img/16692583.jpg" width="50px" height="50px"></a>
             </div>
             <div >
-                <input type="text" class="search" id="search_input">
+                <input type="text" class="search_input" id="search_text">
                 <a class="search_button" href="#" id="search_submit"><img src="img/search_icon.png" width="30px" height="30px"></a>
             </div>
         </nav>
+        <div class="web_content">
+            <div class="post_title_area">
+                <div class="post_title">
+                    <p>
+                        <em>What's new you want to tell?</em>
+                    </p>
+                </div>
+            </div>
+            <div>
+                <textarea class="post_input" id="post_text"><img contenteditable="false" style="width:45px" id="hidden_img" /></textarea>
+            </div>
+            <div class="upload_area">
+                <div>
+                    <input type='file' id='choose_pic'  />
+                </div>
+            </div>
+        </div>
 
     </div>
+    <script>
+        document.getElementById('choose_pic').addEventListener('change', readURL, true);
+        function readURL(){
+            var file = document.getElementById("choose_pic").files[0];
+            var reader = new FileReader();
+            reader.onloadend = function(){
+                var content = document.getElementById("post_text");
+                content.value = content.value + ' <img src="' + reader.result;
+                content.value = content.value + '" />';
+                //document.getElementById('post_text').style.backgroundImage = "url(" + reader.result + ")";
+            }
+            if(file){
+                reader.readAsDataURL(file);
+            }else{
+            }
+        }
+    </script>
 </body>
 </html>
