@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'socialp2p'
+    'socialp2p',
+    'cloudinary',
 ]
 
 MIDDLEWARE_CLASSES = [
