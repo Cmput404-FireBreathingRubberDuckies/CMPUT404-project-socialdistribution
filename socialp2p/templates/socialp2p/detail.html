@@ -9,7 +9,7 @@
 <p>Username: {{username.username}}</p>
 <p>UUID: {{username.author.uuid}}</p>
 <p>host: {{username.author.host}}</p>
-{% cloudinary user.author.photo %}
+{% cloudinary username.author.photo %}
 <p> friends: </p>
 {% for a in username.author.friends.all %}
 <p>{{a.username}}</p>
