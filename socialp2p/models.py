@@ -28,13 +28,13 @@ class Comment(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	post = models.ForeignKey(Post, on_delete=models.CASCADE)
 	content = models.TextField()
+	datetime = models.DateTimeField(auto_now=True)
 
 class FriendRequest(models.Model):
 	requester = models.ForeignKey(User,related_name="requester", on_delete=models.CASCADE)
 	receiver = models.ForeignKey(User,related_name="receiver", on_delete=models.CASCADE)
 	accepted = models.BooleanField(default=False)
-	
+	datetime = models.DateTimeField(auto_now=True)
+
   	def __unicode__(self):
 		return self.requester.username + " to " + self.receiver.username
-
-
