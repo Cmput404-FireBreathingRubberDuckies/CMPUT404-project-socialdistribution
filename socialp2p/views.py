@@ -8,9 +8,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 import json
 
-def detail(request, userid):
-	userid = User.objects.get(id=userid)
-	context = {'userid': userid}
+def detail(request, username):
+	username = User.objects.get(username=username)
+	context = {'username': username}
 	return(render(request, 'socialp2p/detail.html', context))
 
 
