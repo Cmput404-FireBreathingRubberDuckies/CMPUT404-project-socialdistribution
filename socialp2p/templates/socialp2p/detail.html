@@ -7,7 +7,8 @@
 <p>Username: {{username.username}}</p>
 <p>UUID: {{username.author.uuid}}</p>
 <p>host: {{username.author.host}}</p>
-<p> friends: </p> 
+{% cloudinary user.author.photo %}
+<p> friends: </p>
 {% for a in username.author.friends.all %}
 <p>{{a.username}}</p>
 {% endfor %}
@@ -29,7 +30,7 @@ $(document).ready(function() {
 		return false;
 	});
 });
-			
+
 </script>-->
 </body>
 </html>
