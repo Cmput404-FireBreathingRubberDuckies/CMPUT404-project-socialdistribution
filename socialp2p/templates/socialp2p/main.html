@@ -62,11 +62,11 @@
     <div class="container-fluid">
         <nav class="navbar navbar-default" >
             <div class="navbar-header">
-                <a style="margin-left: 20px;" href="#"><img src="img/16692583.jpg" width="50px" height="50px"></a>
+                <a style="margin-left: 20px;" href="#"><img src="/img/16692583.jpg" width="50px" height="50px"></a>
             </div>
             <div >
                 <input type="text" class="search_input" id="search_text">
-                <a class="search_button" href="#" id="search_submit"><img src="img/search_icon.png" width="30px" height="30px"></a>
+                <a class="search_button" href="#" id="search_submit"><img src="/img/search_icon.png" width="30px" height="30px"></a>
             </div>
         </nav>
         <div class="web_content">
@@ -78,12 +78,23 @@
                 </div>
             </div>
             <div>
-                <textarea class="post_input" id="post_text"><img contenteditable="false" style="width:45px" id="hidden_img" /></textarea>
+                <textarea class="post_input" id="post_text"></textarea>
             </div>
             <div class="upload_area">
                 <div>
                     <input type='file' id='choose_pic'  />
                 </div>
+                <div style="text-align: right">
+                    <select id="post_select">
+                        <option>Public</option>
+                        <option>Private</option>
+                        <option>Friend Only</option>
+                    </select>
+                    <button type="submit" id="post_button">POST</button>
+                </div>
+            </div>
+            <div id="posts_area">
+
             </div>
         </div>
 
