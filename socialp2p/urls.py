@@ -11,4 +11,4 @@ urlpatterns = [
     url(r'^signup', views.signup_view, name='signup'),
     url(r'^profile/(?P<username>\w+)/$', views.detail, name='detail'),
     #url(r'^profile/(?P<userid>[0-9]+)/$', views.detail, name='detail'),
-] + static('images', document_root=settings.BASE_DIR+'/images')
+]   #+ static('images', document_root=settings.BASE_DIR+'/images')
