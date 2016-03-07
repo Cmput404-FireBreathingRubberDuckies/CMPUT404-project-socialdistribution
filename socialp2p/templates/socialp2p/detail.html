@@ -6,6 +6,7 @@
 <p>Current User: {{user.username}}</p>
 <p>Username: {{userid.username}}</p>
 <p>host: {{userid.author.host}}</p>
+<p>id: {{userid.author.id}}</p>
 <p> friends: </p> 
 {% for a in userid.author.friends.all %}
 <p>{{a.username}}</p>
