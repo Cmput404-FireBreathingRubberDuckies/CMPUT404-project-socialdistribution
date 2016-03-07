@@ -2,14 +2,13 @@
 
 <html>
 <head>
-
 </head>
 <body>
 <p>Current User: {{user.username}}</p>
 <p>Username: {{username.username}}</p>
 <p>UUID: {{username.author.uuid}}</p>
 <p>host: {{username.author.host}}</p>
-{% cloudinary username.author.photo %}
+{% cloudinary user.author.photo %}
 <p> friends: </p>
 {% for a in username.author.friends.all %}
 <p>{{a.username}}</p>
@@ -18,21 +17,5 @@
 	{% csrf_token %}
 	<input type="submit" value="Add Friend" />
 </form>
-<!--<script type="text/javascript">
-$(document).ready(function() {
-	$("#add").submit(function(event) {
-		$.ajax({
-			type:"POST",
-			url:"/porfile/"+ str(userid.id) +"/",
-			data: {"users":user}
-			success: function() {
-				console.log("success")
-			},
-		});
-		return false;
-	});
-});
-
-</script>-->
 </body>
 </html>
