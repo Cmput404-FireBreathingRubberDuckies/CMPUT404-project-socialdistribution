@@ -5,15 +5,16 @@
 </head>
 <body>
 <p>Current User: {{user.username}}</p>
-<p>Username: {{username.username}}</p>
-<p>UUID: {{username.author.uuid}}</p>
-<p>host: {{username.author.host}}</p>
+<p>Username: {{userid.username}}</p>
+<p>UUID: {{userid.author.uuid}}</p>
+<p>host: {{userid.author.host}}</p>
+<p>id: {{userid.author.id}}</p>
 {% cloudinary user.author.photo %}
 <p> friends: </p>
-{% for a in username.author.friends.all %}
+{% for a in userid.author.friends.all %}
 <p>{{a.username}}</p>
 {% endfor %}
-<form method="POST" id="add">
+<form action="{% url 'socialp2p:detail' userid.id %}" method="POST" id="add">
 	{% csrf_token %}
 	<input type="submit" value="Add Friend" />
 </form>
