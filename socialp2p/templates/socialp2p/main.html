@@ -79,34 +79,32 @@
             </div>
         </div>
     </nav>
-        <div class="web_content">
-            <div class="post_title_area">
-                <div class="post_title">
-                    <p>
-                        <em>What's new you want to tell?</em>
-                    </p>
-                </div>
+    <div class="web_content">
+        <div class="post_title_area">
+            <div class="post_title">
+                <p>
+                    <em>What's new you want to tell?</em>
+                </p>
             </div>
+        </div>
+        <div>
+            <textarea class="post_input" id="post_text"></textarea>
+        </div>
+        <div class="upload_area">
             <div>
-                <textarea class="post_input" id="post_text"></textarea>
+                <input type='file' id='choose_pic'  />
             </div>
-            <div class="upload_area">
-                <div>
-                    <input type='file' id='choose_pic'  />
-                </div>
-                <div style="text-align: right">
-                    <select id="post_select">
-                        <option>Public</option>
-                        <option>Private</option>
-                        <option>Friend Only</option>
-                    </select>
-                    <button type="submit" id="post_button">POST</button>
-                </div>
+            <div style="text-align: right">
+                <select id="post_select">
+                    <option>Public</option>
+                    <option>Private</option>
+                    <option>Friend Only</option>
+                </select>
+                <button type="submit" id="post_button">POST</button>
             </div>
-            <div id="posts_area">
-
-            </div>
-
+        </div>
+        <div id="posts_area">
+        </div>
     </div>
     <script>
         document.getElementById('choose_pic').addEventListener('change', readURL, true);

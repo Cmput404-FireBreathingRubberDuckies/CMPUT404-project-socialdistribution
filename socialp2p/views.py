@@ -9,22 +9,20 @@ from django.contrib.auth import authenticate, login, logout
 import json
 
 def detail(request, username):
-	if request.method=='GET':
-		username = User.objects.get(username=username)
-		context = {'username': username}
-		return(render(request, 'socialp2p/detail.html', context))
-      	elif request.method=='POST':
-		if request.user.is_authenticated():
-			username = User.objects.get(username=username)
-			context = {'username': username}
-			if FriendRequest.objects.filter(requester=request.user, receiver=username).exists():
-				return HttpResponse("Already added Friend")
-			else:
-				friendRequest = FriendRequest(requester=request.user, receiver=username)
-				friendRequest.save()
-				return(render(request, 'socialp2p/detail.html', context))
-		
-
+    if request.method=='GET':
+        username = User.objects.get(username=username)
+        context = {'username': username}
+        return(render(request, 'socialp2p/detail.html', context))
+    elif request.method=='POST':
+        if request.user.is_authenticated():
+            username = User.objects.get(username=username)
+            context = {'username': username}
+            if FriendRequest.objects.filter(requester=request.user, receiver=username).exists():
+                return HttpResponse("Already added Friend")
+            else:
+                friendRequest = FriendRequest(requester=request.user, receiver=username)
+                friendRequest.save()
+                return(render(request, 'socialp2p/detail.html', context))
 
 def login_view(request):
     if request.user.is_authenticated():
