@@ -1,5 +1,10 @@
-div{
-  margin: 15%;
+body {
+  padding-top: 75px;
+}
+
+div.authentication {
+  width: 350px;
+  margin: auto;
 }
 
 .button{

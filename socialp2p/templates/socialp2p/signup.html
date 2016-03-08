@@ -7,7 +7,7 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
 </head>
 <body>
-  <div>
+  <div class="authentication">
     <h1>socialp2p - Sign Up</h1>
     <form action="{% url 'socialp2p:signup' %}" method="POST">
       {% csrf_token %}
