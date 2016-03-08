@@ -75,7 +75,8 @@
                 <a class="search_button" href="#" id="search_submit"><img src="{% static 'img/search_icon.png' %}" width="30px" height="30px"></a>
             </form>
             <div class="navbar-right">
-                <a href="{% url 'socialp2p:profile' user.username %}">{% cloudinary user.author.photo width=20 %}</a>
+                <a href="{% url 'socialp2p:profile' user.username %}">{% cloudinary user.author.photo width=20 class='profile-navbar' %}</a>
+                <a href="{% url 'socialp2p:logout' %}">Log Out</a>
             </div>
         </div>
     </nav>
@@ -88,7 +89,7 @@
             </div>
         </div>
         <div>
-            <textarea class="post_input" id="post_text"></textarea>
+            <textarea class="post_input form-control" rows="4" id="post_text"></textarea>
         </div>
         <div class="upload_area">
             <div>
@@ -100,7 +101,7 @@
                     <option>Private</option>
                     <option>Friend Only</option>
                 </select>
-                <button type="submit" id="post_button">POST</button>
+                <button class="btn btn-default" type="submit" id="post_button">POST</button>
             </div>
         </div>
         <div id="posts_area">

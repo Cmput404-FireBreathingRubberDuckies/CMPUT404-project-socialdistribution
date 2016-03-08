@@ -34,3 +34,7 @@ div.authentication {
   box-shadow: 0 5px #666;
   transform: translateY(4px);
 }
+
+.profile-navbar {
+  margin-top: 14px;
+}
