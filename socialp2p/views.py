@@ -3,15 +3,27 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response, render
 from django.contrib.auth.models import User
-from socialp2p.models import Author
+from socialp2p.models import Author, FriendRequest
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 import json
 
-def detail(request, userid):
-	userid = User.objects.get(id=userid)
-	context = {'userid': userid}
-	return(render(request, 'socialp2p/detail.html', context))
+def detail(request, username):
+	if request.method=='GET':
+		username = User.objects.get(username=username)
+		context = {'username': username}
+		return(render(request, 'socialp2p/detail.html', context))
+      	elif request.method=='POST':
+		if request.user.is_authenticated():
+			username = User.objects.get(username=username)
+			context = {'username': username}
+			if FriendRequest.objects.filter(requester=request.user, receiver=username).exists():
+				return HttpResponse("Already added Friend")
+			else:
+				friendRequest = FriendRequest(requester=request.user, receiver=username)
+				friendRequest.save()
+				return(render(request, 'socialp2p/detail.html', context))
+		
 
 
 def login_view(request):

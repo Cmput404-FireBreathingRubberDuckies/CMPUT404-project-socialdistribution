@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'socialp2p',
+    'cloudinary',
     'api',
     'rest_framework'
 ]
