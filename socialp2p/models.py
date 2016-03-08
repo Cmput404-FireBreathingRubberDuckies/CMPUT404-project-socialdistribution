@@ -11,7 +11,7 @@ class Post(models.Model):
 	markdown = models.BooleanField(default=False)
 	content = models.TextField()
 	#image = models.ImageField(upload_to="images/post", null=True, blank=True)
-	image = CloudinaryField('image', blank=True)
+	image = CloudinaryField('image', default=None, blank=True)
 	visibility = models.CharField(max_length=30)
 	user_can_view = models.ForeignKey(User, related_name='+', blank=True)
 
