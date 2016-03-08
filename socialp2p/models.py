@@ -38,3 +38,6 @@ class FriendRequest(models.Model):
 
   	def __unicode__(self):
 		return self.requester.username + " to " + self.receiver.username
+
+	def friend_request(self):
+		return "friendrequest"

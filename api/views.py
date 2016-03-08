@@ -6,8 +6,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from socialp2p.models import Author
-from api.serializations import AuthorSerializer
+from socialp2p.models import Author, FriendRequest
+from api.serializations import AuthorSerializer, FriendRequestSerializer
 from django.contrib.auth.models import User
 from rest_framework import viewsets, status
 
@@ -58,5 +58,9 @@ def author_detail(request, author_uuid):
         author.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+@api_view(['GET', 'POST'])
 def friend_request(request):
-    return
+    if request.method == 'GET':
+        requests = FriendRequest.objects.all()
+        serializer = FriendRequestSerializer(requests, many=True)
+        return Response(serializer.data)
