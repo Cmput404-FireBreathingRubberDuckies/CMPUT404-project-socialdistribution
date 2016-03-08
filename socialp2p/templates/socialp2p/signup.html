@@ -1,48 +1,52 @@
 <html>
 <head>
-<title>Sign Up Page</title>
-<style type="text/css">
-div{
-    margin: 30%;
-    text-align: center;
-}
-.button{
-  display: inline-block;
-  padding: 15px 25px;
-  font-size: 24px;
-  cursor: pointer;
-  text-align: center;   
-  text-decoration: none;
-  outline: none;
-  color: white;
-  background-color: #008CBA;
-  border: none;
-  border-radius: 15px;
-  margin-top: 20px;
-  box-shadow: 0 9px #999;
-}
-.button:hover {
-    background-color: white;
-    border: 2px solid #008CBA;
-   color: black;
-}
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <style type="text/css">
+    div{
+      margin: 15%;
+      /*text-align: center;*/
+    }
+    .button{
+      display: inline-block;
+      padding: 15px 25px;
+      font-size: 24px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      outline: none;
+      color: white;
+      background-color: #008CBA;
+      border: none;
+      border-radius: 15px;
+      margin-top: 20px;
+      box-shadow: 0 9px #999;
+    }
+    .button:hover {
+      background-color: white;
+      border: 2px solid #008CBA;
+      color: black;
+    }
 
-.button:active {
-  background-color: #008CBA;
-  box-shadow: 0 5px #666;
-  transform: translateY(4px);
-}
-</style>
+    .button:active {
+      background-color: #008CBA;
+      box-shadow: 0 5px #666;
+      transform: translateY(4px);
+    }
+  </style>
 </head>
 <body>
-<div>
-<form action="{% url 'socialp2p:signup' %}" method="POST">
-{% csrf_token %}
-Username <input type="text" name="username"/></br>
-Password <input type="password" name="password"/></br>
-<input type="submit" value="Sign up" name="SignUpButton" class="button"/>
-</form>
-</div>
-
+  <div>
+    <h1>socialp2p - Sign Up</h1>
+    <form action="{% url 'socialp2p:signup' %}" method="POST">
+      {% csrf_token %}
+      <label for="username">Username</label>
+      <input class="form-control" type="text" name="username" placeholder="Username" /></br>
+      <label for="password">Password</label>
+      <input class="form-control" type="password" name="password" placeholder="Password" /></br>
+      <input class="btn btn-default" type="submit" value="Sign Up" name="SignUpButton" class="button"/>
+    </form>
+    <p>If you already have an account, <a href="{% url 'socialp2p:login' %}">Sign In</a></p>
+  </div>
 </body>
 </html>
