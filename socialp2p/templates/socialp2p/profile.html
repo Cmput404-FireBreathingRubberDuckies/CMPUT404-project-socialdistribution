@@ -1,0 +1,35 @@
+{% load staticfiles %}
+{% load cloudinary %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Profile</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container-fluid">
+        <nav class="navbar navbar-default navbar-fixed-top" >
+            <div class="navbar-header">
+                <a style="margin-left: 20px;" href="{% url 'socialp2p:main' %}"><img src="{% static 'img/16692583.jpg' %}" width="50px" height="50px"></a>
+            </div>
+            <div >
+                <input type="text" class="search_input" id="search_text">
+                <a class="search_button" href="#" id="search_submit"><img src="{% static 'img/search_icon.png' %}" width="30px" height="30px"></a>
+            </div>
+            <div class="pull-right">
+                <a href="{% url 'socialp2p:profile' user.username %}">{% cloudinary user.author.photo width=40 %}</a>
+            </div>
+        </nav>
+        <p>Current User: {{user.username}}</p>
+        <p>Username: {{user.username}}</p>
+        <p>UUID: {{user.author.uuid}}</p>
+        <p>host: {{user.author.host}}</p>
+        <p>id: {{user.author.id}}</p>
+        {% cloudinary user.author.photo %}
+        <p> friends: </p>
+        {% for a in user.author.friends.all %}
+        <p>{{a.username}}</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

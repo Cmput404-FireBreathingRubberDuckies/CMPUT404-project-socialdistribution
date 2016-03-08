@@ -1,38 +1,10 @@
+{% load staticfiles %}
+<!DOCTYPE html>
 <html>
 <head>
   <title>Sign In</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-  <style type="text/css">
-    div{
-      margin: 15%;
-    }
-    .button{
-      display: inline-block;
-      padding: 15px 25px;
-      font-size: 24px;
-      cursor: pointer;
-      text-align: center;
-      text-decoration: none;
-      outline: none;
-      color: white;
-      background-color: #008CBA;
-      border: none;
-      border-radius: 15px;
-      margin-top: 20px;
-      box-shadow: 0 9px #999;
-    }
-    .button:hover {
-      background-color: white;
-      border: 2px solid #008CBA;
-      color: black;
-    }
-
-    .button:active {
-      background-color: #008CBA;
-      box-shadow: 0 5px #666;
-      transform: translateY(4px);
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
 </head>
 <body>
   <div>

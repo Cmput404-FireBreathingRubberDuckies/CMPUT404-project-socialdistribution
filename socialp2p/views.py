@@ -71,4 +71,8 @@ def signup_view(request):
 
 @login_required
 def main(request):
-    return render(request, 'socialp2p/index.html')
+    return render(request, 'socialp2p/main.html')
+
+@login_required
+def profile(request, username):
+    return render(request, 'socialp2p/profile.html')

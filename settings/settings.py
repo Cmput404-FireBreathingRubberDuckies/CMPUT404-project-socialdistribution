@@ -142,6 +142,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
+    os.path.join(BASE_DIR, 'socialp2p/static')
 )
 
 LOGIN_URL = 'socialp2p:login'

@@ -1,3 +1,5 @@
+{% load staticfiles %}
+{% load cloudinary %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,11 +64,14 @@
     <div class="container-fluid">
         <nav class="navbar navbar-default" >
             <div class="navbar-header">
-                <a style="margin-left: 20px;" href="#"><img src="/img/16692583.jpg" width="50px" height="50px"></a>
+                <a style="margin-left: 20px;" href="{% url 'socialp2p:main' %}"><img src="{% static 'img/16692583.jpg' %}" width="50px" height="50px"></a>
             </div>
             <div >
                 <input type="text" class="search_input" id="search_text">
-                <a class="search_button" href="#" id="search_submit"><img src="/img/search_icon.png" width="30px" height="30px"></a>
+                <a class="search_button" href="#" id="search_submit"><img src="{% static 'img/search_icon.png' %}" width="30px" height="30px"></a>
+            </div>
+            <div class="pull-right">
+                <a href="{% url 'socialp2p:profile' user.username %}">{% cloudinary user.author.photo width=40 %}</a>
             </div>
         </nav>
         <div class="web_content">
