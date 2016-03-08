@@ -53,7 +53,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 </head>
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top" >
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" >
         <div class="container">
             <div class="navbar-header">
                 <a class="navbar-brand" href="{% url 'socialp2p:main' %}"><img src="{% static 'img/16692583.jpg' %}" width="20px;"></a>
@@ -72,15 +72,15 @@
         </div>
     </nav>
     <div class="container">
-        <p>Current User: {{user.username}}</p>
-        <p>Username: {{user.username}}</p>
-        <p>UUID: {{user.author.uuid}}</p>
-        <p>host: {{user.author.host}}</p>
-        <p>id: {{user.author.id}}</p>
-        {% cloudinary user.author.photo %}
+        <p>Current User: {{user_profile.username}}</p>
+        <p>Username: {{user_profile.username}}</p>
+        <p>UUID: {{user_profile.author.uuid}}</p>
+        <p>host: {{user_profile.author.host}}</p>
+        <p>id: {{user_profile.author.id}}</p>
+        {% cloudinary user_profile.author.photo %}
         <p> friends: </p>
-        {% for a in user.author.friends.all %}
-        <p>{{a.username}}</p>
+        {% for friend in user_profile.author.friends.all %}
+        <p>{{friend.username}}</p>
         {% endfor %}
     </div>
 </body>

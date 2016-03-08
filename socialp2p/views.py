@@ -73,4 +73,6 @@ def main(request):
 
 @login_required
 def profile(request, username):
-    return render(request, 'socialp2p/profile.html')
+    user = User.objects.get(username=username)
+    context = {'user_profile': user}
+    return render(request, 'socialp2p/profile.html', context)
