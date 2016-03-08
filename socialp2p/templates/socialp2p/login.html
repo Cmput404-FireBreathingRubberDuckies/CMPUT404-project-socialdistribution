@@ -12,10 +12,10 @@
     <form action="{% url 'socialp2p:authenticate' %}" method="POST">
       {% csrf_token %}
       <label for="username">Username</label>
-      <input class="form-control" type="text" name="username" placeholder="Username" /></br>
+      <input class="form-control" type="text" name="username" placeholder="Username" /><br>
       <label for="password">Password</label>
-      <input class="form-control" type="password" name="password" placeholder="Password" /></br>
-      <input class="btn btn-default" type="submit" value="Sign In" name="SignInButton" class="button"/>
+      <input class="form-control" type="password" name="password" placeholder="Password" /><br>
+      <input class="btn button btn-default" type="submit" value="Sign In" name="SignInButton"/>
     </form>
     <p>Don't have an account? <a href="{% url 'socialp2p:signup' %}">Sign Up</a></p>
   </div>
