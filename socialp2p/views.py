@@ -8,21 +8,29 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 import json
 
-def detail(request, username):
-    if request.method=='GET':
-        username = User.objects.get(username=username)
-        context = {'username': username}
-        return(render(request, 'socialp2p/detail.html', context))
-    elif request.method=='POST':
-        if request.user.is_authenticated():
-            username = User.objects.get(username=username)
-            context = {'username': username}
-            if FriendRequest.objects.filter(requester=request.user, receiver=username).exists():
-                return HttpResponse("Already added Friend")
-            else:
-                friendRequest = FriendRequest(requester=request.user, receiver=username)
-                friendRequest.save()
-                return(render(request, 'socialp2p/detail.html', context))
+@login_required
+def profile(request, username):
+    user = User.objects.get(username=username)
+    requests = FriendRequest.objects.filter(receiver=user)
+    follow = FriendRequest.objects.filter(requester=user)
+    if request.user.username != username:
+	    if request.method=='GET':
+		context = {'user_profile': user}
+		return(render(request, 'socialp2p/detail.html', context))
+	    #elif request.method=='POST':
+		#if request.user.is_authenticated():
+		    #user = User.objects.get(username=username)
+		    #context = {'user_profile': user}
+		    #if FriendRequest.objects.filter(requester=request.user, receiver=user).exists():
+		        #return HttpResponse("Already added Friend")
+		    #else:
+		        #friendRequest = FriendRequest(requester=request.user, receiver=user)
+		       #friendRequest.save()
+		       # return(render(request, 'socialp2p/detail.html', context))
+    else:
+	context = {'requests':requests, 'follow':follow}
+	return(render(request, 'socialp2p/profile.html', context))
+
 
 def login_view(request):
     if request.user.is_authenticated():
@@ -70,9 +78,3 @@ def signup_view(request):
 @login_required
 def main(request):
     return render(request, 'socialp2p/main.html')
-
-@login_required
-def profile(request, username):
-    user = User.objects.get(username=username)
-    context = {'user_profile': user}
-    return render(request, 'socialp2p/profile.html', context)

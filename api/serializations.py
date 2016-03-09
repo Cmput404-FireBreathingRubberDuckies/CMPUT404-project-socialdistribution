@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
         exclude = ('password', 'last_login', 'groups', 'user_permissions')
 
 class AuthorSerializer(serializers.ModelSerializer):
-    #user = UserSerializer(source="friend")
+    user = UserSerializer()
     class Meta:
         model = Author
         fields = '__all__'
@@ -17,5 +17,5 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 class FriendRequestSerializer(serializers.Serializer):
 	query = serializers.CharField(source='friend_request')
-	Author = UserSerializer(source="requester")
-	Friend = UserSerializer(source="receiver")
+	Author = UserSerializer(source='requester')
+	Friend = UserSerializer(source='receiver')
