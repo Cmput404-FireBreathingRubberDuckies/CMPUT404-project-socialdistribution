@@ -76,7 +76,7 @@
 	<p>UUID: {{user_profile.author.uuid}}</p>
 	<p>host: {{user_profile.author.host}}</p>
 	<p>id: {{user_profile.author.id}}</p>
-	
+	{% cloudinary user_profile.author.photo %}
 	<!--<form action="{% url 'socialp2p:profile' user_profile.username %}" method="POST" id="add">
 		{% csrf_token %}
 	<input type="submit" value="Add Friend" />

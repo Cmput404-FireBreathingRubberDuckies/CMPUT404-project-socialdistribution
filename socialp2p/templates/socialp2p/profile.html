@@ -93,7 +93,7 @@
 	{% for a in follow %}
         <p>{{a.receiver}}</p>
         {% endfor %}
-	
+	{% cloudinary user.author.photo %}
 </form>
     </div>
 </body>
