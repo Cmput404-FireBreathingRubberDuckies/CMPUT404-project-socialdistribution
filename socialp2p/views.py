@@ -11,8 +11,8 @@ import json
 @login_required
 def profile(request, username):
     user = User.objects.get(username=username)
-    requests = FriendRequest.objects.filter(receiver=user)
-    follow = FriendRequest.objects.filter(requester=user)
+    requests = FriendRequest.objects.filter(receiver=user, accepted=False)
+    follow = FriendRequest.objects.filter(requester=user, accepted=False)
     if request.user.username != username:
 	    if request.method=='GET':
 		context = {'user_profile': user}

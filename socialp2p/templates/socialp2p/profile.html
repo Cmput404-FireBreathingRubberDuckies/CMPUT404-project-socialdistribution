@@ -80,9 +80,10 @@
         <p> Friend Requests: </P>
 	{% for b in requests %}
 	<p>{{b.requester}} requested to be friends 
-		<form method="POST" id="accept">
-		{% csrf_token %}
-		<input action="{% url 'socialp2p:profile' user.username %}" type="submit" value="Accept" />
+		<form action="{% url 'api:friends' b.requester.author.uuid %}" method="POST" id="accept">
+			{% csrf_token %}
+		<input type="submit" value="Accept" />
+		</form>
 	</p>
 	{% endfor %}
         <p> friends: </p>

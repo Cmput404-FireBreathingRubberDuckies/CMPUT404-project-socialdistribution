@@ -23,6 +23,9 @@ class Author(models.Model):
 	photo = CloudinaryField('image', default='image/upload/v1457219004/default-avatar.jpg', blank=True)
 	friends = models.ManyToManyField(User, related_name="friend", blank=True)
 
+	def friend(self):
+		return "friends"
+
 class Comment(models.Model):
 	uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
