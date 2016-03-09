@@ -96,12 +96,14 @@ def friends(request, author_uuid):
         return Response(serializer.data)
     elif request.method == 'POST':
         request.user.author.friends.add(user)
+	author.friends.add(request.user)
         friendRequest = FriendRequest.objects.get(requester=user, receiver=request.user)
         friendRequest.accepted = True
         friendRequest.save()
         return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
     elif request.method == 'DELETE':
         request.user.author.friends.delete(user)
+	author.friends.delete(request.user)
         friendRequest = FriendRequest.objects.get(requester=user, receiver=request.user)
         friendRequest.accepted = False
         friendRequest.save()
