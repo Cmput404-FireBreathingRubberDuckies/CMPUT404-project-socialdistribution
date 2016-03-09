@@ -16,12 +16,12 @@ class AuthorSerializer(serializers.ModelSerializer):
         depth = 1
 
 class FriendRequestSerializer(serializers.Serializer):
-	query = serializers.CharField(source='friend_request')
-	Author = UserSerializer(source='requester')
-	Friend = UserSerializer(source='receiver')
+    query = serializers.CharField(source='friend_request')
+    Author = UserSerializer(source='requester')
+    Friend = UserSerializer(source='receiver')
 
 class FriendSerializer(serializers.ModelSerializer):
-	query = serializers.CharField(source='friend')
-	class Meta:
-		model = Author
-		exclude = ('id', 'host', 'photo', 'user')
+    query = serializers.CharField(source='friend')
+    class Meta:
+        model = Author
+        exclude = ('id', 'host', 'photo', 'user')

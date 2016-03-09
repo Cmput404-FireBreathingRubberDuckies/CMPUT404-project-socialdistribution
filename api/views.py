@@ -71,17 +71,17 @@ def friend_request(request, author_uuid):
     user = User.objects.get(author=author)
     
     if request.method == 'GET':
-	requests = FriendRequest.objects.filter(requester=request.user, accepted=False)
+        requests = FriendRequest.objects.filter(requester=request.user, accepted=False)
         serializer = FriendRequestSerializer(requests, many=True)
         return Response(serializer.data)
     elif request.method =='POST':
-	if FriendRequest.objects.filter(requester=request.user, receiver=user).exists():
-		return HttpResponse("Already added Friend")
-	else:
-		friendRequest = FriendRequest(requester=request.user, receiver=user)
-		friendRequest.save()
-		#serializer = FriendRequestSerializer(friendRequest)
-		return HttpResponseRedirect(reverse('socialp2p:profile', args=[user.username]))
+        if FriendRequest.objects.filter(requester=request.user, receiver=user).exists():
+            return HttpResponse("Already added Friend")
+        else:
+            friendRequest = FriendRequest(requester=request.user, receiver=user)
+            friendRequest.save()
+            #serializer = FriendRequestSerializer(friendRequest)
+            return HttpResponseRedirect(reverse('socialp2p:profile', args=[user.username]))
 
 @api_view(['GET', 'POST', 'DELETE'])
 def friends(request, author_uuid):
@@ -92,17 +92,17 @@ def friends(request, author_uuid):
     user = User.objects.get(author=author)
 
     if request.method == 'GET':
-	serializer = FriendSerializer(author)
-	return Response(serializer.data)
+        serializer = FriendSerializer(author)
+        return Response(serializer.data)
     elif request.method == 'POST':
-	request.user.author.friends.add(user)
+        request.user.author.friends.add(user)
         friendRequest = FriendRequest.objects.get(requester=user, receiver=request.user)
-	friendRequest.accepted = True
-	friendRequest.save()
-	return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
+        friendRequest.accepted = True
+        friendRequest.save()
+        return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
     elif request.method == 'DELETE':
-	request.user.author.friends.delete(user)
-	friendRequest = FriendRequest.objects.get(requester=user, receiver=request.user)
-	friendRequest.accepted = False
-	friendRequest.save()
-	return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
+        request.user.author.friends.delete(user)
+        friendRequest = FriendRequest.objects.get(requester=user, receiver=request.user)
+        friendRequest.accepted = False
+        friendRequest.save()
+        return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
