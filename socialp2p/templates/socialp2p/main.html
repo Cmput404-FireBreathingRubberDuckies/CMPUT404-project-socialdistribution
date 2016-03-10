@@ -97,9 +97,9 @@
             </div>
             <div style="text-align: right">
                 <select id="post_select">
-                    <option>Public</option>
-                    <option>Private</option>
-                    <option>Friend Only</option>
+                  {% for choice in Post.Visibility_CHOICES %}
+                    <option>{{ choice.1 }}</option>
+                  {% endfor %}
                 </select>
                 <button class="btn btn-default" type="submit" id="post_button">POST</button>
             </div>
