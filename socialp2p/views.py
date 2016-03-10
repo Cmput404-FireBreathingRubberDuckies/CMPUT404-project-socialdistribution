@@ -61,7 +61,7 @@ def signup_view(request):
     if request.method == 'POST':
         user = User.objects.create_user(request.POST['username'], None, request.POST['password'])
 
-        author = Author(user=user, host='localhost')
+        author = Author(user=user)
         author.save()
 
         a_user = authenticate(username=request.POST['username'], password=request.POST['password'])
