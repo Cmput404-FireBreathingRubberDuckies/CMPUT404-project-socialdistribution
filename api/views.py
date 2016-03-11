@@ -124,5 +124,4 @@ def public_posts(request):
     if request.method == 'GET':
         public_posts = Post.objects.filter(visibility="PUB")
         serializer = PostSerializer(public_posts, many=True)
-        print serializer.data
         return Response(serializer.data)
