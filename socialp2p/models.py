@@ -24,6 +24,9 @@ class Author(models.Model):
     def friend(self):
         return "friends"
 
+    def __str__(self):
+        return self.user.username
+
 class Post(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
