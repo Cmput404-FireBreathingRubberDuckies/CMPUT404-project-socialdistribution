@@ -94,7 +94,7 @@ def friends(request, author_uuid):
     user = User.objects.get(author=author)
 
     if request.method == 'GET':
-        serializer = FriendSerializer(author)
+        serializer = FriendSerializer(author, context={'request': request})
         return Response(serializer.data)
     elif request.method == 'POST':
 
