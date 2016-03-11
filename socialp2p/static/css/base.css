@@ -138,13 +138,14 @@ div.authentication {
 .web_content .posts:hover{
   background-color: #f5f8fa;
 }
-.web_content .posts .profile{
-}
 .web_content .posts .profile img {
   width: 60px;
   height: 60px;
   border-radius: 30px;
   margin-right: 10px;
+}
+.web_content .posts .profile a {
+  text-decoration: none;
 }
 .web_content .posts .profile .displayname {
   font-size: 30px;
