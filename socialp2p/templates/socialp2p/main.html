@@ -58,8 +58,8 @@
     {% for post in posts %}
     <div class="posts">
       <div class="profile">
-        <a href="{% url 'socialp2p:profile' post.author.displayname%}">{% cloudinary post.author.photo %} <strong class="displayname">{{ post.author.displayname }}</strong></a>
-        
+        <a href="{% url 'socialp2p:profile' post.author.displayname%}">{% cloudinary post.author.photo %}</a>
+        <a href="{% url 'socialp2p:profile' post.author.displayname%}"><strong class="displayname">{{ post.author.displayname }}</strong></a>
         <span class="time">{{ post.datetime|localtime }}</span>
       </div>
       <div class=content>
