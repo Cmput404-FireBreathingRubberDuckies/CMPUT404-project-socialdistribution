@@ -81,7 +81,6 @@ def friend_request(request, author_uuid):
         else:
             friendRequest = FriendRequest(requester=current_author, receiver=author)
             friendRequest.save()
-            #serializer = FriendRequestSerializer(friendRequest)
             return HttpResponseRedirect(reverse('socialp2p:profile', args=[user.username]))
 
 @api_view(['GET', 'POST', 'DELETE'])
@@ -109,7 +108,12 @@ def friends(request, author_uuid):
 	elif request.POST.get("delete"):
 	    current_author.friends.remove(author)
             author.friends.remove(current_author)
-            #friendRequest = FriendRequest.objects.get(requester=current_author, receiver=current_author)
-           # friendRequest.accepted = False
-            #friendRequest.save()
+	    if FriendRequest.objects.filter(requester=current_author, receiver=author).exists():
+	        friendRequest = FriendRequest.objects.get(requester=current_author, receiver=author)
+		friendRequest.accepted = False
+		friendRequest.save()
+            else:
+		friendRequest = FriendRequest.objects.get(requester=author, receiver=current_author)
+		friendRequest.accepted = False
+		friendRequest.save()
 	    return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))

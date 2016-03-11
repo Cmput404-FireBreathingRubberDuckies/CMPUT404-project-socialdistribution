@@ -21,9 +21,6 @@ class Author(models.Model):
     def uuid_str(self):
         return str(self.uuid)
 
-    def friend(self):
-        return "friends"
-
     def __str__(self):
         return self.user.username
 
@@ -63,4 +60,7 @@ class FriendRequest(models.Model):
     datetime = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return self.requester.username + " to " + self.receiver.username
+        return self.requester.user.username + " to " + self.receiver.user.username
+
+    def url_friend(self):
+        return self.host + 'api/author/' + str(self.uuid)
