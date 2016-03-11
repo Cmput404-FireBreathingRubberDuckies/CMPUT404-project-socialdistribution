@@ -10,6 +10,6 @@ urlpatterns = [
     url(r'^logout/$', views.logout_view, name='logout'),
     url(r'^signup/$', views.signup_view, name='signup'),
     url(r'^profile/(?P<username>\w+)/$', views.profile, name='profile'),
-    url(r'^posts/$', views.posts_view, name='signup'),
+    url(r'^posts/$', views.posts_view, name='posts'),
     #url(r'^profile/(?P<userid>[0-9]+)/$', views.detail, name='detail'),
 ]   #+ static('images', document_root=settings.BASE_DIR+'/images')
