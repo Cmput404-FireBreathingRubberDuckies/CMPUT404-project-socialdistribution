@@ -10,8 +10,8 @@ from rest_framework import routers
 # router.register(r'author', models.AuthorViewSet)
 
 urlpatterns = [
-    url(r'^authors/$', views.author_list, name='author_list'),
-    url(r'^authors/(?P<author_uuid>[^/]+)/$', views.author_detail, name='author_detail'),
+    url(r'^author/$', views.author_list, name='author_list'),
+    url(r'^author/(?P<author_uuid>[^/]+)/$', views.author_detail, name='author_detail'),
     #url(r'^friendrequest/$', views.friend_request, name='friend_request'),
     url(r'^friends/(?P<author_uuid>[^/]+)/$', views.friends, name='friends'),
     url(r'^friendrequest/(?P<author_uuid>[^/]+)/$', views.friend_request, name='friend_request'),
