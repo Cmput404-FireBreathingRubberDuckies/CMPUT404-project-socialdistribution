@@ -163,14 +163,18 @@ div.authentication {
   margin-left: auto;
   margin-right: auto
 }
-.friends-section {
+.left-column {
+  padding: 0;
+}
+.left-column-module {
   border-right: 1px solid rgba(217,217,217,1);
   border-left: 1px solid rgba(217,217,217,1);
   border-bottom: 1px solid rgba(217,217,217,1);
   border-radius: 4px;
   padding: 0;
+  margin-bottom: 10px;
 }
-.friends-section-header {
+.left-column-module-header {
   background-color: #222222;
   box-shadow: 0 0 0 1px #222222;
   height: 34px;
@@ -179,7 +183,7 @@ div.authentication {
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
 }
-.friends-section-header p {
+.left-column-module-header p {
   margin-left: 10px;
 }
 .friend-row {
