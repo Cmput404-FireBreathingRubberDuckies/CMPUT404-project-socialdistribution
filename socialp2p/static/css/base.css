@@ -100,11 +100,13 @@ div.authentication {
 /* posts.html */
 .web_content .posts{
   padding: 20px 50px;
-  border-radius:.42857em;
   border-width:1px;
   border-style:solid;
   border-color:#E1E8ED;
   box-sizing:border-box;
+}
+.web_content .posts:hover{
+  background-color: #f5f8fa;
 }
 .web_content .posts .profile{
 }
