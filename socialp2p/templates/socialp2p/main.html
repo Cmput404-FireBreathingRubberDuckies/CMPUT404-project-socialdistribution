@@ -1,5 +1,6 @@
 {% load staticfiles %}
 {% load cloudinary %}
+{% load tz %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,10 +40,12 @@
       <textarea class="post_input form-control" rows="4" id="post_text"></textarea>
     </div>
     <div class="upload_area">
-      <div>
-        <input type='file' id='choose_pic'  />
+      <input id="uploadFile" placeholder="Choose An Image" disabled="disabled" />
+      <div class="fileUpload btn btn-primary post_left">
+        <span>Browse</span>
+        <input id="uploadBtn" type="file" class="upload" />
       </div>
-      <div style="text-align: right">
+      <div class="post_right">
         <select id="post_select">
           {% for choice in Post.Visibility_CHOICES %}
           <option>{{ choice.1 }}</option>
@@ -51,25 +54,42 @@
         <button class="btn btn-default" type="submit" id="post_button">POST</button>
       </div>
     </div>
-    <div id="posts_area">
+
+    {% for post in posts %}
+    <div class="posts">
+      <div class="profile">
+        {% cloudinary post.author.photo %}
+        <strong class="displayname">{{ post.author.displayname }}</strong>
+        <span class="time">{{ post.datetime|localtime }}</span>
+      </div>
+      <div class=content>
+        <p>{{ post.content }}</p>
+        {% if post.image %}
+        {% cloudinary post.image width=700 height=300 crop="fill" %}
+        {% endif %}
+      </div>
     </div>
+    {% endfor %}
   </div>
   <script>
-  document.getElementById('choose_pic').addEventListener('change', readURL, true);
-  function readURL(){
-    var file = document.getElementById("choose_pic").files[0];
-    var reader = new FileReader();
-    reader.onloadend = function(){
-      var content = document.getElementById("post_text");
-      content.value = content.value + ' <img src="' + reader.result;
-      content.value = content.value + '" />';
-      //document.getElementById('post_text').style.backgroundImage = "url(" + reader.result + ")";
-    }
-    if(file){
-      reader.readAsDataURL(file);
-    }else{
-    }
-  }
+  document.getElementById("uploadBtn").onchange = function () {
+    document.getElementById("uploadFile").value = this.value.replace(/.*[\/\\]/, '');
+  };
+  // document.getElementById('choose_pic').addEventListener('change', readURL, true);
+  // function readURL(){
+  //   var file = document.getElementById("choose_pic").files[0];
+  //   var reader = new FileReader();
+  //   reader.onloadend = function(){
+  //     var content = document.getElementById("post_text");
+  //     content.value = content.value + ' <img src="' + reader.result;
+  //     content.value = content.value + '" />';
+  //     //document.getElementById('post_text').style.backgroundImage = "url(" + reader.result + ")";
+  //   }
+  //   if(file){
+  //     reader.readAsDataURL(file);
+  //   }else{
+  //   }
+  // }
   </script>
 </body>
 </html>

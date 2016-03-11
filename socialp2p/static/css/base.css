@@ -64,6 +64,8 @@ div.authentication {
   width: 800px;
   left: 20%
 }
+
+/* main.html */
 .post_title_area{
   position: relative;
   overflow: hidden;
@@ -79,7 +81,7 @@ div.authentication {
   height: 21px;
   color: #1b7fb6;
 }
-.post_input{
+/*.post_input{
   width: 100%;
   height: 100px;
   padding-left: 0;
@@ -87,14 +89,41 @@ div.authentication {
 }
 .post_input:focus{
   outline-color: #eb7350;
+}*/
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+}
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
 }
 .upload_area{
   position: relative;
-  height:30px;
+  padding: 10px 0px;
 }
 .checkbox {
   float: right;
   margin-top: 0px;
+}
+.web_content .upload_area .post_left {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 20px;
+}
+.web_content .upload_area .post_right {
+  float: right;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 50px;
 }
 
 /* posts.html */

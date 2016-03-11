@@ -83,4 +83,4 @@ def posts_view(request):
 
 @login_required
 def main(request):
-    return render(request, 'socialp2p/main.html', {'Post': Post})
+    return render(request, 'socialp2p/main.html', {'Post': Post, 'posts': Post.objects.filter(visibility='PUB').order_by('-datetime')})
