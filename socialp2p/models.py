@@ -26,6 +26,7 @@ class Post(models.Model):
     )
     visibility = models.CharField(max_length=3, choices=Visibility_CHOICES, default=PRIVATE)
     user_can_view = models.ForeignKey(User, related_name='+', null=True, blank=True)
+    datetime = models.DateTimeField(auto_now=True)
 
 class Author(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
