@@ -22,7 +22,6 @@ class JSONResponse(HttpResponse):
 
 @api_view(['GET', 'POST'])
 def author_list(request):
-    permission_classes = [permissions.IsAuthenticated]
     if request.method == 'GET':
         authors = Author.objects.all()
         serializer = AuthorSerializer(authors, many=True)
@@ -99,17 +98,18 @@ def friends(request, author_uuid):
         serializer = FriendSerializer(author)
         return Response(serializer.data)
     elif request.method == 'POST':
-        current_author.friends.add(author)
-        # request.user.author.friends.add(user)
-        author.friends.add(current_author)
-        friendRequest = FriendRequest.objects.get(requester=author, receiver=current_author)
-        friendRequest.accepted = True
-        friendRequest.save()
-        return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
-    elif request.method == 'DELETE':
-        request.user.author.friends.delete(user)
-        author.friends.delete(request.user)
-        friendRequest = FriendRequest.objects.get(requester=user, receiver=request.user)
-        friendRequest.accepted = False
-        friendRequest.save()
-	return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
+
+        if request.POST.get("accept"):
+            current_author.friends.add(author)
+            author.friends.add(current_author)
+            friendRequest = FriendRequest.objects.get(requester=author, receiver=current_author)
+            friendRequest.accepted = True
+            friendRequest.save()
+            return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
+	elif request.POST.get("delete"):
+	    current_author.friends.remove(author)
+            author.friends.remove(current_author)
+            #friendRequest = FriendRequest.objects.get(requester=current_author, receiver=current_author)
+           # friendRequest.accepted = False
+            #friendRequest.save()
+	    return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
