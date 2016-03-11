@@ -75,6 +75,9 @@ def signup_view(request):
     else:
         return render(request, 'socialp2p/signup.html')
 
+def posts_view(request):
+    return render(request, 'socialp2p/posts.html', {'posts': Post.objects.all()})
+
 @login_required
 def main(request):
     return render(request, 'socialp2p/main.html', {'Post': Post})
