@@ -1,87 +1,60 @@
+{% extends 'base.html' %}
 {% load staticfiles %}
 {% load cloudinary %}
-<!DOCTYPE html>
-<html>
-<head>
-<title>Profile</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-<link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
-<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-</head>
-<body>
-    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" >
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" width="300px" href="{% url 'socialp2p:main' %}">socialp2p</a>
+{% block body %}
+<div class="container">
+    <div class="col-md-3 left-column">
+        <div class="left-column-module">
+            <div class="left-column-module-header friends-section">
+                <p>Friends</p>
             </div>
-            <form class="navbar-form navbar-left" role="search">
-                <div class="form-group">
-                    <input type="text" class="search_input form-control" id="search_text" placeholder="Search">
+            {% for friend in user.author.friends.all %}
+                <div class="friend-row">
+                    <a href="{% url 'socialp2p:profile' friend.displayname%}">{% cloudinary friend.photo %}<strong class="displayname">{{ friend.displayname }}</strong></a>
+                    <form class="unfriend-form pull-right" action="{% url 'api:friends' friend.uuid %}" method="POST" id="delete">
+                        {% csrf_token %}
+                        <input class="btn btn-default unfriend-btn" type="submit" value="Unfriend" name="delete"/>
+                    </form>
                 </div>
-                <a class="search_button" href="#" id="search_submit"><img src="{% static 'img/search_icon.png' %}" width="30px" height="30px"></a>
-            </form>
-            <div class="navbar-right">
-                <a href="{% url 'socialp2p:profile' user.username %}">{% cloudinary user.author.photo width=20 class='profile-navbar' %}</a>
-                <a href="{% url 'socialp2p:logout' %}">Log Out</a>
-            </div>
-        </div>
-    </nav>
-    <div class="container">
-        <div class="col-md-3 left-column">
-            <div class="left-column-module">
-                <div class="left-column-module-header friends-section">
-                    <p>Friends</p>
-                </div>
-                {% for friend in user.author.friends.all %}
-                    <div class="friend-row">
-                        <a href="{% url 'socialp2p:profile' friend.displayname%}">{% cloudinary friend.photo %}<strong class="displayname">{{ friend.displayname }}</strong></a>
-                        <form class="unfriend-form pull-right" action="{% url 'api:friends' friend.uuid %}" method="POST" id="delete">
-                            {% csrf_token %}
-                            <input class="btn btn-default unfriend-btn" type="submit" value="Unfriend" name="delete"/>
-                        </form>
-                    </div>
-                {% endfor %}
-                {% if user.author.friends.all|length == 0 %}
-                    <div class="friend-row">
-                        <p>No Friends</p>
-                    </div>
-                {% endif %}
-            </div>
-
-            <div class="left-column-module friends-requests-section">
-                <div class="left-column-module-header">
-                    <p>Friend Requests</p>
-                </div>
-                {% for b in requests %}
-                    <div class="friend-row">
-                        <a href="{% url 'socialp2p:profile' b.requester.displayname%}">{% cloudinary b.requester.photo %}<strong class="displayname">{{ b.requester.displayname }}</strong></a>
-                        <form class="pull-right" action="{% url 'api:friends' b.requester.uuid %}" method="POST" id="accept">
-                            {% csrf_token %}
-                            <input class="btn btn-default" type="submit" value="Accept" name="accept"/>
-                        </form>
-                    </div>
-                {% endfor %}
-                {% if requests|length == 0 %}
-                    <div class="friend-row">
-                        <p>No Friend Requests</p>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-        <div class="col-md-9">
-            <p>Username: {{user.username}}</p>
-            <p>UUID: {{user.author.uuid}}</p>
-            <p>host: {{user.author.host}}</p>
-            <p>id: {{user.author.id}}</p>
-
-            <P> Pending Friend Requests/Following </P>
-            {% for a in follow %}
-                <p>{{a.receiver.displayname}}</p>
             {% endfor %}
-            {% cloudinary user.author.photo %}
+            {% if user.author.friends.all|length == 0 %}
+                <div class="friend-row">
+                    <p>No Friends</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="left-column-module friends-requests-section">
+            <div class="left-column-module-header">
+                <p>Friend Requests</p>
+            </div>
+            {% for b in requests %}
+                <div class="friend-row">
+                    <a href="{% url 'socialp2p:profile' b.requester.displayname%}">{% cloudinary b.requester.photo %}<strong class="displayname">{{ b.requester.displayname }}</strong></a>
+                    <form class="pull-right" action="{% url 'api:friends' b.requester.uuid %}" method="POST" id="accept">
+                        {% csrf_token %}
+                        <input class="btn btn-default" type="submit" value="Accept" name="accept"/>
+                    </form>
+                </div>
+            {% endfor %}
+            {% if requests|length == 0 %}
+                <div class="friend-row">
+                    <p>No Friend Requests</p>
+                </div>
+            {% endif %}
         </div>
     </div>
+    <div class="col-md-9">
+        <p>Username: {{user.username}}</p>
+        <p>UUID: {{user.author.uuid}}</p>
+        <p>host: {{user.author.host}}</p>
+        <p>id: {{user.author.id}}</p>
 
-</body>
-</html>
+        <P> Pending Friend Requests/Following </P>
+        {% for a in follow %}
+            <p>{{a.receiver.displayname}}</p>
+        {% endfor %}
+        {% cloudinary user.author.photo %}
+    </div>
+</div>
+{% endblock %}

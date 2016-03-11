@@ -1,46 +1,23 @@
+{% extends 'base.html' %}
 {% load staticfiles %}
 {% load cloudinary %}
 {% load tz %}
-<!DOCTYPE html>
-<html>
-<head>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
-</head>
-<body>
-  <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" >
-    <div class="container">
-      <div class="navbar-header">
-        <a class="navbar-brand" width="300px" href="{% url 'socialp2p:main' %}">socialp2p</a>
-      </div>
-      <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-          <input type="text" class="search_input form-control" id="search_text" placeholder="Search">
-        </div>
-        <a class="search_button" href="#" id="search_submit"><img src="{% static 'img/search_icon.png' %}" width="30px" height="30px"></a>
-      </form>
-      <div class="navbar-right">
-        <a href="{% url 'socialp2p:profile' user.username %}">{% cloudinary user.author.photo width=20 class='profile-navbar' %}</a>
-        <a href="{% url 'socialp2p:logout' %}">Log Out</a>
-      </div>
+{% block body %}
+<div class="web_content">
+  {% for post in posts %}
+  <div class="posts">
+    <div class="profile">
+      <a href="{% url 'socialp2p:profile' post.author.displayname%}">{% cloudinary post.author.photo %}</a>
+      <a href="{% url 'socialp2p:profile' post.author.displayname%}"><strong class="displayname">{{ post.author.displayname }}</strong></a>
+      <span class="time">{{ post.datetime|localtime }}</span>
     </div>
-  </nav>
-  <div class="web_content">
-    {% for post in posts %}
-    <div class="posts">
-      <div class="profile">
-        <a href="{% url 'socialp2p:profile' post.author.displayname%}">{% cloudinary post.author.photo %}</a>
-        <a href="{% url 'socialp2p:profile' post.author.displayname%}"><strong class="displayname">{{ post.author.displayname }}</strong></a>
-        <span class="time">{{ post.datetime|localtime }}</span>
-      </div>
-      <div class=content>
-        <p>{{ post.content }}</p>
-        {% if post.image %}
-          {% cloudinary post.image width=700 height=300 crop="fill" %}
-        {% endif %}
-      </div>
+    <div class=content>
+      <p>{{ post.content }}</p>
+      {% if post.image %}
+        {% cloudinary post.image width=700 height=300 crop="fill" %}
+      {% endif %}
     </div>
-    {% endfor %}
   </div>
-</body>
-</html>
+  {% endfor %}
+</div>
+{% endblock %}

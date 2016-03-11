@@ -1,95 +1,72 @@
+{% extends 'base.html' %}
 {% load staticfiles %}
 {% load cloudinary %}
 {% load tz %}
-<!DOCTYPE html>
-<html>
-<head>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
-</head>
-<body>
-  <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" >
-    <div class="container">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="{% url 'socialp2p:main' %}">socialp2p</a>
-      </div>
-      <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-          <input type="text" class="search_input form-control" id="search_text" placeholder="Search">
-        </div>
-        <a class="search_button" href="#" id="search_submit"><img src="{% static 'img/search_icon.png' %}" width="30px" height="30px"></a>
-      </form>
-      <div class="navbar-right">
-        <a href="{% url 'socialp2p:profile' user.username %}">{% cloudinary user.author.photo width=20 class='profile-navbar' %}</a>
-        <a href="{% url 'socialp2p:logout' %}">Log Out</a>
-      </div>
+{% block body %}
+<div class="web_content">
+  <div class="post_title_area">
+    <div class="post_title">
+      <p>
+        <em>What's new you want to tell?</em>
+      </p>
     </div>
-  </nav>
-  <div class="web_content">
-    <div class="post_title_area">
-      <div class="post_title">
-        <p>
-          <em>What's new you want to tell?</em>
-        </p>
-      </div>
-      <div class="checkbox">
-        <label><input id="post_markdown" type="checkbox"> Markdown?</label>
-      </div>
+    <div class="checkbox">
+      <label><input id="post_markdown" type="checkbox"> Markdown?</label>
     </div>
-    <div>
-      <textarea class="post_input form-control" rows="4" id="post_text"></textarea>
-    </div>
-    <div class="upload_area">
-      <input id="uploadFile" placeholder="Choose An Image" disabled="disabled" />
-      <div class="fileUpload btn btn-primary post_left">
-        <span>Browse</span>
-        <input id="uploadBtn" type="file" class="upload" />
-      </div>
-      <div class="post_right">
-        <select id="post_select">
-          {% for choice in Post.Visibility_CHOICES %}
-          <option>{{ choice.1 }}</option>
-          {% endfor %}
-        </select>
-        <button class="btn btn-default" type="submit" id="post_button">POST</button>
-      </div>
-    </div>
-
-    {% for post in posts %}
-    <div class="posts">
-      <div class="profile">
-        <a href="{% url 'socialp2p:profile' post.author.displayname%}">{% cloudinary post.author.photo %}</a>
-        <a href="{% url 'socialp2p:profile' post.author.displayname%}"><strong class="displayname">{{ post.author.displayname }}</strong></a>
-        <span class="time">{{ post.datetime|localtime }}</span>
-      </div>
-      <div class=content>
-        <p>{{ post.content }}</p>
-        {% if post.image %}
-        {% cloudinary post.image width=700 height=300 crop="fill" %}
-        {% endif %}
-      </div>
-    </div>
-    {% endfor %}
   </div>
-  <script>
-  document.getElementById("uploadBtn").onchange = function () {
-    document.getElementById("uploadFile").value = this.value.replace(/.*[\/\\]/, '');
-  };
-  // document.getElementById('choose_pic').addEventListener('change', readURL, true);
-  // function readURL(){
-  //   var file = document.getElementById("choose_pic").files[0];
-  //   var reader = new FileReader();
-  //   reader.onloadend = function(){
-  //     var content = document.getElementById("post_text");
-  //     content.value = content.value + ' <img src="' + reader.result;
-  //     content.value = content.value + '" />';
-  //     //document.getElementById('post_text').style.backgroundImage = "url(" + reader.result + ")";
-  //   }
-  //   if(file){
-  //     reader.readAsDataURL(file);
-  //   }else{
-  //   }
-  // }
-  </script>
-</body>
-</html>
+  <div>
+    <textarea class="post_input form-control" rows="4" id="post_text"></textarea>
+  </div>
+  <div class="upload_area">
+    <input id="uploadFile" placeholder="Choose An Image" disabled="disabled" />
+    <div class="fileUpload btn btn-primary post_left">
+      <span>Browse</span>
+      <input id="uploadBtn" type="file" class="upload" />
+    </div>
+    <div class="post_right">
+      <select id="post_select">
+        {% for choice in Post.Visibility_CHOICES %}
+        <option>{{ choice.1 }}</option>
+        {% endfor %}
+      </select>
+      <button class="btn btn-default" type="submit" id="post_button">POST</button>
+    </div>
+  </div>
+
+  {% for post in posts %}
+  <div class="posts">
+    <div class="profile">
+      <a href="{% url 'socialp2p:profile' post.author.displayname%}">{% cloudinary post.author.photo %}</a>
+      <a href="{% url 'socialp2p:profile' post.author.displayname%}"><strong class="displayname">{{ post.author.displayname }}</strong></a>
+      <span class="time">{{ post.datetime|localtime }}</span>
+    </div>
+    <div class=content>
+      <p>{{ post.content }}</p>
+      {% if post.image %}
+      {% cloudinary post.image width=700 height=300 crop="fill" %}
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<script>
+document.getElementById("uploadBtn").onchange = function () {
+  document.getElementById("uploadFile").value = this.value.replace(/.*[\/\\]/, '');
+};
+// document.getElementById('choose_pic').addEventListener('change', readURL, true);
+// function readURL(){
+//   var file = document.getElementById("choose_pic").files[0];
+//   var reader = new FileReader();
+//   reader.onloadend = function(){
+//     var content = document.getElementById("post_text");
+//     content.value = content.value + ' <img src="' + reader.result;
+//     content.value = content.value + '" />';
+//     //document.getElementById('post_text').style.backgroundImage = "url(" + reader.result + ")";
+//   }
+//   if(file){
+//     reader.readAsDataURL(file);
+//   }else{
+//   }
+// }
+</script>
+{% endblock %}

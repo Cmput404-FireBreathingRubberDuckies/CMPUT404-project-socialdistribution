@@ -1,47 +1,16 @@
+{% extends 'base.html' %}
 {% load staticfiles %}
 {% load cloudinary %}
-<!DOCTYPE html>
-<html>
-<head>
-<title>Profile</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-<link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
-<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-</head>
-<body>
-    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" >
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" width="300px" href="{% url 'socialp2p:main' %}">socialp2p</a>
-            </div>
-            <form class="navbar-form navbar-left" role="search">
-                <div class="form-group">
-                    <input type="text" class="search_input form-control" id="search_text" placeholder="Search">
-                </div>
-                <a class="search_button" href="#" id="search_submit"><img src="{% static 'img/search_icon.png' %}" width="30px" height="30px"></a>
-            </form>
-            <div class="navbar-right">
-                <a href="{% url 'socialp2p:profile' user.username %}">{% cloudinary user.author.photo width=20 class='profile-navbar' %}</a>
-                <a href="{% url 'socialp2p:logout' %}">Log Out</a>
-            </div>
-        </div>
-    </nav>
-    <div class="container">
-	<p>Username: {{user_profile.username}}</p>
-	<p>UUID: {{user_profile.author.uuid}}</p>
-	<p>host: {{user_profile.author.host}}</p>
-	<p>id: {{user_profile.author.id}}</p>
-	{% cloudinary user_profile.author.photo %}
-	<!--<form action="{% url 'socialp2p:profile' user_profile.username %}" method="POST" id="add">
-		{% csrf_token %}
-	<input type="submit" value="Add Friend" />
-	</form>-->
-	<form action="{% url 'api:friend_request' user_profile.author.uuid %}" method="POST" id="add">
-		{% csrf_token %}
-	<input type="submit" value="Add Friend" />
-	</form>
-</form>
-    </div>
-</body>
-</html>
+{% block body %}
+<div class="container">
+    <p>Username: {{user_profile.username}}</p>
+    <p>UUID: {{user_profile.author.uuid}}</p>
+    <p>host: {{user_profile.author.host}}</p>
+    <p>id: {{user_profile.author.id}}</p>
+    {% cloudinary user_profile.author.photo %}
+    <form action="{% url 'api:friend_request' user_profile.author.uuid %}" method="POST" id="add">
+    	{% csrf_token %}
+        <input type="submit" value="Add Friend" />
+    </form>
+</div>
+{% endblock %}

@@ -35,10 +35,6 @@ div.authentication {
   transform: translateY(4px);
 }
 
-.profile-navbar {
-  margin-top: 14px;
-}
-
 .search_input{
   /*position: relative;*/
   /*float: left;*/
@@ -203,4 +199,7 @@ div.authentication {
 }
 .unfriend-form {
   display: inline;
+}
+li.profile-icon:hover {
+  background-color: #5c5c5c;
 }
