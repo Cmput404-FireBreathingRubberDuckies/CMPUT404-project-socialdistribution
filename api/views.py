@@ -8,9 +8,9 @@ from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import HttpResponseRedirect, HttpResponse
-from socialp2p.models import Author, FriendRequest
+from socialp2p.models import Author, FriendRequest, Post
 from socialp2p import views
-from api.serializations import AuthorSerializer, FriendRequestSerializer, FriendSerializer
+from api.serializations import *
 from django.contrib.auth.models import User
 from rest_framework import viewsets, status, permissions
 
@@ -70,7 +70,7 @@ def friend_request(request, author_uuid):
     except Author.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     user = User.objects.get(author=author)
-    
+
     if request.method == 'GET':
         requests = FriendRequest.objects.filter(requester=current_author, accepted=False)
         serializer = FriendRequestSerializer(requests, many=True)
@@ -96,7 +96,7 @@ def friends(request, author_uuid):
     user = User.objects.get(author=author)
 
     if request.method == 'GET':
-        serializer = FriendSerializer(author, context={'request': request})
+        serializer = FriendSerializer(author)
         return Response(serializer.data)
     elif request.method == 'POST':
 
@@ -119,3 +119,11 @@ def friends(request, author_uuid):
 		friendRequest.accepted = False
 		friendRequest.save()
 	    return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
+
+# Currently returning a list of posts, needs changes to match requirements
+@api_view(['GET', 'POST', 'DELETE'])
+def public_posts(request):
+    if request.method == 'GET':
+        public_posts = Post.objects.filter(visibility="PUB")
+        serializer = PostSerializer(public_posts, many=True)
+        return Response(serializer.data)
