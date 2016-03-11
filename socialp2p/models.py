@@ -11,9 +11,22 @@ class Post(models.Model):
     markdown = models.BooleanField(default=False)
     content = models.TextField()
     #image = models.ImageField(upload_to="images/post", null=True, blank=True)
-    image = CloudinaryField('image', default=None, blank=True)
-    visibility = models.CharField(max_length=30)
-    user_can_view = models.ForeignKey(User, related_name='+', blank=True)
+    image = CloudinaryField('image', null=True, blank=True)
+    PUBLIC = 'PUB'
+    FOAF = 'FOF'
+    FRIENDS = 'FRS'
+    PRIVATE = 'PRV'
+    SERVERONLY = 'SVO'
+    Visibility_CHOICES = (
+        (PUBLIC, 'PUBLIC'),
+        (FOAF, 'FOAF'),
+        (FRIENDS, 'FRIENDS'),
+        (PRIVATE, 'PRIVATE'),
+        (SERVERONLY, 'SERVERONLY'),
+    )
+    visibility = models.CharField(max_length=3, choices=Visibility_CHOICES, default=PRIVATE)
+    user_can_view = models.ForeignKey(User, related_name='+', null=True, blank=True)
+    datetime = models.DateTimeField(auto_now=True)
 
 class Author(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)

@@ -38,3 +38,61 @@ div.authentication {
 .profile-navbar {
   margin-top: 14px;
 }
+
+.search_input{
+  /*position: relative;*/
+  /*float: left;*/
+  width: 300px;
+  /*height: 30px;*/
+  /*margin: 9px 0 0 10px;*/
+  /*background-color: #f2f2f5;*/
+  /*border: 1px solid #ccc;*/
+}
+.search_input:focus{
+  width: 600px;
+  outline-color: #eb7350;
+}
+.search_button{
+  /*position: relative;*/
+  /*display: inline-block;*/
+  /*left: -30px;*/
+  /*top: 9px;*/
+}
+.web_content{
+  display: block;
+  position: fixed;
+  width: 800px;
+  left: 20%
+}
+.post_title_area{
+  position: relative;
+  overflow: hidden;
+  height: 21px;
+  display: block;
+}
+.post_title{
+  outline-style: none;
+  line-height: 16px;
+  font-family: Tahoma;
+  float: left;
+  width: 200px;
+  height: 21px;
+  color: #1b7fb6;
+}
+.post_input{
+  width: 100%;
+  height: 100px;
+  padding-left: 0;
+  padding-top: 0;
+}
+.post_input:focus{
+  outline-color: #eb7350;
+}
+.upload_area{
+  position: relative;
+  height:30px;
+}
+.checkbox {
+  float: right;
+  margin-top: 0px;
+}
