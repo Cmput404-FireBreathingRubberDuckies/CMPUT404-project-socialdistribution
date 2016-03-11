@@ -60,7 +60,7 @@ div.authentication {
 }
 .web_content{
   display: block;
-  position: fixed;
+  position: absolute;
   width: 800px;
   left: 20%
 }
@@ -95,4 +95,40 @@ div.authentication {
 .checkbox {
   float: right;
   margin-top: 0px;
+}
+
+/* posts.html */
+.web_content .posts{
+  padding: 20px 50px;
+  border-width:1px;
+  border-style:solid;
+  border-color:#E1E8ED;
+  box-sizing:border-box;
+}
+.web_content .posts:hover{
+  background-color: #f5f8fa;
+}
+.web_content .posts .profile{
+}
+.web_content .posts .profile img {
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+}
+.web_content .posts .profile .displayname {
+  font-size: 30px;
+  font-weight: bold;
+}
+.web_content .posts .profile .time {
+  font-size: 15px;
+  float: right;
+}
+.web_content .posts .content p {
+  font-size: 20px;
+}
+.web_content .posts .content img {
+  border-radius: 2px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto
 }

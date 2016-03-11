@@ -79,7 +79,7 @@ def signup_view(request):
 # all posts public on server
 @login_required
 def posts_view(request):
-    return render(request, 'socialp2p/posts.html', {'posts': Post.objects.filter(visibility='PUB')})
+    return render(request, 'socialp2p/posts.html', {'posts': Post.objects.filter(visibility='PUB').order_by('-datetime')})
 
 @login_required
 def main(request):

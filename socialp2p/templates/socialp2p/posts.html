@@ -26,9 +26,18 @@
     </div>
   </nav>
   <div class="web_content">
-    <h1>Public posts on the server</h1>
     {% for post in posts %}
-      <p>{{ post.author.displayname }} posts on {{ post.datetime|localtime }}:<br><em>{{ post.content }}</em><br>markdown={{ post.markdown }}<br>{% cloudinary post.image %}</p>
+    <div class="posts">
+      <div class="profile">
+        {% cloudinary post.author.photo %}
+        <strong class="displayname">{{ post.author.displayname }}</strong>
+        <span class="time">{{ post.datetime|localtime }}</span>
+      </div>
+      <div class=content>
+        <p>{{ post.content }}</p>
+        {% cloudinary post.image width=700 height=300 crop="fill" %}
+      </div>
+    </div>
     {% endfor %}
   </div>
 </body>
