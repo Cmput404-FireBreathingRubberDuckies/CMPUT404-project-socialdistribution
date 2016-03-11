@@ -41,6 +41,11 @@
                     </form>
                 </div>
             {% endfor %}
+            {% if user.author.friends.all|length == 0 %}
+                <div class="friend-row">
+                    <p>No Friends</p>
+                </div>
+            {% endif %}
         </div>
         <div class="col-md-9">
             <p>Username: {{user.username}}</p>
