@@ -8,7 +8,7 @@ from cloudinary.models import CloudinaryField
 class Author(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    host = models.CharField(max_length=30, default="http://socialp2p.herokuapp.com/")
+    host = models.CharField(max_length=100, default="http://socialp2p.herokuapp.com/")
     photo = CloudinaryField('image', default='image/upload/v1457219004/default-avatar.jpg', blank=True)
     friends = models.ManyToManyField('self', related_name="friends", blank=True)
 
