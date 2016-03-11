@@ -35,7 +35,9 @@
       </div>
       <div class=content>
         <p>{{ post.content }}</p>
-        {% cloudinary post.image width=700 height=300 crop="fill" %}
+        {% if post.image %}
+          {% cloudinary post.image width=700 height=300 crop="fill" %}
+        {% endif %}
       </div>
     </div>
     {% endfor %}
