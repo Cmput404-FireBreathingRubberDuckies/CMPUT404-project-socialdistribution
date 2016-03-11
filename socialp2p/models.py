@@ -23,8 +23,9 @@ class Author(models.Model):
     photo = CloudinaryField('image', default='image/upload/v1457219004/default-avatar.jpg', blank=True)
     friends = models.ManyToManyField(User, related_name="friend", blank=True)
 
-    def friend(self):
-        return "friends"
+    def uuid_str(self):
+        return str(self.uuid)
+
 
 class Comment(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
@@ -41,6 +42,3 @@ class FriendRequest(models.Model):
 
     def __unicode__(self):
         return self.requester.username + " to " + self.receiver.username
-
-    def friend_request(self):
-        return "friendrequest"
