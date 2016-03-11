@@ -104,6 +104,7 @@ div.authentication {
   border-style:solid;
   border-color:#E1E8ED;
   box-sizing:border-box;
+  margin-bottom: 10px;
 }
 .web_content .posts:hover{
   background-color: #f5f8fa;
@@ -114,6 +115,7 @@ div.authentication {
   width: 60px;
   height: 60px;
   border-radius: 30px;
+  margin-right: 10px;
 }
 .web_content .posts .profile .displayname {
   font-size: 30px;
@@ -131,4 +133,40 @@ div.authentication {
   display: block;
   margin-left: auto;
   margin-right: auto
+}
+.friends-section {
+  border-right: 1px solid rgba(217,217,217,1);
+  border-left: 1px solid rgba(217,217,217,1);
+  border-bottom: 1px solid rgba(217,217,217,1);
+  border-radius: 4px;
+  padding: 0;
+}
+.friends-section-header {
+  background-color: #222222;
+  box-shadow: 0 0 0 1px #222222;
+  height: 34px;
+  color: #9d9d9d;
+  line-height: 34px;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+}
+.friends-section-header p {
+  margin-left: 10px;
+}
+.friend-row {
+  margin-bottom: 10px;
+  height: 34px;
+  margin: 10px;
+}
+.friend-row img {
+  width: 30px;
+  height: 30px;
+  border-radius: 30px;
+  margin-right: 10px;
+}
+.unfriend-btn {
+  display: inline;
+}
+.unfriend-form {
+  display: inline;
 }
