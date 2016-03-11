@@ -4,34 +4,37 @@
 {% load tz %}
 {% block body %}
 <div class="web_content">
-  <div class="post_title_area">
-    <div class="post_title">
-      <p>
-        <em>What's new you want to tell?</em>
-      </p>
+  <form action="{% url 'socialp2p:main' %}" method="POST">
+    {% csrf_token %}
+    <div class="post_title_area">
+      <div class="post_title">
+        <p>
+          <em>What's new you want to tell?</em>
+        </p>
+      </div>
+      <div class="checkbox">
+        <label><input id="post_markdown" name="markdown" type="checkbox" value="false"> Markdown?</label>
+      </div>
     </div>
-    <div class="checkbox">
-      <label><input id="post_markdown" type="checkbox"> Markdown?</label>
+    <div>
+      <textarea name="content" class="post_input form-control" rows="4" id="post_text"></textarea>
     </div>
-  </div>
-  <div>
-    <textarea class="post_input form-control" rows="4" id="post_text"></textarea>
-  </div>
-  <div class="upload_area">
-    <input id="uploadFile" placeholder="Choose An Image" disabled="disabled" />
-    <div class="fileUpload btn btn-primary post_left">
-      <span>Browse</span>
-      <input id="uploadBtn" type="file" class="upload" />
+    <div class="upload_area">
+      <input id="uploadFile" placeholder="Choose An Image" disabled="disabled" />
+      <div class="fileUpload btn btn-primary post_left">
+        <span>Browse</span>
+        <input name="image" id="uploadBtn" type="file" class="upload" />
+      </div>
+      <div class="post_right">
+        <select id="post_select" name="visibility">
+          {% for choice in Post.Visibility_CHOICES %}
+          <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+          {% endfor %}
+        </select>
+        <button class="btn btn-default" type="submit" id="post_button">POST</button>
+      </div>
     </div>
-    <div class="post_right">
-      <select id="post_select">
-        {% for choice in Post.Visibility_CHOICES %}
-        <option>{{ choice.1 }}</option>
-        {% endfor %}
-      </select>
-      <button class="btn btn-default" type="submit" id="post_button">POST</button>
-    </div>
-  </div>
+  </form>
 
   {% for post in posts %}
   <div class="posts">

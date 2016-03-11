@@ -83,4 +83,9 @@ def posts_view(request):
 
 @login_required
 def main(request):
-    return render(request, 'socialp2p/main.html', {'Post': Post, 'posts': Post.objects.filter(visibility='PUB').order_by('-datetime')})
+    if request.method == 'POST':
+        post = Post(author=Author.objects.get(user=request.user), content=request.POST['content'], markdown=request.POST.get('markdown', False), image=request.POST['image'], visibility=request.POST['visibility'])
+        post.save()
+        return HttpResponseRedirect(reverse('socialp2p:main'))
+    else:
+        return render(request, 'socialp2p/main.html', {'Post': Post, 'posts': Post.objects.filter(visibility='PUB').order_by('-datetime')})
