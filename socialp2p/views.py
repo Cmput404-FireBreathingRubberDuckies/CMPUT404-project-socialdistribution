@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response, render
 from django.contrib.auth.models import User
-from socialp2p.models import Author, FriendRequest
+from socialp2p.models import Author, FriendRequest, Post
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 import json
@@ -76,6 +76,11 @@ def signup_view(request):
     else:
         return render(request, 'socialp2p/signup.html')
 
+# all posts public on server
+@login_required
+def posts_view(request):
+    return render(request, 'socialp2p/posts.html', {'posts': Post.objects.filter(visibility='PUB'), 'authors': Author})
+
 @login_required
 def main(request):
-    return render(request, 'socialp2p/main.html')
+    return render(request, 'socialp2p/main.html', {'Post': Post})

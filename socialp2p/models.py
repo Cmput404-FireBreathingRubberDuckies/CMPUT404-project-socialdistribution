@@ -18,6 +18,9 @@ class Author(models.Model):
     def url(self):
         return self.host + 'api/author/' + str(self.uuid)
 
+    def uuid_str(self):
+        return str(self.uuid)
+
     def friend(self):
         return "friends"
 
@@ -41,6 +44,7 @@ class Post(models.Model):
     )
     visibility = models.CharField(max_length=3, choices=Visibility_CHOICES, default=PRIVATE)
     user_can_view = models.ForeignKey(Author, related_name='+', null=True, blank=True)
+    datetime = models.DateTimeField(auto_now=True)
 
 class Comment(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
@@ -57,6 +61,3 @@ class FriendRequest(models.Model):
 
     def __unicode__(self):
         return self.requester.username + " to " + self.receiver.username
-
-    def friend_request(self):
-        return "friendrequest"

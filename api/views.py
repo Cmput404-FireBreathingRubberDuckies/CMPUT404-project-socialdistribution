@@ -12,7 +12,7 @@ from socialp2p.models import Author, FriendRequest
 from socialp2p import views
 from api.serializations import AuthorSerializer, FriendRequestSerializer, FriendSerializer
 from django.contrib.auth.models import User
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, permissions
 
 class JSONResponse(HttpResponse):
     def __init__(self, data, **kwargs):
@@ -22,6 +22,7 @@ class JSONResponse(HttpResponse):
 
 @api_view(['GET', 'POST'])
 def author_list(request):
+    permission_classes = [permissions.IsAuthenticated]
     if request.method == 'GET':
         authors = Author.objects.all()
         serializer = AuthorSerializer(authors, many=True)
@@ -111,4 +112,4 @@ def friends(request, author_uuid):
         friendRequest = FriendRequest.objects.get(requester=user, receiver=request.user)
         friendRequest.accepted = False
         friendRequest.save()
-        return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
+	return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
