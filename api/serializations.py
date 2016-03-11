@@ -9,12 +9,18 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         exclude = ('password', 'last_login', 'groups', 'user_permissions')
 
-class AuthorSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+class FriendProfileSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(source='uuid')
     class Meta:
         model = Author
-        fields = '__all__'
-        depth = 1
+        fields = ('id', 'host', 'displayname', 'url')
+
+class AuthorSerializer(serializers.ModelSerializer):
+    friends = FriendProfileSerializer(many=True)
+    id = serializers.CharField(source='uuid')
+    class Meta:
+        model = Author
+        fields = ('id', 'host', 'displayname', 'url','friends')
 
 class FriendRequestSerializer(serializers.Serializer):
     query = serializers.SerializerMethodField('friend_request')
