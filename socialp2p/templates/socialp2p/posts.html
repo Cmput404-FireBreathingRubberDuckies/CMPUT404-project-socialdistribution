@@ -31,7 +31,7 @@
   <div class="web_content">
     <h1>Public posts on the server</h1>
     {% for post in posts %}
-      <p>{{ post.user }} posts on {{ post.datetime }}:<br><em>{{ post.content }}</em><br>markdown={{ post.markdown }}<br>{{ post.image }}</p>
+      <p>{{ post.user }} posts on {{ post.datetime }}:<br><em>{{ post.content }}</em><br>markdown={{ post.markdown }}<br>{% cloudinary post.image %}</p>
     {% endfor %}
   </div>
 </body>
