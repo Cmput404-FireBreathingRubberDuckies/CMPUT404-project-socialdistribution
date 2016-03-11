@@ -22,7 +22,6 @@ class JSONResponse(HttpResponse):
 
 @api_view(['GET', 'POST'])
 def author_list(request):
-    permission_classes = [permissions.IsAuthenticated]
     if request.method == 'GET':
         authors = Author.objects.all()
         serializer = AuthorSerializer(authors, many=True)
@@ -96,16 +95,17 @@ def friends(request, author_uuid):
         serializer = FriendSerializer(author)
         return Response(serializer.data)
     elif request.method == 'POST':
-        request.user.author.friends.add(user)
-	author.friends.add(request.user)
-        friendRequest = FriendRequest.objects.get(requester=user, receiver=request.user)
-        friendRequest.accepted = True
-        friendRequest.save()
-        return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
-    elif request.method == 'DELETE':
-        request.user.author.friends.delete(user)
-	author.friends.delete(request.user)
-        friendRequest = FriendRequest.objects.get(requester=user, receiver=request.user)
-        friendRequest.accepted = False
-        friendRequest.save()
-	return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
+        if request.POST.get("accept"):
+            request.user.author.friends.add(user)
+	    author.friends.add(request.user)
+            friendRequest = FriendRequest.objects.get(requester=user, receiver=request.user)
+            friendRequest.accepted = True
+            friendRequest.save()
+            return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
+	elif request.POST.get("delete"):
+	    request.user.author.friends.remove(user)
+	    author.friends.remove(request.user)
+            friendRequest = FriendRequest.objects.get(requester=user, receiver=request.user)
+            friendRequest.accepted = False
+            friendRequest.save()
+	    return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
