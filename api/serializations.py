@@ -37,10 +37,10 @@ class FriendSerializer(serializers.Serializer):
 
     def getFriends(self, author_obj):
         friends = author_obj.friends.all()
-	list1 = []
-	for a in friends:
-		list1.append(a.author.uuid)
-	return list1
+        list1 = []
+        for friend in friends:
+            list1.append(friend.uuid)
+        return list1
 
     def friend_str(self, obj):
-	return "friends"
+        return "friends"

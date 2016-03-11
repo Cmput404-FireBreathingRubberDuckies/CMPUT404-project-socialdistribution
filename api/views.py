@@ -86,7 +86,9 @@ def friend_request(request, author_uuid):
 @api_view(['GET', 'POST', 'DELETE'])
 def friends(request, author_uuid):
     current_user = User.objects.get(id=request.user.id)
+    # current_user = ''
     current_author = Author.objects.get(user=current_user)
+    # current_author = ''
     try:
         author = Author.objects.get(uuid=author_uuid)
     except Author.DoesNotExist:
