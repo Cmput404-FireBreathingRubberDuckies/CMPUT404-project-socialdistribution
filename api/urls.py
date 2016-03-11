@@ -18,4 +18,5 @@ urlpatterns = [
     #url(r'^author/(?P<pk>[0-9]+)/$', views.Author_detail),
     # url(r'^authors/(?P<user_uuid>\w+)/$', views.author_info, name='info'),
     # url(r'^author/(?P<username>\w+)/$', views.Author_detail, name='detail'),
+    url(r'^posts/$', views.public_posts, name='posts'),
 ]

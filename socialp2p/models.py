@@ -28,6 +28,7 @@ class Post(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     markdown = models.BooleanField(default=False)
+    title = models.TextField()
     content = models.TextField()
     image = CloudinaryField('image', null=True, blank=True)
     PUBLIC = 'PUB'
