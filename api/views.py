@@ -127,3 +127,19 @@ def public_posts(request):
         public_posts = Post.objects.filter(visibility="PUB")
         serializer = PostSerializer(public_posts, many=True)
         return Response(serializer.data)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def post_detail(request, post_uuid):
+    try:
+        post_uuid = uuid.UUID(post_uuid)
+    except Exception as e:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        post = Post.objects.get(uuid=post_uuid)
+    except Post.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = PostSerializer(post)
+        return Response(serializer.data)

@@ -14,31 +14,48 @@ HOST: http://socialp2p.herokuapp.com/api
 + (NoteData)
 
 # Group Posts
-Group description (also with *Markdown*)
+Endpoints for post retrieval
 
-## Important Info
-Descriptions may also contain sub-headings and **more Markdown**.
-
-## Posts List [/notes]
-Note list description
-
-+ Even
-+ More
-+ Markdown
+## Posts List [/posts]
+Public posts in the server
 
 ### Get Posts [GET]
-Get a list of notes.
+Get a list of posts marked as public on the server.
 
 + Response 200 (application/json)
+    
+    + Body
 
-    + Headers
+            [
+                {
+                    "id": "7f0996d2-def2-424e-94f7-9b1c323d39cb",
+                    "author": {
+                        "id": "a727114f-6873-4e10-85a0-5ced9d88b1b7",
+                        "host": "http://socialp2p.herokuapp.com/",
+                        "displayname": "ivan",
+                        "url": "http://socialp2p.herokuapp.com/api/author/a727114f-6873-4e10-85a0-5ced9d88b1b7"
+                    },
+                    "published": "2016-03-11T06:24:51.481828Z",
+                    "content_type": "text/plain",
+                    "title": "First!",
+                    "content": "My first post, woohoo!"
+                },
+                {
+                    "id": "94136a58-cb72-41c0-93e6-30c6ec578052",
+                    "author": {
+                        "id": "a169ea75-0746-47fe-b52f-e424c94da2cc",
+                        "host": "http://socialp2p.herokuapp.com/",
+                        "displayname": "john",
+                        "url": "http://socialp2p.herokuapp.com/api/author/a169ea75-0746-47fe-b52f-e424c94da2cc"
+                    },
+                    "published": "2016-03-11T06:24:10.117472Z",
+                    "content_type": "text/plain",
+                    "title": "Newbie",
+                    "content": "I'm new here!"
+                }
+            ]
 
-            X-Request-ID: f72fc914
-            X-Response-Time: 4ms
-
-    + Attributes (NoteList)
-
-### Create New Note [POST]
+### Create New Post [POST]
 Create a new note using a title and an optional content body.
 
 + Request with body (application/json)
@@ -47,7 +64,7 @@ Create a new note using a title and an optional content body.
 
             {
                 "title": "My new note",
-                "body": "This is the body"
+                "content": "This is the body"
             }
 
 + Response 201
@@ -77,6 +94,35 @@ Create a new note using a title and an optional content body.
             {
                 "error": "Invalid title"
             }
+
+## Specific post [/posts/{id}]
+Get a specific post
+
++ Parameters
+
+    + id: `7f0996d2-def2-424e-94f7-9b1c323d39cb` (required, string) - The note ID
+
+### Get Note [GET]
+Get a single post.
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "id": "7f0996d2-def2-424e-94f7-9b1c323d39cb",
+                "author": {
+                    "id": "a727114f-6873-4e10-85a0-5ced9d88b1b7",
+                    "host": "http://socialp2p.herokuapp.com/",
+                    "displayname": "ivan",
+                    "url": "http://socialp2p.herokuapp.com/api/author/a727114f-6873-4e10-85a0-5ced9d88b1b7"
+                },
+                "published": "2016-03-11T06:24:51.481828Z",
+                "content_type": "text/plain",
+                "title": "First!",
+                "content": "My first post, woohoo!"
+            }
+
 
 ## Note [/notes/{id}{?body}]
 Note description
