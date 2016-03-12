@@ -3,6 +3,7 @@ from socialp2p.models import Author, FriendRequest, Post, Comment
 from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
+from django.core.urlresolvers import reverse
 import uuid
 # Create your tests here.
 
@@ -90,7 +91,7 @@ class Tests(TestCase):
     #Test author_list api that returns a list of authors 
     def test_author_list_api(self):
 
-	ApiUrl = "http://127.0.0.1:8000/api/author/"
+	ApiUrl = reverse("api:author_list")
 	response = self.client.get(ApiUrl)
 
 	self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -102,7 +103,7 @@ class Tests(TestCase):
         user = User.objects.create_user("test", "test@hotmail.com", "testpassword")
 	author = Author(user=user, uuid=Auuid)
 	author.save()
-	ApiUrl = "http://127.0.0.1:8000/api/author/" + str(Auuid) + "/"
+	ApiUrl = reverse("api:author_detail", args=[Auuid])
 
 	#Test GET method. The GET method returns a specific author
 	GetResponse = self.client.get(ApiUrl)
@@ -128,7 +129,7 @@ class Tests(TestCase):
 	RecvAuthor = Author(user=RecvUser, uuid=RecvUuid)
 	RecvAuthor.save()
 
-	ApiUrl = "http://127.0.0.1:8000/api/friendrequest/" + str(RecvUuid) + "/"
+	ApiUrl = reverse("api:friend_request", args=[RecvUuid])
 
 	#Test POST method. The POST method create friend request
 	PostResponse = self.client.get(ApiUrl)
@@ -153,7 +154,7 @@ class Tests(TestCase):
    
 	self.client.login(username=user.username, password="testpassword")
 
-	ApiUrl = "http://127.0.0.1:8000/api/friends/" + str(Auuid) + "/"	
+	ApiUrl = reverse("api:friends", args=[Auuid])	
 
 	#Test GET method. The GET method returns a list of friends
 	GetResponse = self.client.get(ApiUrl)
@@ -175,7 +176,7 @@ class Tests(TestCase):
 	posts = Post(author=author, title="test post", content="this is a test")
 	posts.save()
 
-	ApiUrl = "http://127.0.0.1:8000/api/posts/"
+	ApiUrl = reverse("api:posts")
 
 	#Test GET method. The GET method returns a list of posts
 	GetResponse = self.client.get(ApiUrl)
