@@ -7,6 +7,9 @@ from socialp2p.models import Author, FriendRequest, Post
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 import json
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 @login_required
 def profile(request, username):
@@ -84,7 +87,9 @@ def posts_view(request):
 @login_required
 def main(request):
     if request.method == 'POST':
-        post = Post(author=Author.objects.get(user=request.user), content=request.POST['content'], markdown=request.POST.get('markdown', False), image=request.POST['image'], visibility=request.POST['visibility'])
+        ret = cloudinary.uploader.upload(request.FILES['image'])
+        image_id = ret['public_id']
+        post = Post(author=Author.objects.get(user=request.user), content=request.POST['content'], markdown=request.POST.get('markdown', False), image=image_id, visibility=request.POST['visibility'])
         post.save()
         return HttpResponseRedirect(reverse('socialp2p:main'))
     else:

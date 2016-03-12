@@ -4,7 +4,7 @@
 {% load tz %}
 {% block body %}
 <div class="web_content">
-  <form action="{% url 'socialp2p:main' %}" method="POST">
+  <form action="{% url 'socialp2p:main' %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="post_title_area">
       <div class="post_title">
