@@ -56,44 +56,26 @@ Get a list of posts marked as public on the server.
             ]
 
 ### Create New Post [POST]
-Create a new note using a title and an optional content body.
+Create a new post
 
 + Request with body (application/json)
 
     + Body
 
             {
-                "title": "My new note",
-                "content": "This is the body"
+                "title": "this is the title",
+                "content": "This is the body",
+                "author": {
+                    "id": "a727114f-6873-4e10-85a0-5ced9d88b1b7",
+                    "host": "http://socialp2p.herokuapp.com/",
+                    "displayname": "ivan",
+                    "url": "http://socialp2p.herokuapp.com/api/author/a727114f-6873-4e10-85a0-5ced9d88b1b7"
+                },
+                "content_type": "text/plain",
             }
 
 + Response 201
 
-+ Response 400 (application/json)
-
-    + Body
-
-            {
-                "error": "Invalid title"
-            }
-
-+ Request without body (application/json)
-
-    + Body
-
-            {
-                "title": "My new note"
-            }
-
-+ Response 201
-
-+ Response 400 (application/json)
-
-    + Body
-
-            {
-                "error": "Invalid title"
-            }
 
 ## Specific post [/posts/{id}]
 Get a specific post
@@ -124,127 +106,11 @@ Get a single post.
             }
 
 
-## Note [/notes/{id}{?body}]
-Note description
-
-+ Parameters
-
-    + id: `68a5sdf67` (required, string) - The note ID
-
-### Get Note [GET]
-Get a single note.
-
-+ Parameters
-
-    + body: `false` (boolean) - Set to `false` to exclude note body content.
-
-+ Response 200 (application/json)
-
-    + Headers
-
-            X-Request-ID: f72fc914
-            X-Response-Time: 4ms
-
-    + Attributes (NoteData)
-
-+ Response 404 (application/json)
-
-    + Headers
-
-            X-Request-ID: f72fc914
-            X-Response-Time: 4ms
-
-    + Body
-
-            {
-                "error": "Note not found"
-            }
-
-### Update a Note [PUT]
-Update a single note by setting the title and/or body.
-
-::: warning
-#### <i class="fa fa-warning"></i> Caution
-If the value for `title` or `body` is `null` or `undefined`, then the corresponding value is not modified on the server. However, if you send an empty string instead then it will **permanently overwrite** the original value.
-:::
-
-+ Request (application/json)
-
-    + Body
-
-            {
-                "title": "Grocery List (Safeway)"
-            }
-
-+ Response 200 (application/json)
-
-    + Headers
-
-            X-Request-ID: f72fc914
-            X-Response-Time: 4ms
-
-    + Attributes (NoteData)
-
-+ Response 404 (application/json)
-
-    + Headers
-
-            X-Request-ID: f72fc914
-            X-Response-Time: 4ms
-
-    + Body
-
-            {
-                "error": "Note not found"
-            }
-
-+ Request delete body (application/json)
-
-    + Body
-
-            {
-                "body": ""
-            }
-
-+ Response 200 (application/json)
-
-    + Headers
-
-            X-Request-ID: f72fc914
-            X-Response-Time: 4ms
-
-    + Attributes (NoteData)
-
-+ Response 404 (application/json)
-
-    + Headers
-
-            X-Request-ID: f72fc914
-            X-Response-Time: 4ms
-
-    + Body
-
-            {
-                "error": "Note not found"
-            }
-
-### Delete a Note [DELETE]
+### Delete a Post [DELETE]
 Delete a single note
 
 + Response 204
 
-+ Response 404 (application/json)
-
-    + Headers
-
-            X-Request-ID: f72fc914
-            X-Response-Time: 4ms
-
-    + Body
-
-            {
-                "error": "Note not found"
-            }
 
 # Group Authors
 Group description
@@ -319,20 +185,13 @@ A specific author
 
 
 # Group Friends
-Get or set tags on notes
-
-## GET /friends
-Get a list of bars
-
-+ Response 200 (application/json)
-
-        ["tag1", "tag2", "tag3"]
+Get friends of authors
 
 ## Get [/friends/{id}]
-Get a single tag
+Get friends
 
 + Parameters
-    + id - Unique tag identifier
+    + id: `7f0996d2-def2-424e-94f7-9b1c323d39cb` - Unique author identifier
 
 ### GET
 
