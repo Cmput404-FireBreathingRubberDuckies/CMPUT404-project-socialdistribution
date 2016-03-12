@@ -45,10 +45,14 @@
         </div>
     </div>
     <div class="col-md-9">
-        <p>Username: {{user.username}}</p>
-        <p>UUID: {{user.author.uuid}}</p>
-        <p>host: {{user.author.host}}</p>
-        <p>id: {{user.author.id}}</p>
+        <<form action = "{% url 'socialp2p:profile' user.username %}" data-method="PUT">
+	{% csrf_token %}
+        <p>Username: <input type="text" value={{user.username}} /></p>
+        <p>First Name: <input type="text" value={{user.first_name}} /></p>
+	<p>Last Name: <input type="text" value={{user.last_name}} /></p>
+	<p>Email: <input type="text" value={{user.email}} /></p>
+	<input class="btn btn-default" type="submit" value="Edit and Save"/>
+	</form>
 
         <P> Pending Friend Requests/Following </P>
         {% for a in follow %}
@@ -57,4 +61,9 @@
         {% cloudinary user.author.photo %}
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        $('form').ajaxForm();
+    });
+</script>
 {% endblock %}
