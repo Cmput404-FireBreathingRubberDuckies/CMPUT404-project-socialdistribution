@@ -6,18 +6,11 @@ from api import views, models
 from rest_framework import routers
 
 
-# router = routers.DefaultRouter()
-# router.register(r'author', models.AuthorViewSet)
-
 urlpatterns = [
     url(r'^author/$', views.author_list, name='author_list'),
     url(r'^author/(?P<author_uuid>[^/]+)/$', views.author_detail, name='author_detail'),
-    #url(r'^friendrequest/$', views.friend_request, name='friend_request'),
     url(r'^friends/(?P<author_uuid>[^/]+)/$', views.friends, name='friends'),
     url(r'^friendrequest/(?P<author_uuid>[^/]+)/$', views.friend_request, name='friend_request'),
-    #url(r'^author/(?P<pk>[0-9]+)/$', views.Author_detail),
-    # url(r'^authors/(?P<user_uuid>\w+)/$', views.author_info, name='info'),
-    # url(r'^author/(?P<username>\w+)/$', views.Author_detail, name='detail'),
     url(r'^posts/$', views.public_posts, name='posts'),
     url(r'^posts/(?P<post_uuid>[^/]+)/$', views.post_detail, name='post_detail')
 ]

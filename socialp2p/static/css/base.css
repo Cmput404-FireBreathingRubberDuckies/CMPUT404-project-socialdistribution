@@ -36,23 +36,11 @@ div.authentication {
 }
 
 .search_input{
-  /*position: relative;*/
-  /*float: left;*/
   width: 300px;
-  /*height: 30px;*/
-  /*margin: 9px 0 0 10px;*/
-  /*background-color: #f2f2f5;*/
-  /*border: 1px solid #ccc;*/
 }
 .search_input:focus{
   width: 600px;
   outline-color: #eb7350;
-}
-.search_button{
-  /*position: relative;*/
-  /*display: inline-block;*/
-  /*left: -30px;*/
-  /*top: 9px;*/
 }
 .web_content{
   display: block;
