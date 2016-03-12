@@ -56,9 +56,9 @@ div.authentication {
 }
 .web_content{
   display: block;
-  position: absolute;
   width: 800px;
-  left: 20%
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* main.html */
