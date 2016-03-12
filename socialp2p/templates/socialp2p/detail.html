@@ -8,9 +8,11 @@
     <p>host: {{user_profile.author.host}}</p>
     <p>url: {{user_profile.author.url}}</p>
     {% cloudinary user_profile.author.photo %}
-    <form action="{% url 'api:friend_request' user_profile.author.uuid %}" method="POST" id="add">
-    	{% csrf_token %}
-        <input type="submit" value="Add Friend" />
-    </form>
+    {% if not is_friend %}
+        <form action="{% url 'api:friend_request' user_profile.author.uuid %}" method="POST" id="add">
+            {% csrf_token %}
+            <input type="submit" value="Add Friend" />
+        </form>
+    {% endif %}
 </div>
 {% endblock %}

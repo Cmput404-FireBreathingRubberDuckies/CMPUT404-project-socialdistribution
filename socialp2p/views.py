@@ -17,9 +17,13 @@ def profile(request, username):
     author = Author.objects.get(user=user)
     requests = FriendRequest.objects.filter(receiver=author, accepted=False)
     follow = FriendRequest.objects.filter(requester=author, accepted=False)
+    is_friend = False
+    if len(request.user.author.friends.filter(uuid=author.uuid)) == 1:
+        is_friend = True
+
     if request.user.username != username:
         if request.method=='GET':
-            context = {'user_profile': user}
+            context = {'user_profile': user, 'is_friend': is_friend}
             return render(request, 'socialp2p/detail.html', context)
 
     else:
