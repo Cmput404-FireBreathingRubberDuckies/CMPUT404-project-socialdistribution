@@ -87,8 +87,11 @@ def posts_view(request):
 @login_required
 def main(request):
     if request.method == 'POST':
-        ret = cloudinary.uploader.upload(request.FILES['image'])
-        image_id = ret['public_id']
+        if request.POST['image'] == '':
+            image_id = ''
+        else:
+            ret = cloudinary.uploader.upload(request.FILES['image'])
+            image_id = ret['public_id']
         post = Post(author=Author.objects.get(user=request.user), content=request.POST['content'], markdown=request.POST.get('markdown', False), image=image_id, visibility=request.POST['visibility'])
         post.save()
         return HttpResponseRedirect(reverse('socialp2p:main'))
