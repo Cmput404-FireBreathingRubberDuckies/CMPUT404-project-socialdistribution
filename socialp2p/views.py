@@ -82,7 +82,7 @@ def posts_view(request):
 @login_required
 def main(request):
     if request.method == 'POST':
-        if request.POST['image'] == '':
+        if request.POST.get('image') == '':
             image_id = ''
         else:
             ret = cloudinary.uploader.upload(request.FILES['image'])
