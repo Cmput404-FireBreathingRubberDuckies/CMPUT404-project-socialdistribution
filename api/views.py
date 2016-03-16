@@ -121,12 +121,11 @@ def friends(request, author_uuid):
 	    return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
 
 # Currently returning a list of posts, needs changes to match requirements
-@api_view(['GET', 'POST', 'DELETE'])
+@api_view(['GET'])
 def public_posts(request):
-    if request.method == 'GET':
-        public_posts = Post.objects.filter(visibility="PUB")
-        serializer = PostSerializer(public_posts, many=True)
-        return Response(serializer.data)
+    public_posts = Post.objects.filter(visibility="PUB")
+    serializer = PostSerializer(public_posts, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def post_detail(request, post_uuid):
