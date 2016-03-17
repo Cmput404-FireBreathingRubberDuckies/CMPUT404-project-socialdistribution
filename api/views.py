@@ -1,4 +1,5 @@
 import uuid
+import json
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -62,26 +63,35 @@ def author_detail(request, author_uuid):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET', 'POST'])
-def friend_request(request, author_uuid):
-    current_user = User.objects.get(id=request.user.id)
-    current_author = Author.objects.get(user=current_user)
-    try:
-        author = Author.objects.get(uuid=author_uuid)
-    except Author.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    user = User.objects.get(author=author)
+def friend_request(request):
+    #current_user = User.objects.get(id=request.user.id)
+    #current_author = Author.objects.get(user=current_user)
+    #try:
+        #author = Author.objects.get(uuid=author_uuid)
+    #except Author.DoesNotExist:
+        #return Response(status=status.HTTP_404_NOT_FOUND)
+    #user = User.objects.get(author=author)
 
-    if request.method == 'GET':
-        requests = FriendRequest.objects.filter(requester=current_author, accepted=False)
-        serializer = FriendRequestSerializer(requests, many=True)
-        return Response(serializer.data)
-    elif request.method =='POST':
-        if FriendRequest.objects.filter(requester=current_author, receiver=author).exists():
+    #if request.method == 'GET':
+        #requests = FriendRequest.objects.filter(requester=current_author, accepted=False)
+        #serializer = FriendRequestSerializer(requests, many=True)
+        #return Response(serializer.data)
+    if request.method =='POST':
+
+	user_uuid = json.loads(request.POST.get('user_uuid'))
+	author_uuid = json.loads(request.POST.get('author_uuid'))
+	current_author = Author.objects.get(uuid=user_uuid)
+	friend = Author.objects.get(uuid=author_uuid)
+
+        if FriendRequest.objects.filter(requester=current_author, receiver=friend).exists():
             return HttpResponse("Already added Friend")
         else:
-            friendRequest = FriendRequest(requester=current_author, receiver=author)
+            friendRequest = FriendRequest(requester=current_author, receiver=friend)
             friendRequest.save()
-            return HttpResponseRedirect(reverse('socialp2p:profile', args=[user.username]))
+	    serializer = FriendRequestSerializer(friendRequest)
+            return Response(serializer.data)
+
+
 
 @api_view(['GET', 'POST', 'DELETE'])
 def friends(request, author_uuid):
