@@ -10,7 +10,7 @@
             </div>
             {% for friend in user.author.friends.all %}
                 <div class="friend-row">
-                    <a href="{% url 'socialp2p:profile' friend.displayname%}">{% cloudinary friend.photo %}<strong class="displayname">{{ friend.displayname }}</strong></a>
+	            <a href="{% url 'socialp2p:profile' friend.displayname%}">{% cloudinary friend.photo %}<strong class="displayname">{{ friend.displayname }}</strong></a>
                     <form class="unfriend-form pull-right" action="{% url 'api:friends' friend.uuid %}" method="POST" id="delete">
                         {% csrf_token %}
                         <input class="btn btn-default unfriend-btn" type="submit" value="Unfriend" name="delete"/>
@@ -30,7 +30,7 @@
             </div>
             {% for b in requests %}
                 <div class="friend-row">
-                    <a href="{% url 'socialp2p:profile' b.requester.displayname%}">{% cloudinary b.requester.photo %}<strong class="displayname">{{ b.requester.displayname }}</strong></a>
+ 		    <a href="{% url 'socialp2p:profile' b.requester.displayname%}">{% cloudinary b.requester.photo %}<strong class="displayname">{{ b.requester.displayname }}</strong></a>
                     <form class="pull-right" action="{% url 'api:friends' b.requester.uuid %}" method="POST" id="accept">
                         {% csrf_token %}
                         <input class="btn btn-default" type="submit" value="Accept" name="accept"/>
@@ -45,25 +45,21 @@
         </div>
     </div>
     <div class="col-md-9">
-        <<form action = "{% url 'socialp2p:profile' user.username %}" data-method="PUT">
+        <form action = "{% url 'api:author_detail' user.author.uuid %}" method="POST" id="edit">
 	{% csrf_token %}
-        <p>Username: <input type="text" value={{user.username}} /></p>
-        <p>First Name: <input type="text" value={{user.first_name}} /></p>
-	<p>Last Name: <input type="text" value={{user.last_name}} /></p>
-	<p>Email: <input type="text" value={{user.email}} /></p>
-	<input class="btn btn-default" type="submit" value="Edit and Save"/>
-	</form>
+        <p>Username: <input type="text" value='{{user.username}}' /></p>
+        <p>First Name: <input type="text" value='{{user.first_name}}' name="edit_firstname" /></p>
+	<p>Last Name: <input type="text" value='{{user.last_name}}' name="edit_lastname" /></p>
+	<p>Email: <input type="text" value='{{user.email}}' name="edit_email" /></p>
 
         <P> Pending Friend Requests/Following </P>
         {% for a in follow %}
             <p>{{a.receiver.displayname}}</p>
         {% endfor %}
+	<p>Profile Picture: <input type="file" name="Choose Picture" /></p>
         {% cloudinary user.author.photo %}
+	<input class="btn btn-default" type="submit" value="Edit and Save" name="edit"/>
+	</form>
     </div>
 </div>
-<script>
-    $(document).ready(function() {
-        $('form').ajaxForm();
-    });
-</script>
 {% endblock %}

@@ -35,7 +35,7 @@ def author_list(request):
     #         return Response(serializer.data, status=status.HTTP_201_CREATED)
     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def author_detail(request, author_uuid):
     try:
         author_uuid = uuid.UUID(author_uuid)
@@ -50,6 +50,21 @@ def author_detail(request, author_uuid):
     if request.method == 'GET':
         serializer = AuthorSerializer(author)
         return Response(serializer.data)
+
+    elif request.method == 'POST':
+	if request.POST.get('edit'):
+	    user = User.objects.get(author=author)
+	    edit_firstname = request.POST['edit_firstname']
+	    edit_lastname = request.POST['edit_lastname']
+	    edit_email = request.POST['edit_email']
+	    if edit_firstname=='' or edit_lastname=='' or edit_email=='':
+		return HttpResponse("field cannot be empty")
+	    else:
+		user.first_name = edit_firstname
+		user.last_name = edit_lastname
+		user.email = edit_email
+		user.save()
+		return HttpResponseRedirect(reverse('socialp2p:profile', args=[user.username]))
 
     elif request.method == 'PUT':
         serializer = AuthorSerializer(author, data=request.data)
