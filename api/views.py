@@ -1,11 +1,9 @@
 import uuid
 import json
+from PIL import Image
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import HttpResponseRedirect, HttpResponse
@@ -15,11 +13,6 @@ from api.serializations import *
 from django.contrib.auth.models import User
 from rest_framework import viewsets, status, permissions
 
-class JSONResponse(HttpResponse):
-    def __init__(self, data, **kwargs):
-        content = JSONRenderer().render(data)
-        kwargs['content_type'] = 'application/json'
-        super(JSONResponse, self).__init__(content, **kwargs)
 
 @api_view(['GET', 'POST'])
 def author_list(request):
@@ -57,13 +50,24 @@ def author_detail(request, author_uuid):
 	    edit_firstname = request.POST['edit_firstname']
 	    edit_lastname = request.POST['edit_lastname']
 	    edit_email = request.POST['edit_email']
+	    edit_pic = request.POST['edit_pic']
+
+	    if edit_pic != '':
+		try:
+    		    im=Image.open(edit_pic)
+		except IOError:
+    	      	    return HttpResponse("Not a valid image")
+
 	    if edit_firstname=='' or edit_lastname=='' or edit_email=='':
 		return HttpResponse("field cannot be empty")
+	    
 	    else:
 		user.first_name = edit_firstname
 		user.last_name = edit_lastname
 		user.email = edit_email
 		user.save()
+		author.photo = edit_pic
+		author.save()
 		return HttpResponseRedirect(reverse('socialp2p:profile', args=[user.username]))
 
     elif request.method == 'PUT':

@@ -10,7 +10,7 @@
             </div>
             {% for friend in user.author.friends.all %}
                 <div class="friend-row">
-	            <a href="{% url 'socialp2p:profile' friend.displayname%}">{% cloudinary friend.photo %}<strong class="displayname">{{ friend.displayname }}</strong></a>
+	             <a href="{% url 'socialp2p:profile' friend.displayname%}">{% cloudinary friend.photo %}<strong class="displayname">{{ friend.displayname }}</strong></a>
                     <form class="unfriend-form pull-right" action="{% url 'api:friends' friend.uuid %}" method="POST" id="delete">
                         {% csrf_token %}
                         <input class="btn btn-default unfriend-btn" type="submit" value="Unfriend" name="delete"/>
@@ -56,7 +56,7 @@
         {% for a in follow %}
             <p>{{a.receiver.displayname}}</p>
         {% endfor %}
-	<p>Profile Picture: <input type="file" name="Choose Picture" /></p>
+	<p>Profile Picture: <input type="file" value="Choose Picture" name="edit_pic" /></p>
         {% cloudinary user.author.photo %}
 	<input class="btn btn-default" type="submit" value="Edit and Save" name="edit"/>
 	</form>
