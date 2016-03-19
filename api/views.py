@@ -44,38 +44,32 @@ def author_detail(request, author_uuid):
         serializer = AuthorSerializer(author)
         return Response(serializer.data)
 
-    elif request.method == 'POST':
-	if request.POST.get('edit'):
-	    user = User.objects.get(author=author)
-	    edit_firstname = request.POST['edit_firstname']
-	    edit_lastname = request.POST['edit_lastname']
-	    edit_email = request.POST['edit_email']
-	    edit_pic = request.POST['edit_pic']
-
-	    if edit_pic != '':
-		try:
-    		    im=Image.open(edit_pic)
-		except IOError:
-    	      	    return HttpResponse("Not a valid image")
-
-	    if edit_firstname=='' or edit_lastname=='' or edit_email=='':
-		return HttpResponse("field cannot be empty")
-	    
-	    else:
-		user.first_name = edit_firstname
-		user.last_name = edit_lastname
-		user.email = edit_email
-		user.save()
-		author.photo = edit_pic
-		author.save()
-		return HttpResponseRedirect(reverse('socialp2p:profile', args=[user.username]))
-
     elif request.method == 'PUT':
-        serializer = AuthorSerializer(author, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+	user = User.objects.get(author=author)
+	edit_firstname = request.data.get('edit_firstname')
+	edit_lastname = request.data.get('edit_lastname')
+	edit_email = request.data.get('edit_email')
+	edit_pic = request.data.get('edit_pic')
+
+	if edit_pic != None:
+	    try:
+       	        im=Image.open(edit_pic)
+	    except IOError:
+    	      	return HttpResponse("Not a valid image")
+
+	if edit_firstname=='' or edit_lastname=='' or edit_email=='':
+	    return HttpResponse("field cannot be empty")
+	    
+	else:
+	    user.first_name = edit_firstname
+	    user.last_name = edit_lastname
+	    user.email = edit_email
+	    user.save()
+	    author.photo = edit_pic
+	    author.save()
+	    serializer = AuthorSerializer(author)
+	    return HttpResponseRedirect(reverse('socialp2p:profile', args=[user.username]))
+
 
     elif request.method == 'DELETE':
         author.delete()
@@ -97,8 +91,8 @@ def friend_request(request):
         #return Response(serializer.data)
     if request.method =='POST':
 
-	user_uuid = json.loads(request.POST.get('user_uuid'))
-	author_uuid = json.loads(request.POST.get('author_uuid'))
+	user_uuid = json.loads(request.POST.get('author'))
+	author_uuid = json.loads(request.POST.get('friend'))
 	current_author = Author.objects.get(uuid=user_uuid)
 	friend = Author.objects.get(uuid=author_uuid)
 

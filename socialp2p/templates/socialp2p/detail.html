@@ -25,7 +25,7 @@
       	        $.ajax({
 		    type:"POST", 
 		    url,
-		    data : {csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value, user_uuid : JSON.stringify(user_uuid), author_uuid : JSON.stringify(author_uuid)},
+		    data : {csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value, author : JSON.stringify(user_uuid), friend : JSON.stringify(author_uuid)},
     		    dataType : "json",
 		    success: function( data ){
            	        alert('Added Friend');

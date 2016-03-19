@@ -10,7 +10,7 @@
             </div>
             {% for friend in user.author.friends.all %}
                 <div class="friend-row">
-	             <a href="{% url 'socialp2p:profile' friend.displayname%}">{% cloudinary friend.photo %}<strong class="displayname">{{ friend.displayname }}</strong></a>
+	            <a href="{% url 'socialp2p:profile' friend.displayname%}">{% cloudinary friend.photo %}<strong class="displayname">{{ friend.displayname }}</strong></a> 
                     <form class="unfriend-form pull-right" action="{% url 'api:friends' friend.uuid %}" method="POST" id="delete">
                         {% csrf_token %}
                         <input class="btn btn-default unfriend-btn" type="submit" value="Unfriend" name="delete"/>
@@ -45,7 +45,7 @@
         </div>
     </div>
     <div class="col-md-9">
-        <form action = "{% url 'api:author_detail' user.author.uuid %}" method="POST" id="edit">
+        <form action = "{% url 'api:author_detail' user.author.uuid %}" data-method="PUT" id="edit">
 	{% csrf_token %}
         <p>Username: <input type="text" value='{{user.username}}' /></p>
         <p>First Name: <input type="text" value='{{user.first_name}}' name="edit_firstname" /></p>
@@ -58,8 +58,40 @@
         {% endfor %}
 	<p>Profile Picture: <input type="file" value="Choose Picture" name="edit_pic" /></p>
         {% cloudinary user.author.photo %}
-	<input class="btn btn-default" type="submit" value="Edit and Save" name="edit"/>
+	<input class="btn btn-default" type="submit" value="Edit and Save" />
 	</form>
+	<script type='text/javascript'>
+	//http://stackoverflow.com/questions/5100539/django-csrf-check-failing-with-an-ajax-post-request
+    	$(document).ready(function() {      
+	    var edit_firstname = "{{user.first_name}}"
+	    var user_id = "{{user.author.uuid}}"
+	    $.ajaxSetup({ 
+	        beforeSend: function(xhr, settings) {
+		    function getCookie(name) {
+		        var cookieValue = null;
+		        if (document.cookie && document.cookie != '') {
+		            var cookies = document.cookie.split(';');
+		            for (var i = 0; i < cookies.length; i++) {
+		                var cookie = jQuery.trim(cookies[i]);
+		                // Does this cookie string begin with the name we want?
+		                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+		                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+		                    break;
+		                }
+		            }
+		        }
+		        return cookieValue;
+		    }
+		    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+		        // Only send the token to relative URLs i.e. locally.
+		        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+		    }
+	        } 
+	    });
+            $('#edit').ajaxForm({
+	    });
+        });
+	</script>
     </div>
 </div>
 {% endblock %}
