@@ -53,26 +53,23 @@ def author_detail(request, author_uuid):
 	edit_firstname = request.data.get('edit_firstname')
 	edit_lastname = request.data.get('edit_lastname')
 	edit_email = request.data.get('edit_email')
-	edit_pic = request.data.get('edit_pic')
-
-	if edit_pic != None:
-	    try:
-       	        im=Image.open(edit_pic)
-	    except IOError:
-    	      	return HttpResponse("Not a valid image")
 
 	if edit_firstname=='' or edit_lastname=='' or edit_email=='':
 	    return HttpResponse("field cannot be empty")
 
 	else:
-	    user.first_name = edit_firstname
-	    user.last_name = edit_lastname
-	    user.email = edit_email
-	    user.save()
-	    author.photo = edit_pic
-	    author.save()
-	    serializer = AuthorSerializer(author)
-	    return HttpResponseRedirect(reverse('socialp2p:profile', args=[user.username]))
+		user.first_name = edit_firstname
+	    	user.last_name = edit_lastname
+	    	user.email = edit_email
+	    	user.save()
+        	if request.POST.get('edit_pic') !='':
+           		cloudinary.uploader.destroy(author.photo, invalidate = True)
+           		ret = cloudinary.uploader.upload(request.FILES['edit_pic'], invalidate = True)
+           		image_id = ret['public_id']
+       			author.photo = image_id
+	    		author.save()
+	    	serializer = AuthorSerializer(author)
+	    	return HttpResponseRedirect(reverse('socialp2p:profile', args=[user.username]))
     elif request.method == 'DELETE':
         author.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -159,7 +156,7 @@ def public_posts(request):
     serializer = PostSerializer(public_posts, many=True)
     return Response(serializer.data)
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET','POST', 'PUT', 'DELETE'])
 def post_detail(request, post_uuid):
     try:
         post_uuid = uuid.UUID(post_uuid)
@@ -174,3 +171,21 @@ def post_detail(request, post_uuid):
     if request.method == 'GET':
         serializer = PostSerializer(post)
         return Response(serializer.data)
+
+    if request.method == 'POST':
+        edit_content = request.data.get('post_content')
+        if edit_content == '':
+            return HttpResponse("field cannot be empty")
+
+        else:
+            	post.content = edit_content
+		if request.POST.get('post_image') !='':
+           		cloudinary.uploader.destroy(post.image, invalidate = True)
+           		ret = cloudinary.uploader.upload(request.FILES['post_image'], invalidate = True)
+           		image_id = ret['public_id']
+			post.image = image_id
+            	post.save()
+            	return HttpResponseRedirect(reverse('socialp2p:profile', args=[post.author.user.username]))
+
+
+
