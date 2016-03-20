@@ -4,7 +4,7 @@ from PIL import Image
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.http import HttpResponse
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from django.http import HttpResponseRedirect, HttpResponse
 from socialp2p.models import Author, FriendRequest, Post
@@ -12,6 +12,9 @@ from socialp2p import views
 from api.serializations import *
 from django.contrib.auth.models import User
 from rest_framework import viewsets, status, permissions
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
@@ -33,6 +36,8 @@ def author_list(request):
     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@authentication_classes((SessionAuthentication, BasicAuthentication))
+@permission_classes((IsAuthenticated,))
 def author_detail(request, author_uuid):
     try:
         author_uuid = uuid.UUID(author_uuid)
@@ -177,6 +182,8 @@ def author_posts(request, author_uuid):
 
 # Currently returning a list of posts, needs changes to match requirements
 @api_view(['GET'])
+@authentication_classes((SessionAuthentication, BasicAuthentication))
+@permission_classes((IsAuthenticated,))
 def public_posts(request):
     public_posts = Post.objects.filter(visibility="PUB")
     serializer = PostSerializer(public_posts, many=True)
