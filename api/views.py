@@ -204,18 +204,20 @@ def post_detail(request, post_uuid):
 
     if request.method == 'POST':
         edit_content = request.data.get('post_content')
-        if edit_content == '':
-            return HttpResponse("field cannot be empty")
+	if request.POST.get('check_remove_picture') != '':
+		cloudinary.uploader.destroy(post.image, invalidate = True)
+		post.image = ''
 
-        else:
-            	post.content = edit_content
-		if request.POST.get('post_image') !='':
-           		cloudinary.uploader.destroy(post.image, invalidate = True)
-           		ret = cloudinary.uploader.upload(request.FILES['post_image'], invalidate = True)
-           		image_id = ret['public_id']
-			post.image = image_id
-            	post.save()
-            	return HttpResponseRedirect(reverse('socialp2p:profile', args=[post.author.user.username]))
+        if request.POST.get('post_content') != '':
+		post.content = edit_content
+
+	if request.POST.get('post_image') !='':
+           	cloudinary.uploader.destroy(post.image, invalidate = True)
+           	ret = cloudinary.uploader.upload(request.FILES['post_image'], invalidate = True)
+           	image_id = ret['public_id']
+		post.image = image_id
+	post.save()
+	return HttpResponseRedirect(reverse('socialp2p:profile', args=[post.author.user.username]))
 
 
 
