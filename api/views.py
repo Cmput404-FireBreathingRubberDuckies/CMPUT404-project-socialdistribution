@@ -12,6 +12,10 @@ from socialp2p import views
 from api.serializations import *
 from django.contrib.auth.models import User
 from rest_framework import viewsets, status, permissions
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 
 
 @api_view(['GET', 'POST'])
@@ -69,8 +73,6 @@ def author_detail(request, author_uuid):
 	    author.save()
 	    serializer = AuthorSerializer(author)
 	    return HttpResponseRedirect(reverse('socialp2p:profile', args=[user.username]))
-
-
     elif request.method == 'DELETE':
         author.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
