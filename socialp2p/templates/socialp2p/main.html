@@ -31,6 +31,13 @@
           <option value="{{ choice.0 }}">{{ choice.1 }}</option>
           {% endfor %}
         </select>
+        <select id="share_to" name="share_to" style="display: none">
+          {% for author in authors %}
+            {% if author.uuid != current_author.uuid %}
+              <option value="{{ author.uuid }}">{{ author.displayname }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
         <button class="btn btn-default" type="submit" id="post_button">POST</button>
       </div>
     </div>
@@ -56,6 +63,16 @@
 document.getElementById("uploadBtn").onchange = function () {
   document.getElementById("uploadFile").value = this.value.replace(/.*[\/\\]/, '');
 };
+document.getElementById("post_select").onchange = function () {
+  console.log(document.getElementById("post_select").value);
+  if (document.getElementById("post_select").value == 'ONL') {
+    document.getElementById("share_to").style.display = '';
+  } else {
+    document.getElementById("share_to").style.display = 'None';
+    document.getElementById("share_to").value = '';
+  }
+};
+
 // document.getElementById('choose_pic').addEventListener('change', readURL, true);
 // function readURL(){
 //   var file = document.getElementById("choose_pic").files[0];
