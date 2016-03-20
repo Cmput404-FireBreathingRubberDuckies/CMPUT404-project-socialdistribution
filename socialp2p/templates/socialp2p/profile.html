@@ -133,6 +133,7 @@
 </div>
 <div class="web_content">
     {% for post in posts %}
+    {% if user.author.uuid == post.author.uuid %}
     <div class="posts">
         <div class="profile">
             <a href="{% url 'socialp2p:profile' post.author.displayname%}">{% cloudinary post.author.photo %}</a>
@@ -146,6 +147,7 @@
             {% endif %}
         </div>
     </div>
+    {% endif %}
     {% endfor %}
 </div>
 {% endblock %}
