@@ -27,7 +27,7 @@ def profile(request, username):
             return render(request, 'socialp2p/detail.html', context)
 
     else:
-        context = {'requests':requests, 'follow':follow, 'posts': Post.objects.filter(visibility='PUB').order_by('-datetime')}
+        context = {'requests':requests, 'follow':follow, 'posts': Post.objects.order_by('-datetime')}
         return render(request, 'socialp2p/profile.html', context)
 
 
@@ -92,4 +92,16 @@ def main(request):
         post.save()
         return HttpResponseRedirect(reverse('socialp2p:main'))
     else:
-        return render(request, 'socialp2p/main.html', {'Post': Post, 'posts': Post.objects.filter(visibility='PUB').order_by('-datetime')})
+
+	author = Author.objects.get(user=request.user)
+	private_posts = Post.objects.filter(author=author, visibility='PRV')
+    	posts = Post.objects.filter(visibility='PUB')
+	posts = posts | private_posts
+
+        for i in author.friends.all():
+	    friends_posts = Post.objects.filter(author=i, visibility='FRS')
+	    posts = posts | friends_posts
+
+        posts = posts.order_by('-datetime')
+        return render(request, 'socialp2p/main.html', {'Post': Post, 'posts': posts, 'authors': Author.objects.order_by('user__username'), "current_author": Author.objects.get(user=request.user)})
+

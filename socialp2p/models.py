@@ -69,3 +69,8 @@ class FriendRequest(models.Model):
 
     def url_friend(self):
         return self.host + 'api/author/' + str(self.uuid)
+
+class Node(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    host = models.CharField(max_length=100)
+    accepted = models.BooleanField(default=False)

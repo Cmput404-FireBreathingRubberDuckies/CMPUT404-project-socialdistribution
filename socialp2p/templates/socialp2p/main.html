@@ -33,9 +33,9 @@
         </select>
         <select id="share_to" name="share_to" style="display: none">
           {% for author in authors %}
-            {% if author.uuid != current_author.uuid %}
-              <option value="{{ author.uuid }}">{{ author.displayname }}</option>
-            {% endif %}
+          {% if author.uuid != current_author.uuid %}
+          <option value="{{ author.uuid }}">{{ author.displayname }}</option>
+          {% endif %}
           {% endfor %}
         </select>
         <button class="btn btn-default" type="submit" id="post_button">POST</button>
@@ -51,7 +51,11 @@
       <span class="time">{{ post.datetime|localtime }}</span>
     </div>
     <div class=content>
-      <p>{{ post.content }}</p>
+      {% if post.markdown %}
+      <div class='markdown_post'>{{ post.content }}</div>
+      {% else %}
+      <div><p>{{ post.content }}</p></div>
+      {% endif %}
       {% if post.image %}
       {% cloudinary post.image width=700 height=300 crop="fill" %}
       {% endif %}
@@ -72,6 +76,15 @@ document.getElementById("post_select").onchange = function () {
     document.getElementById("share_to").value = '';
   }
 };
+$( document ).ready(function() {
+  $(".markdown_post").each(function(){
+    var reader = new commonmark.Parser();
+    var writer = new commonmark.HtmlRenderer();
+    var parsed = reader.parse($(this).text());
+    var result = writer.render(parsed);
+    $(this).html(result);
+  });
+});
 
 // document.getElementById('choose_pic').addEventListener('change', readURL, true);
 // function readURL(){
