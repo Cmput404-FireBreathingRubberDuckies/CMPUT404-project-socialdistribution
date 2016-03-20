@@ -58,8 +58,13 @@ class PostSerializer(serializers.Serializer):
     content_type = serializers.SerializerMethodField()
     title = serializers.CharField()
     content = serializers.CharField()
+    visibility = serializers.CharField()
     # comments = CommentSerializer(many=True) # Not quite sure how to get this working
 
     def get_content_type(self, post_obj):
         markdown = post_obj.markdown
         return 'text/x-markdown' if markdown else 'text/plain'
+
+
+
+

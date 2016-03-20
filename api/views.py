@@ -145,10 +145,33 @@ def friends(request, author_uuid):
 		friendRequest.save()
 	    return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
 
-# Currently only returning public posts, need to return all posts visible for author
+# Currently only returning public posts, and friends posts but not friend of friend
 @api_view(['GET'])
 def posts(request):
+
+    author = Author.objects.get(user=request.user)
     posts = Post.objects.filter(visibility="PUB")
+
+    for i in author.friends.all():
+	friends_posts = Post.objects.filter(author=i, visibility="FRS")
+	posts = posts | friends_posts
+
+    serializer = PostSerializer(posts, many=True)
+    return Response(serializer.data)
+
+# Currently only returning public posts, and friends posts but not friend of friend
+@api_view(['GET'])
+def author_posts(request, author_uuid):
+
+    request_author = Author.objects.get(uuid=author_uuid)
+    request_user = User.objects.get(author=request_author)
+    current_author = Author.objects.get(user=request.user)
+    posts = Post.objects.filter(author=request_author, visibility="PUB")
+
+    if current_author.friends.filter(user=request_user).exists():
+	friend_posts = Post.objects.filter(author=request_author, visibility="FRS")
+    	posts = posts | friend_posts
+
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
 
