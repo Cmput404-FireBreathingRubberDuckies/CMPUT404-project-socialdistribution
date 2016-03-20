@@ -45,7 +45,7 @@
         </div>
     </div>
     <div class="col-md-9">
-        <form action = "{% url 'api:author_detail' user.author.uuid %}" data-method="PUT" id="edit">
+        <form action = "{% url 'api:author_detail' user.author.uuid %}" method="POST" id="edit" enctype="multipart/form-data">
 	{% csrf_token %}
         <p>Username: <input type="text" value='{{user.username}}' /></p>
         <p>First Name: <input type="text" value='{{user.first_name}}' name="edit_firstname" /></p>
@@ -56,9 +56,16 @@
         {% for a in follow %}
             <p>{{a.receiver.displayname}}</p>
         {% endfor %}
-	<p>Profile Picture: <input type="file" value="Choose Picture" name="edit_pic" /></p>
+	<p>Profile Picture: </p>
+    <div class="upload_area">
+      <input id="uploadFile" placeholder="Choose An Image" disabled="disabled" />
+      <div class="fileUpload btn btn-primary post_left">
+        <span>Browse</span>
+        <input name="edit_pic" id="uploadBtn" type="file" class="upload" />
+    </div>
+    <br></br>
         {% cloudinary user.author.photo %}
-	<input class="btn btn-default" type="submit" value="Edit and Save" />
+	<input class="btn btn-default" type="submit" value="Save" />
 	</form>
 	<script type='text/javascript'>
 	//http://stackoverflow.com/questions/5100539/django-csrf-check-failing-with-an-ajax-post-request
@@ -92,6 +99,26 @@
 	    });
         });
 	</script>
+    <script>
+document.getElementById("uploadBtn").onchange = function () {
+  document.getElementById("uploadFile").value = this.value.replace(/.*[\/\\]/, '');
+};
+// document.getElementById('choose_pic').addEventListener('change', readURL, true);
+// function readURL(){
+//   var file = document.getElementById("choose_pic").files[0];
+//   var reader = new FileReader();
+//   reader.onloadend = function(){
+//     var content = document.getElementById("post_text");
+//     content.value = content.value + ' <img src="' + reader.result;
+//     content.value = content.value + '" />';
+//     //document.getElementById('post_text').style.backgroundImage = "url(" + reader.result + ")";
+//   }
+//   if(file){
+//     reader.readAsDataURL(file);
+//   }else{
+//   }
+// }
+</script>
     </div>
 </div>
 {% endblock %}

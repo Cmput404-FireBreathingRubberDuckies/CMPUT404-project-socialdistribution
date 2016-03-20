@@ -12,6 +12,10 @@ from socialp2p import views
 from api.serializations import *
 from django.contrib.auth.models import User
 from rest_framework import viewsets, status, permissions
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 
 
 @api_view(['GET', 'POST'])
@@ -44,31 +48,29 @@ def author_detail(request, author_uuid):
         serializer = AuthorSerializer(author)
         return Response(serializer.data)
 
-    elif request.method == 'PUT':
-	user = User.objects.get(author=author)
-	edit_firstname = request.data.get('edit_firstname')
-	edit_lastname = request.data.get('edit_lastname')
-	edit_email = request.data.get('edit_email')
-	edit_pic = request.data.get('edit_pic')
+    elif request.method == 'POST':
+	   user = User.objects.get(author=author)
+	   edit_firstname = request.data.get('edit_firstname')
+	   edit_lastname = request.data.get('edit_lastname')
+	   edit_email = request.data.get('edit_email')
 
-	if edit_pic != None:
-	    try:
-       	        im=Image.open(edit_pic)
-	    except IOError:
-    	      	return HttpResponse("Not a valid image")
 
-	if edit_firstname=='' or edit_lastname=='' or edit_email=='':
-	    return HttpResponse("field cannot be empty")
+	   if edit_firstname=='' or edit_lastname=='' or edit_email=='':
+	       return HttpResponse("field cannot be empty")
 	    
-	else:
-	    user.first_name = edit_firstname
-	    user.last_name = edit_lastname
-	    user.email = edit_email
-	    user.save()
-	    author.photo = edit_pic
-	    author.save()
-	    serializer = AuthorSerializer(author)
-	    return HttpResponseRedirect(reverse('socialp2p:profile', args=[user.username]))
+	   else:
+           	user.first_name = edit_firstname
+           	user.last_name = edit_lastname
+           	user.email = edit_email
+           	user.save()
+           	if request.POST.get('image') !='':
+			cloudinary.uploader.destroy(author.photo, invalidate = True)
+			ret = cloudinary.uploader.upload(request.FILES['edit_pic'], invalidate = True)
+			image_id = ret['public_id']
+		author.photo = image_id
+		author.save()
+		serializer = AuthorSerializer(author)
+		return HttpResponseRedirect(reverse('socialp2p:profile', args=[user.username]))
 
 
     elif request.method == 'DELETE':
