@@ -27,8 +27,9 @@ def profile(request, username):
             return render(request, 'socialp2p/detail.html', context)
 
     else:
-        context = {'requests':requests, 'follow':follow}
+        context = {'requests':requests, 'follow':follow, 'posts': Post.objects.filter(visibility='PUB').order_by('-datetime')}
         return render(request, 'socialp2p/profile.html', context)
+
 
 
 def login_view(request):

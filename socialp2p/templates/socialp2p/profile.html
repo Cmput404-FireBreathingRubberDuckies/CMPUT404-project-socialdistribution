@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load cloudinary %}
+{% load tz %}
 {% block body %}
 <div class="container">
     <div class="col-md-3 left-column">
@@ -47,25 +48,48 @@
     <div class="col-md-9">
         <form action = "{% url 'api:author_detail' user.author.uuid %}" method="POST" id="edit" enctype="multipart/form-data">
 	{% csrf_token %}
-        <p>Username: <input type="text" value='{{user.username}}' /></p>
-        <p>First Name: <input type="text" value='{{user.first_name}}' name="edit_firstname" /></p>
-	<p>Last Name: <input type="text" value='{{user.last_name}}' name="edit_lastname" /></p>
-	<p>Email: <input type="text" value='{{user.email}}' name="edit_email" /></p>
+        <table style='width:100%'>
+            <tr>
+                <td><p>Username:</p></td>
+                <td><input type="text" value='{{user.username}}' disabled="disabled"/></td>
+                <td><p>Email: </p></td>
+                <td><input type="text" value='{{user.email}}' name="edit_email" /></td>
+                
+            </tr>
+            <tr>
+                <td><p>First Name: </p></td>
+                <td><input type="text" value='{{user.first_name}}' name="edit_firstname" /></td>
+                <td><p>Last Name: </p></td>
+                <td><input type="text" value='{{user.last_name}}' name="edit_lastname" /></td>
+            </tr>
+            <tr>
+                <td colspan='2'><P> Pending Friend Requests/Following: </P></td>
+                <td>
+                    <select>
+                        {% for a in follow %}
+                        <option>{{a.receiver.displayname}}</option>
+                        {% endfor %}
+                        {% if follow|length == 0%}
+                        <option> None </option>
+                        {% endif %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td ><p>Profile Picture: </p></td>
+                <td colspan='2'><input id="uploadFile" placeholder="Choose An Image" disabled="disabled" />
+                    <div class="fileUpload btn btn-primary post_left">
+                        <span>Browse</span>
+                        <input name="edit_pic" id="uploadBtn" type="file" class="upload" />
+                    </div>
+                </td>
+            </tr>
 
-        <P> Pending Friend Requests/Following </P>
-        {% for a in follow %}
-            <p>{{a.receiver.displayname}}</p>
-        {% endfor %}
-	<p>Profile Picture: </p>
-    <div class="upload_area">
-      <input id="uploadFile" placeholder="Choose An Image" disabled="disabled" />
-      <div class="fileUpload btn btn-primary post_left">
-        <span>Browse</span>
-        <input name="edit_pic" id="uploadBtn" type="file" class="upload" />
-    </div>
+        </table>
+
+    {% cloudinary user.author.photo %}
     <br></br>
-        {% cloudinary user.author.photo %}
-	<input class="btn btn-default" type="submit" value="Save" />
+	<input class="upload" type="submit" value="Save" />
 	</form>
 	<script type='text/javascript'>
 	//http://stackoverflow.com/questions/5100539/django-csrf-check-failing-with-an-ajax-post-request
@@ -100,25 +124,28 @@
         });
 	</script>
     <script>
-document.getElementById("uploadBtn").onchange = function () {
-  document.getElementById("uploadFile").value = this.value.replace(/.*[\/\\]/, '');
-};
-// document.getElementById('choose_pic').addEventListener('change', readURL, true);
-// function readURL(){
-//   var file = document.getElementById("choose_pic").files[0];
-//   var reader = new FileReader();
-//   reader.onloadend = function(){
-//     var content = document.getElementById("post_text");
-//     content.value = content.value + ' <img src="' + reader.result;
-//     content.value = content.value + '" />';
-//     //document.getElementById('post_text').style.backgroundImage = "url(" + reader.result + ")";
-//   }
-//   if(file){
-//     reader.readAsDataURL(file);
-//   }else{
-//   }
-// }
-</script>
+        //The same scrpit from main.html
+        document.getElementById("uploadBtn").onchange = function () {
+        document.getElementById("uploadFile").value = this.value.replace(/.*[\/\\]/, '');
+    };
+    </script>
     </div>
+</div>
+<div class="web_content">
+    {% for post in posts %}
+    <div class="posts">
+        <div class="profile">
+            <a href="{% url 'socialp2p:profile' post.author.displayname%}">{% cloudinary post.author.photo %}</a>
+            <a href="{% url 'socialp2p:profile' post.author.displayname%}"><strong class="displayname">{{ post.author.displayname }}</strong></a>
+            <span class="time">{{ post.datetime|localtime }}</span>
+        </div>
+        <div class=content>
+            <p>{{ post.content }}</p>
+            {% if post.image %}
+            {% cloudinary post.image width=700 height=300 crop="fill" %}
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}
