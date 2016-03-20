@@ -35,13 +35,17 @@ class Post(models.Model):
     FOAF = 'FOF'
     FRIENDS = 'FRS'
     PRIVATE = 'PRV'
+    ONLY = 'ONL'
+    LOCALFRI = 'LFS'
     SERVERONLY = 'SVO'
     Visibility_CHOICES = (
-        (PUBLIC, 'PUBLIC'),
-        (FOAF, 'FOAF'),
-        (FRIENDS, 'FRIENDS'),
-        (PRIVATE, 'PRIVATE'),
-        (SERVERONLY, 'SERVERONLY'),
+        (PUBLIC, 'Public to All'),
+        (SERVERONLY, 'Public to Local'),
+        (FOAF, 'Friends of Friends'),
+        (FRIENDS, 'Friends'),
+        (LOCALFRI, 'Local Friends'),
+        (ONLY, 'Only This Person ...'),
+        (PRIVATE, 'Only Me'),
     )
     visibility = models.CharField(max_length=3, choices=Visibility_CHOICES, default=PRIVATE)
     user_can_view = models.ForeignKey(Author, related_name='+', null=True, blank=True)

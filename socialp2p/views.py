@@ -91,4 +91,4 @@ def main(request):
         post.save()
         return HttpResponseRedirect(reverse('socialp2p:main'))
     else:
-        return render(request, 'socialp2p/main.html', {'Post': Post, 'posts': Post.objects.filter(visibility='PUB').order_by('-datetime')})
+        return render(request, 'socialp2p/main.html', {'Post': Post, 'posts': Post.objects.filter(visibility='PUB').order_by('-datetime'), 'authors': Author.objects.all(), "current_author": Author.objects.get(user=request.user)})

@@ -107,7 +107,7 @@ div.authentication {
   float: right;
   display: inline-block;
   vertical-align: middle;
-  line-height: 50px;
+  margin-top: 10px;
 }
 
 /* posts.html */
