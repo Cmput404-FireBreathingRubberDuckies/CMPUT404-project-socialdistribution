@@ -44,7 +44,7 @@ def author_detail(request, author_uuid):
         serializer = AuthorSerializer(author)
         return Response(serializer.data)
 
-    elif request.method == 'PUT':
+    elif request.method == 'POST':
 	user = User.objects.get(author=author)
 	edit_firstname = request.data.get('edit_firstname')
 	edit_lastname = request.data.get('edit_lastname')
@@ -59,7 +59,7 @@ def author_detail(request, author_uuid):
 
 	if edit_firstname=='' or edit_lastname=='' or edit_email=='':
 	    return HttpResponse("field cannot be empty")
-	    
+
 	else:
 	    user.first_name = edit_firstname
 	    user.last_name = edit_lastname
@@ -142,6 +142,13 @@ def friends(request, author_uuid):
 		friendRequest.accepted = False
 		friendRequest.save()
 	    return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
+
+# Currently only returning public posts, need to return all posts visible for author
+@api_view(['GET'])
+def posts(request):
+    posts = Post.objects.filter(visibility="PUB")
+    serializer = PostSerializer(posts, many=True)
+    return Response(serializer.data)
 
 # Currently returning a list of posts, needs changes to match requirements
 @api_view(['GET'])
