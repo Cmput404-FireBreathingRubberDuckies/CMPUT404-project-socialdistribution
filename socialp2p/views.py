@@ -20,7 +20,8 @@ def profile(request, author_uuid):
         if request.method=='GET':
             host = 'http://' + request.get_host()
             headers = {'Cookie': 'sessionid=' + request.COOKIES.get('sessionid')}
-            r = req.get(host + reverse('api:author_detail', args=(author_uuid,)), headers=headers)
+            r = requests.get(host + reverse('api:author_detail', args=(author_uuid,)), headers=headers)
+            print "TETETETETET", r.text
             author = r.json()
             if r.status_code == 200:
                 is_friend = False
@@ -28,10 +29,10 @@ def profile(request, author_uuid):
                 return render(request, 'socialp2p/detail.html', context)
     else:
         author = Author.objects.get(uuid=author_uuid)
-        requests = FriendRequest.objects.filter(receiver=author, accepted=False)
+        reqs = FriendRequest.objects.filter(receiver=author, accepted=False)
         follow = FriendRequest.objects.filter(requester=author, accepted=False)
         is_friend = False # need to fix this
-        context = {'requests':requests, 'follow':follow, 'posts': Post.objects.order_by('-datetime')}
+        context = {'requests':reqs, 'follow':follow, 'posts': Post.objects.order_by('-datetime')}
         return render(request, 'socialp2p/profile.html', context)
 
 def login_view(request):
@@ -94,9 +95,15 @@ def main(request):
         post.save()
         return HttpResponseRedirect(reverse('socialp2p:main'))
     else:
-
-        r = requests.get('http://floating-sands-69681.herokuapp.com/api/posts', auth=('socialp2p', 'socialp2p'))
-        data = r.json().get('posts')
+        data = []
+        nodes = Node.objects.all()
+        endpoint = 'api/posts'
+        for node in nodes:
+            url = node.host + endpoint
+            r = requests.get(url, auth=(node.access_username, node.access_password))
+            p = r.json().get('posts')
+            data += p
+        # data = r.json().get('posts')
 
         author = Author.objects.get(user=request.user)
         private_posts = Post.objects.filter(author=author, visibility='PRV')

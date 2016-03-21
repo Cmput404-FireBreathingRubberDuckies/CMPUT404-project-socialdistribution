@@ -45,6 +45,7 @@ def author_detail(request, author_uuid):
     try:
         author_uuid = uuid.UUID(author_uuid)
     except Exception as e:
+        print "FALIED"
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     try:

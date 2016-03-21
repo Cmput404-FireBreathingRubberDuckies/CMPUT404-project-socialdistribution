@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db import models
 import uuid
 from cloudinary.models import CloudinaryField
+from django import forms
 
 
 class Author(models.Model):
@@ -80,6 +81,8 @@ class Node(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     host = models.CharField(max_length=100)
     accepted = models.BooleanField(default=False)
+    access_username = models.CharField(max_length=100)
+    access_password = models.CharField(max_length=100)
 
     def __str__(self):
         return self.host
