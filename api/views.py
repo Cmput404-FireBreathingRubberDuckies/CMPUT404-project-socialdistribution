@@ -3,6 +3,7 @@ import json
 import requests
 from PIL import Image
 from django.core.urlresolvers import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -50,7 +51,7 @@ def author_detail(request, author_uuid):
     try:
         author = Author.objects.get(uuid=author_uuid)
     except Exception as e:
-        endpoint = 'api/author/' 
+        endpoint = 'api/author/'
         nodes = Node.objects.all()
         response_status = 404
         for node in nodes:
@@ -126,8 +127,6 @@ def friend_request(request):
 	    serializer = FriendRequestSerializer(friendRequest)
             return Response(serializer.data)
 
-
-
 @api_view(['GET', 'POST', 'DELETE'])
 def friends(request, author_uuid):
     current_user = User.objects.get(id=request.user.id)
@@ -168,46 +167,120 @@ def friends(request, author_uuid):
 # Currently only returning public, private, and friends posts but not friend of friend
 @api_view(['GET'])
 def posts(request):
-
     author = Author.objects.get(user=request.user)
-    posts = Post.objects.filter(visibility="PUB")
+    queryset = Post.objects.filter(visibility="PUB")
 
     for i in author.friends.all():
         friends_posts = Post.objects.filter(author=i, visibility="FRS")
-        posts = posts | friends_posts
+        queryset = queryset | friends_posts
 
     private_posts = Post.objects.filter(author=author, visibility="PRV")
     friends_posts = Post.objects.filter(author=author, visibility="FRS")
-    posts = posts | friends_posts | private_posts
+    queryset = queryset | friends_posts | private_posts
+
+    page = request.query_params.get('page')
+    size = request.query_params.get('size')
+    size = size if size else 50
+
+    paginator = Paginator(queryset, size)
+
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        posts = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999),
+        # deliver last page of results.
+        posts = paginator.page(paginator.num_pages)
 
     serializer = PostSerializer(posts, many=True)
-    return Response(serializer.data)
+
+    return Response({
+        "query": "posts",
+        "count": len(queryset),
+        "next": "?page=" + str(posts.next_page_number()) if posts.has_next() else None,
+        "previous": "?page=" + str(posts.previous_page_number()) if posts.has_previous() else None,
+        "size": size,
+        "posts": serializer.data
+        })
 
 # Currently only returning public, private, and friends posts but not friend of friend
 @api_view(['GET'])
 def author_posts(request, author_uuid):
-
     request_author = Author.objects.get(uuid=author_uuid)
     request_user = User.objects.get(author=request_author)
     current_author = Author.objects.get(user=request.user)
-    posts = Post.objects.filter(author=request_author, visibility="PUB")
+
+    queryset = Post.objects.filter(author=request_author, visibility="PUB")
     private_posts = Post.objects.filter(author=request_author, visibility="PRV")
 
     if current_author.friends.filter(user=request_user).exists():
-	friend_posts = Post.objects.filter(author=request_author, visibility="FRS")
-    	posts = posts | private_posts | friend_posts
+        friend_posts = Post.objects.filter(author=request_author, visibility="FRS")
+        queryset = queryset | private_posts | friend_posts
+    else:
+        queryset = queryset | private_posts
+
+    page = request.query_params.get('page')
+    size = request.query_params.get('size')
+    size = size if size else 50
+
+    paginator = Paginator(queryset, size)
+
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        posts = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999),
+        # deliver last page of results.
+        posts = paginator.page(paginator.num_pages)
 
     serializer = PostSerializer(posts, many=True)
-    return Response(serializer.data)
+
+    return Response({
+        "query": "posts",
+        "count": len(queryset),
+        "next": "?page=" + str(posts.next_page_number()) if posts.has_next() else None,
+        "previous": "?page=" + str(posts.previous_page_number()) if posts.has_previous() else None,
+        "size": size,
+        "posts": serializer.data
+        })
 
 # Currently returning a list of posts, needs changes to match requirements
 @api_view(['GET'])
 @authentication_classes((SessionAuthentication, BasicAuthentication))
 @permission_classes((IsAuthenticated,))
 def public_posts(request):
-    public_posts = Post.objects.filter(visibility="PUB")
-    serializer = PostSerializer(public_posts, many=True)
-    return Response({"query": "posts", "count": len(public_posts), "posts": serializer.data})
+    queryset = Post.objects.filter(visibility="PUB")
+
+    page = request.query_params.get('page')
+    size = request.query_params.get('size')
+    size = size if size else 50
+
+    paginator = Paginator(queryset, size)
+
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        posts = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999),
+        # deliver last page of results.
+        posts = paginator.page(paginator.num_pages)
+
+    serializer = PostSerializer(posts, many=True)
+
+    return Response({
+        "query": "posts",
+        "count": len(queryset),
+        "next": "?page=" + str(posts.next_page_number()) if posts.has_next() else None,
+        "previous": "?page=" + str(posts.previous_page_number()) if posts.has_previous() else None,
+        "size": size,
+        "posts": serializer.data
+        })
 
 @api_view(['GET','POST', 'PUT', 'DELETE'])
 def post_detail(request, post_uuid):
