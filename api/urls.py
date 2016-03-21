@@ -14,5 +14,5 @@ urlpatterns = [
     url(r'^friends/(?P<author_uuid>[^/]+)/$', views.friends, name='friends'),
     url(r'^friendrequest/$', views.friend_request, name='friend_request'),
     url(r'^posts/$', views.public_posts, name='posts'),
-    url(r'^posts/(?P<post_uuid>[^/]+)/$', views.post_detail, name='post_detail')
+    url(r'^posts/(?P<post_uuid>[^/]+)/$', views.post_detail, name='post_detail'),
 ]
