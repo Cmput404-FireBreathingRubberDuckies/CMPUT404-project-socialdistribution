@@ -46,10 +46,13 @@ class FriendSerializer(serializers.Serializer):
         return 'friends'
 
 class CommentSerializer(serializers.ModelSerializer):
-    # TODO fix proper fields
+    id = serializers.CharField(source='uuid')
+    comment = serializers.CharField(source='content')
+    published = serializers.CharField(source='datetime')
+    author = FriendProfileSerializer()
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = ('id', 'comment', 'published', 'author')
 
 class PostSerializer(serializers.Serializer):
     id = serializers.CharField(source='uuid')
@@ -60,8 +63,13 @@ class PostSerializer(serializers.Serializer):
     content = serializers.CharField()
     title = serializers.CharField()
     visibility = serializers.CharField()
-    # comments = CommentSerializer(many=True) # Not quite sure how to get this working
+    comments = serializers.SerializerMethodField('get_comment')
 
     def get_content_type(self, post_obj):
         markdown = post_obj.markdown
         return 'text/x-markdown' if markdown else 'text/plain'
+
+    def get_comment(self, post_obj):
+        comments = Comment.objects.filter(post=post_obj.id)
+        comments = CommentSerializer(comments, many=True)
+        return comments.data
