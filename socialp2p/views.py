@@ -15,26 +15,23 @@ import requests as req
 
 @login_required
 def profile(request, author_uuid):
-    author = None
-    try:
+    if str(request.user.author.uuid) != str(author_uuid):
+        if request.method=='GET':
+            host = 'http://' + request.get_host()
+            headers = {'Cookie': 'sessionid=' + request.COOKIES.get('sessionid')}
+            r = req.get(host + reverse('api:author_detail', args=(author_uuid,)), headers=headers)
+            author = r.json()
+            if r.status_code == 200:
+                is_friend = False
+                context = {'user_profile': author, 'is_friend': is_friend}
+                return render(request, 'socialp2p/detail.html', context)
+    else:
         author = Author.objects.get(uuid=author_uuid)
-    except Author.DoesNotExist:
-        host = 'http://' + request.get_host()
-        headers = {'Cookie': 'sessionid=' + request.COOKIES.get('sessionid')}
-        r = req.get(host + reverse('api:author_detail', args=(author_uuid,)), headers=headers)
-        author = r.json()
-        is_friend = False
-        context = {'user_profile': author, 'is_friend': is_friend}
-        return render(request, 'socialp2p/detail.html', context)
-    requests = FriendRequest.objects.filter(receiver=author, accepted=False)
-    follow = FriendRequest.objects.filter(requester=author, accepted=False)
-    # is_friend = False
-    # if len(request.user.author.friends.filter(uuid=author.uuid)) == 1:
-        # is_friend = True
-    context = {'requests':requests, 'follow':follow, 'posts': Post.objects.order_by('-datetime')}
-    return render(request, 'socialp2p/profile.html', context)
-
-
+        requests = FriendRequest.objects.filter(receiver=author, accepted=False)
+        follow = FriendRequest.objects.filter(requester=author, accepted=False)
+        is_friend = False # need to fix this
+        context = {'requests':requests, 'follow':follow, 'posts': Post.objects.order_by('-datetime')}
+        return render(request, 'socialp2p/profile.html', context)
 
 def login_view(request):
     if request.user.is_authenticated():

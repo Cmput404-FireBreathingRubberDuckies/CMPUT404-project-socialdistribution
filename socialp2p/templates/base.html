@@ -24,7 +24,7 @@
                 <a class="search_button" href="#" id="search_submit"><img src="{% static 'img/search_icon.png' %}" width="30px" height="30px"></a>
             </form>
              <ul class="nav navbar-nav navbar-right">
-                <li class="profile-icon"><a href="{% url 'socialp2p:profile' user.username %}">{% cloudinary user.author.photo width=20 class='profile-navbar' %}</a></li>
+                <li class="profile-icon"><a href="{% url 'socialp2p:profile' user.author.uuid %}">{% cloudinary user.author.photo width=20 class='profile-navbar' %}</a></li>
                 <li><a href="{% url 'socialp2p:logout' %}">Log Out</a></li>
             </ul>
         </div>
