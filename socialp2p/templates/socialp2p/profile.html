@@ -147,7 +147,30 @@
             {% endif %}
         </div>
     </div>
+    <div class='edit_toggle'>
+        <p>Edit</p>
+    </div>
+    <form action = "{% url 'api:post_detail' post.uuid %}" method="POST" id="edit_post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class='edit_area' style='display:none'>
+            <textarea name="post_content" class="post_input form-control" rows="4" id="post_text"></textarea>
+            <div class="upload_area">
+                <input id="uploadFile" placeholder="Choose An Image" disabled="disabled" />
+                <div class="fileUpload btn btn-primary post_left">
+                    <span>Browse</span>
+                    <input name="post_image" id="uploadBtn" type="file" class="upload" />
+                </div>
+                <input type='checkbox' name='check_remove_picture'/>Remove Picture<br>
+            </div>
+            <input class="upload" type="submit" value="Update" />
+        </div>
+    </form>
     {% endif %}
     {% endfor %}
 </div>
+<script type="text/javascript">
+$(".edit_toggle").click(function() { 
+    $($('.edit_area')[$(this).index(".edit_toggle")]).toggle('fast'); 
+});
+</script>
 {% endblock %}

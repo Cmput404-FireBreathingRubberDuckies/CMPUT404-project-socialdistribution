@@ -146,8 +146,55 @@ div.authentication {
   border-radius: 2px;
   display: block;
   margin-left: auto;
-  margin-right: auto
+  margin-right: auto;
+  margin-bottom: 20px;
 }
+
+
+
+
+/* Comments on posts */
+.web_content .comments{
+  margin-top: 20px;
+  padding: 20px 20px;
+  border-width:2px;
+  border-style: dotted;
+  border-color: #E1E8ED;
+  border-radius: 5px;
+  box-sizing: border-box;
+  background-color: #eee;
+}
+.web_content .show_comments{
+  position: relative;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.web_content .comments .commenter_profile img {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin-right: 10px;
+}
+.web_content .comments .commenter_profile a {
+  text-decoration: none;
+}
+.web_content .comments .commenter_profile .displayname {
+  font-size: 20px;
+  font-weight: bold;
+}
+.web_content .comments .commenter_profile .time {
+  font-size: 15px;
+  float: right;
+}
+.web_content .comments .content p {
+  font-size: 15px;
+}
+/* Comments on posts */
+
+
+
+
 .left-column {
   padding: 0;
 }
@@ -191,3 +238,12 @@ div.authentication {
 li.profile-icon:hover {
   background-color: #5c5c5c;
 }
+
+/* work only with edit in profile */
+div.edit_toggle{
+    border-radius: 35px;
+    padding: 10px;
+    color: blue;
+    text-shadow: 1px 2px 1px blue;
+}
+
