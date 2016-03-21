@@ -283,6 +283,8 @@ def public_posts(request):
         })
 
 @api_view(['GET','POST', 'PUT', 'DELETE'])
+@authentication_classes((SessionAuthentication, BasicAuthentication))
+@permission_classes((IsAuthenticated,))
 def post_detail(request, post_uuid):
     try:
         post_uuid = uuid.UUID(post_uuid)
@@ -296,7 +298,11 @@ def post_detail(request, post_uuid):
 
     if request.method == 'GET':
         serializer = PostSerializer(post)
-        return Response(serializer.data)
+        return Response({
+            "query": "posts",
+            "count": 1,
+            "posts": [serializer.data]
+            })
 
     if request.method == 'POST':
         edit_content = request.data.get('post_content')
