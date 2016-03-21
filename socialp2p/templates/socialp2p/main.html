@@ -59,6 +59,18 @@
       {% if post.image %}
       {% cloudinary post.image width=700 height=300 crop="fill" %}
       {% endif %}
+
+    </div>
+  </div>
+  {% endfor %}
+  {% for posts in remote_posts %}
+  <div class="posts">
+    <div class="profile">
+       <strong class="displayname">{{ posts.author.displayname }}</strong></a>
+       <span class="time">{{ posts.published }}</span>
+    </div>
+    <div class=content>
+    <p>{{ posts.content }}<p>
     </div>
     <button class="btn btn-default show_comments">Show Comments</button>
     <div class="comments" style='display: none'>
