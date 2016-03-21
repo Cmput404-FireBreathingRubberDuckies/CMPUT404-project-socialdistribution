@@ -42,14 +42,14 @@ def author_list(request):
 @permission_classes((IsAuthenticated,))
 def author_detail(request, author_uuid):
     author = None
-    try:
-        author_uuid = uuid.UUID(author_uuid)
-    except Exception as e:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    # try:
+    #     author_uuid = uuid.UUID(author_uuid)
+    # except Exception as e:
+    #     return Response(status=status.HTTP_404_NOT_FOUND)
 
     try:
         author = Author.objects.get(uuid=author_uuid)
-    except Author.DoesNotExist:
+    except Exception as e:
         endpoint = 'api/author/' 
         nodes = Node.objects.all()
         response_status = 404

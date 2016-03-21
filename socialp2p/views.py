@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound
 from django.template import RequestContext
 from django.shortcuts import render_to_response, render
 from django.contrib.auth.models import User
@@ -21,12 +21,14 @@ def profile(request, author_uuid):
             host = 'http://' + request.get_host()
             headers = {'Cookie': 'sessionid=' + request.COOKIES.get('sessionid')}
             r = requests.get(host + reverse('api:author_detail', args=(author_uuid,)), headers=headers)
-            print "TETETETETET", r.text
-            author = r.json()
+
             if r.status_code == 200:
+                author = r.json()
                 is_friend = False
                 context = {'user_profile': author, 'is_friend': is_friend}
                 return render(request, 'socialp2p/detail.html', context)
+            else:
+                return HttpResponseNotFound('<p>User not found</p>')
     else:
         author = Author.objects.get(uuid=author_uuid)
         reqs = FriendRequest.objects.filter(receiver=author, accepted=False)
@@ -101,8 +103,9 @@ def main(request):
         for node in nodes:
             url = node.host + endpoint
             r = requests.get(url, auth=(node.access_username, node.access_password))
-            p = r.json().get('posts')
-            data += p
+            if r.status_code == 200:
+                p = r.json().get('posts')
+                data += p
         # data = r.json().get('posts')
 
         author = Author.objects.get(user=request.user)
