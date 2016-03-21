@@ -3,32 +3,36 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response, render
 from django.contrib.auth.models import User
-from socialp2p.models import Author, FriendRequest, Post
+from socialp2p.models import Author, FriendRequest, Post, Node
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 import json
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+import requests as req
+
 
 @login_required
-def profile(request, username):
-    user = User.objects.get(username=username)
-    author = Author.objects.get(user=user)
+def profile(request, author_uuid):
+    author = None
+    try:
+        author = Author.objects.get(uuid=author_uuid)
+    except Author.DoesNotExist:
+        host = 'http://' + request.get_host()
+        headers = {'Cookie': 'sessionid=' + request.COOKIES.get('sessionid')}
+        r = req.get(host + reverse('api:author_detail', args=(author_uuid,)), headers=headers)
+        author = r.json()
+        is_friend = False
+        context = {'user_profile': author, 'is_friend': is_friend}
+        return render(request, 'socialp2p/detail.html', context)
     requests = FriendRequest.objects.filter(receiver=author, accepted=False)
     follow = FriendRequest.objects.filter(requester=author, accepted=False)
-    is_friend = False
-    if len(request.user.author.friends.filter(uuid=author.uuid)) == 1:
-        is_friend = True
-
-    if request.user.username != username:
-        if request.method=='GET':
-            context = {'user_profile': user, 'is_friend': is_friend}
-            return render(request, 'socialp2p/detail.html', context)
-
-    else:
-        context = {'requests':requests, 'follow':follow, 'posts': Post.objects.order_by('-datetime')}
-        return render(request, 'socialp2p/profile.html', context)
+    # is_friend = False
+    # if len(request.user.author.friends.filter(uuid=author.uuid)) == 1:
+        # is_friend = True
+    context = {'requests':requests, 'follow':follow, 'posts': Post.objects.order_by('-datetime')}
+    return render(request, 'socialp2p/profile.html', context)
 
 
 

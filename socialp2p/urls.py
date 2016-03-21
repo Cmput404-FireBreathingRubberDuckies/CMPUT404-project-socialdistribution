@@ -9,6 +9,6 @@ urlpatterns = [
     url(r'^authenticate/$', views.authenticate_view, name='authenticate'),
     url(r'^logout/$', views.logout_view, name='logout'),
     url(r'^signup/$', views.signup_view, name='signup'),
-    url(r'^profile/(?P<username>\w+)/$', views.profile, name='profile'),
+    url(r'^profile/(?P<author_uuid>[^/]+)/$', views.profile, name='profile'),
     url(r'^posts/$', views.posts_view, name='posts'),
 ]

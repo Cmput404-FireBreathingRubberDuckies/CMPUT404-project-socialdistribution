@@ -64,7 +64,3 @@ class PostSerializer(serializers.Serializer):
     def get_content_type(self, post_obj):
         markdown = post_obj.markdown
         return 'text/x-markdown' if markdown else 'text/plain'
-
-
-
-

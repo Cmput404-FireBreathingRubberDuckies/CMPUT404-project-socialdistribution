@@ -3,10 +3,10 @@
 {% load cloudinary %}
 {% block body %}
 <div class="container" id="container">
-    <p>username: {{user_profile.username}}</p>
-    <p data-qid="{{user_profile.author.uuid}}">id: {{user_profile.author.uuid}}</p>
-    <p>host: {{user_profile.author.host}}</p>
-    <p>url: {{user_profile.author.url}}</p>
+    <p>username: {{user_profile.displayname}}</p>
+    <p data-qid="{{user_profile.author.uuid}}">id: {{user_profile.id}}</p>
+    <p>host: {{user_profile.host}}</p>
+    <p>url: {{user_profile.url}}</p>
     {% cloudinary user_profile.author.photo %}
     {% if not is_friend %}
         <form action="{% url 'api:friend_request' %}" method="POST" id="add">

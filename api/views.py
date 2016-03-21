@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from django.http import HttpResponseRedirect, HttpResponse
-from socialp2p.models import Author, FriendRequest, Post
+from socialp2p.models import Author, FriendRequest, Post, Node
 from socialp2p import views
 from api.serializations import *
 from django.contrib.auth.models import User
@@ -18,10 +18,13 @@ from rest_framework.views import APIView
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+import requests
 
 
 
 @api_view(['GET', 'POST'])
+@authentication_classes((SessionAuthentication, BasicAuthentication))
+@permission_classes((IsAuthenticated,))
 def author_list(request):
     if request.method == 'GET':
         authors = Author.objects.all()
@@ -39,6 +42,7 @@ def author_list(request):
 @authentication_classes((SessionAuthentication, BasicAuthentication))
 @permission_classes((IsAuthenticated,))
 def author_detail(request, author_uuid):
+    author = None
     try:
         author_uuid = uuid.UUID(author_uuid)
     except Exception as e:
@@ -47,7 +51,25 @@ def author_detail(request, author_uuid):
     try:
         author = Author.objects.get(uuid=author_uuid)
     except Author.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        endpoint = 'api/author/' 
+        nodes = Node.objects.all()
+        response_status = 404
+        for node in nodes:
+            if node.user.username == 'fbook':
+                author_uuid_str = str(author_uuid)
+                author_uuid_str = author_uuid_str.replace("-", "")
+                url = node.host + endpoint + author_uuid_str
+
+            r = requests.get(url, auth=('socialp2p', 'socialp2p'))
+            if r.status_code == 200:
+                response_status = 200
+                author = r.json()
+                break
+        if response_status != 200:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+            if request.method == 'GET':
+                return Response(author)
 
     if request.method == 'GET':
         serializer = AuthorSerializer(author)
@@ -187,7 +209,7 @@ def author_posts(request, author_uuid):
 def public_posts(request):
     public_posts = Post.objects.filter(visibility="PUB")
     serializer = PostSerializer(public_posts, many=True)
-    return Response(serializer.data)
+    return Response({"query": "posts", "count": len(public_posts), "posts": serializer.data})
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def post_detail(request, post_uuid):
