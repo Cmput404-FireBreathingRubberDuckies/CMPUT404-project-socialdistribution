@@ -1,5 +1,6 @@
 import uuid
 import json
+import requests
 from PIL import Image
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
