@@ -31,7 +31,7 @@
             </div>
             {% for b in requests %}
                 <div class="friend-row">
- 		    <a href="{% url 'socialp2p:profile' b.requester.displayname%}">{% cloudinary b.requester.photo %}<strong class="displayname">{{ b.requester.displayname }}</strong></a>
+ 		    <a href="{% url 'socialp2p:profile' b.requester.uuid%}">{% cloudinary b.requester.photo %}<strong class="displayname">{{ b.requester.displayname }}</strong></a>
                     <form class="pull-right" action="{% url 'api:friends' b.requester.uuid %}" method="POST" id="accept">
                         {% csrf_token %}
                         <input class="btn btn-default" type="submit" value="Accept" name="accept"/>
@@ -136,8 +136,8 @@
     {% if user.author.uuid == post.author.uuid %}
     <div class="posts">
         <div class="profile">
-            <a href="{% url 'socialp2p:profile' post.author.displayname%}">{% cloudinary post.author.photo %}</a>
-            <a href="{% url 'socialp2p:profile' post.author.displayname%}"><strong class="displayname">{{ post.author.displayname }}</strong></a>
+            <a href="{% url 'socialp2p:profile' post.author.uuid%}">{% cloudinary post.author.photo %}</a>
+            <a href="{% url 'socialp2p:profile' post.author.uuid%}"><strong class="displayname">{{ post.author.displayname }}</strong></a>
             <span class="time">{{ post.datetime|localtime }}</span>
         </div>
         <div class=content>
