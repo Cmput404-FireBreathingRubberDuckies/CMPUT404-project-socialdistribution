@@ -105,18 +105,14 @@
     </div>
     <button class="btn btn-default show_comments">Show Comments</button>
     <div class="comments" style='display: none'>
-      {% for comment in comments %}
-        {% if comment.post.uuid == post.uuid %}
           <div class="commenter_profile">
-            <a href="{% url 'socialp2p:profile' comment.author.displayname%}">{% cloudinary comment.author.photo %}</a>
-            <a href="{% url 'socialp2p:profile' comment.author.displayname%}"><strong class="displayname">{{ comment.author.displayname }}</strong></a>
-            <span class="time">{{ comment.datetime|localtime }}</span>
+
+            <a href="{% url 'socialp2p:profile' comment.author.displayname%}"><strong class="displayname">{{ post.comments.author.displayname }}</strong></a>
+            <span class="time">{{ comment.published }}</span>
           </div>
           <div class="content">
-            <p>{{ comment.content }}</p>
+            <p>{{ post.comments.comment }}</p>
           </div>
-        {% endif %}
-      {% endfor %}
       <!-- Add new comment -->
       <form action="{% url 'socialp2p:new_comment' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
