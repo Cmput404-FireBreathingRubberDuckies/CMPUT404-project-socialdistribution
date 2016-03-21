@@ -106,3 +106,12 @@ def main(request):
         current_author = Author.objects.get(user=request.user)
         comments = Comment.objects.order_by('-datetime')
         return render(request, 'socialp2p/main.html', {'Post': Post, 'posts': posts, 'authors': authors, 'current_author': current_author, 'comments': comments})
+
+@login_required
+def new_comment(request):
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        post_uuid = request.POST.get('post')
+        comment = Comment(author=Author.objects.get(user=request.user), content=content, post=Post.objects.get(uuid=post_uuid))
+        comment.save()
+        return HttpResponseRedirect(reverse('socialp2p:main'))
