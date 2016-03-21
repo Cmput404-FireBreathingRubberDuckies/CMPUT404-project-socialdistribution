@@ -51,6 +51,9 @@ class Post(models.Model):
     user_can_view = models.ForeignKey(Author, related_name='+', null=True, blank=True)
     datetime = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return str(self.uuid)
+
 class Comment(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
