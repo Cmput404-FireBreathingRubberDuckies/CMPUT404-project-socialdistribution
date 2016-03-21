@@ -51,7 +51,7 @@ class Post(models.Model):
         (ONLY, 'Only This Person ...'),
         (PRIVATE, 'Only Me'),
     )
-    visibility = models.CharField(max_length=3, choices=Visibility_CHOICES, default=PRIVATE)
+    visibility = models.CharField(max_length=12, choices=Visibility_CHOICES, default=PRIVATE)
     user_can_view = models.ForeignKey(Author, related_name='+', null=True, blank=True)
     datetime = models.DateTimeField(auto_now=True)
 
