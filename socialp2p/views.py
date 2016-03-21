@@ -11,7 +11,7 @@ import requests
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
-import requests as req
+import requests
 
 
 @login_required
@@ -95,19 +95,18 @@ def main(request):
         return HttpResponseRedirect(reverse('socialp2p:main'))
     else:
 
-	r = requests.get('http://floating-sands-69681.herokuapp.com/api/posts', auth=('socialp2p', 'socialp2p'))
-	data = r.json().get('posts')
+        r = requests.get('http://floating-sands-69681.herokuapp.com/api/posts', auth=('socialp2p', 'socialp2p'))
+        data = r.json().get('posts')
 
-	author = Author.objects.get(user=request.user)
-	private_posts = Post.objects.filter(author=author, visibility='PRV')
-	my_friend_posts = Post.objects.filter(author=author, visibility='FRS')
-    	posts = Post.objects.filter(visibility='PUB')
-	posts = posts | private_posts | my_friend_posts
-
+        author = Author.objects.get(user=request.user)
+        private_posts = Post.objects.filter(author=author, visibility='PRV')
+        my_friend_posts = Post.objects.filter(author=author, visibility='FRS')
+        posts = Post.objects.filter(visibility='PUB')
+        posts = posts | private_posts | my_friend_posts
 
         for i in author.friends.all():
-	    friends_posts = Post.objects.filter(author=i, visibility='FRS')
-	    posts = posts | friends_posts
+            friends_posts = Post.objects.filter(author=i, visibility='FRS')
+            posts = posts | friends_posts
 
         posts = posts.order_by('-datetime')
         authors = Author.objects.order_by('user__username')
