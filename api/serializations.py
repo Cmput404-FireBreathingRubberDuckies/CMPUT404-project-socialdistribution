@@ -58,6 +58,7 @@ class PostSerializer(serializers.Serializer):
     content_type = serializers.SerializerMethodField()
     title = serializers.CharField()
     content = serializers.CharField()
+    title = serializers.CharField()
     visibility = serializers.CharField()
     # comments = CommentSerializer(many=True) # Not quite sure how to get this working
 

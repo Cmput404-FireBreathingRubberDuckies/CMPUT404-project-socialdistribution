@@ -17,6 +17,7 @@
       </div>
     </div>
     <div>
+      <input id="post_title" name="post-title" class="form-control"></input>
       <textarea name="content" class="post_input form-control" rows="4" id="post_text"></textarea>
     </div>
     <div class="upload_area">
@@ -51,6 +52,7 @@
       <span class="time">{{ post.datetime|localtime }}</span>
     </div>
     <div class="content">
+      <h2>{{ post.title }}</h2>
       {% if post.markdown %}
       <div class='markdown_post'>{{ post.content }}</div>
       {% else %}
