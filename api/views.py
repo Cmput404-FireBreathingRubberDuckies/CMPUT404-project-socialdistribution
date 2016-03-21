@@ -170,14 +170,14 @@ def friends(request, author_uuid):
 def posts(request):
 
     author = Author.objects.get(user=request.user)
-    posts = Post.objects.filter(visibility="PUB")
+    posts = Post.objects.filter(visibility="PUBLIC")
 
     for i in author.friends.all():
-        friends_posts = Post.objects.filter(author=i, visibility="FRS")
+        friends_posts = Post.objects.filter(author=i, visibility="FRIENDS")
         posts = posts | friends_posts
 
-    private_posts = Post.objects.filter(author=author, visibility="PRV")
-    friends_posts = Post.objects.filter(author=author, visibility="FRS")
+    private_posts = Post.objects.filter(author=author, visibility="PRIVATE")
+    friends_posts = Post.objects.filter(author=author, visibility="FRIENDS")
     posts = posts | friends_posts | private_posts
 
     serializer = PostSerializer(posts, many=True)
@@ -190,11 +190,11 @@ def author_posts(request, author_uuid):
     request_author = Author.objects.get(uuid=author_uuid)
     request_user = User.objects.get(author=request_author)
     current_author = Author.objects.get(user=request.user)
-    posts = Post.objects.filter(author=request_author, visibility="PUB")
-    private_posts = Post.objects.filter(author=request_author, visibility="PRV")
+    posts = Post.objects.filter(author=request_author, visibility="PUBLIC")
+    private_posts = Post.objects.filter(author=request_author, visibility="PRIVATE")
 
     if current_author.friends.filter(user=request_user).exists():
-	friend_posts = Post.objects.filter(author=request_author, visibility="FRS")
+	friend_posts = Post.objects.filter(author=request_author, visibility="FRIENDS")
     	posts = posts | private_posts | friend_posts
 
     serializer = PostSerializer(posts, many=True)
@@ -205,7 +205,7 @@ def author_posts(request, author_uuid):
 @authentication_classes((SessionAuthentication, BasicAuthentication))
 @permission_classes((IsAuthenticated,))
 def public_posts(request):
-    public_posts = Post.objects.filter(visibility="PUB")
+    public_posts = Post.objects.filter(visibility="PUBLIC")
     serializer = PostSerializer(public_posts, many=True)
     return Response({"query": "posts", "count": len(public_posts), "posts": serializer.data})
 

@@ -35,13 +35,13 @@ class Post(models.Model):
     title = models.TextField()
     content = models.TextField()
     image = CloudinaryField('image', null=True, blank=True)
-    PUBLIC = 'PUB'
-    FOAF = 'FOF'
-    FRIENDS = 'FRS'
-    PRIVATE = 'PRV'
+    PUBLIC = 'PUBLIC'
+    FOAF = 'FOAF'
+    FRIENDS = 'FRIENDS'
+    PRIVATE = 'PRIVATE'
     ONLY = 'ONL'
     LOCALFRI = 'LFS'
-    SERVERONLY = 'SVO'
+    SERVERONLY = 'SERVERONLY'
     Visibility_CHOICES = (
         (PUBLIC, 'Public to All'),
         (SERVERONLY, 'Public to Local'),

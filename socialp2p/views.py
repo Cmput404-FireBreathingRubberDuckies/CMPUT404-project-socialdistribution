@@ -83,7 +83,7 @@ def signup_view(request):
 # all posts public on server
 @login_required
 def posts_view(request):
-    return render(request, 'socialp2p/posts.html', {'posts': Post.objects.filter(visibility='PUB').order_by('-datetime')})
+    return render(request, 'socialp2p/posts.html', {'posts': Post.objects.filter(visibility='PUBLIC').order_by('-datetime')})
 
 @login_required
 def main(request):
@@ -109,13 +109,13 @@ def main(request):
         # data = r.json().get('posts')
 
         author = Author.objects.get(user=request.user)
-        private_posts = Post.objects.filter(author=author, visibility='PRV')
-        my_friend_posts = Post.objects.filter(author=author, visibility='FRS')
-        posts = Post.objects.filter(visibility='PUB')
+        private_posts = Post.objects.filter(author=author, visibility='PRIVATE')
+        my_friend_posts = Post.objects.filter(author=author, visibility='FRIENDS')
+        posts = Post.objects.filter(visibility='PUBLIC')
         posts = posts | private_posts | my_friend_posts
 
         for i in author.friends.all():
-            friends_posts = Post.objects.filter(author=i, visibility='FRS')
+            friends_posts = Post.objects.filter(author=i, visibility='FRIENDS')
             posts = posts | friends_posts
 
         posts = posts.order_by('-datetime')
