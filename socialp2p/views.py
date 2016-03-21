@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response, render
 from django.contrib.auth.models import User
-from socialp2p.models import Author, FriendRequest, Post
+from socialp2p.models import Author, FriendRequest, Post, Comment
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 import json
@@ -92,16 +92,17 @@ def main(request):
         post.save()
         return HttpResponseRedirect(reverse('socialp2p:main'))
     else:
-
-	author = Author.objects.get(user=request.user)
-	private_posts = Post.objects.filter(author=author, visibility='PRV')
-    	posts = Post.objects.filter(visibility='PUB')
-	posts = posts | private_posts
+        author = Author.objects.get(user=request.user)
+        private_posts = Post.objects.filter(author=author, visibility='PRV')
+        posts = Post.objects.filter(visibility='PUB')
+        posts = posts | private_posts
 
         for i in author.friends.all():
 	    friends_posts = Post.objects.filter(author=i, visibility='FRS')
 	    posts = posts | friends_posts
 
         posts = posts.order_by('-datetime')
-        return render(request, 'socialp2p/main.html', {'Post': Post, 'posts': posts, 'authors': Author.objects.order_by('user__username'), "current_author": Author.objects.get(user=request.user)})
-
+        authors = Author.objects.order_by('user__username')
+        current_author = Author.objects.get(user=request.user)
+        comments = Comment.objects.order_by('-datetime')
+        return render(request, 'socialp2p/main.html', {'Post': Post, 'posts': posts, 'authors': authors, 'current_author': current_author, 'comments': comments})
