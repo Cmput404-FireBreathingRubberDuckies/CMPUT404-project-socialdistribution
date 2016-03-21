@@ -45,7 +45,6 @@ def author_detail(request, author_uuid):
     try:
         author_uuid = uuid.UUID(author_uuid)
     except Exception as e:
-        print "FALIED"
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     try:
@@ -55,12 +54,9 @@ def author_detail(request, author_uuid):
         nodes = Node.objects.all()
         response_status = 404
         for node in nodes:
-            if node.user.username == 'fbook':
-                author_uuid_str = str(author_uuid)
-                author_uuid_str = author_uuid_str.replace("-", "")
-                url = node.host + endpoint + author_uuid_str
-
-            r = requests.get(url, auth=('socialp2p', 'socialp2p'))
+            author_uuid_str = str(author_uuid)
+            url = node.host + endpoint + author_uuid_str
+            r = requests.get(url, auth=(node.access_username, node.access_password))
             if r.status_code == 200:
                 response_status = 200
                 author = r.json()
