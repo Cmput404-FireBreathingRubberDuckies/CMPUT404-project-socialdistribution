@@ -199,8 +199,8 @@ def posts(request):
     return Response({
         "query": "posts",
         "count": len(queryset),
-        "next": "?page=" + str(posts.next_page_number()) if posts.has_next() else None,
-        "previous": "?page=" + str(posts.previous_page_number()) if posts.has_previous() else None,
+        "next": reverse('api:posts') + "?page=" + str(posts.next_page_number()) + "&size=" + str(size) if posts.has_next() else None,
+        "previous": reverse('api:posts') + "?page=" + str(posts.previous_page_number()) + "&size=" + str(size) if posts.has_previous() else None,
         "size": size,
         "posts": serializer.data
         })
@@ -242,8 +242,8 @@ def author_posts(request, author_uuid):
     return Response({
         "query": "posts",
         "count": len(queryset),
-        "next": "?page=" + str(posts.next_page_number()) if posts.has_next() else None,
-        "previous": "?page=" + str(posts.previous_page_number()) if posts.has_previous() else None,
+        "next": reverse('api:author_posts') + "?page=" + str(posts.next_page_number()) + "&size=" + str(size) if posts.has_next() else None,
+        "previous": reverse('api:author_posts') + "?page=" + str(posts.previous_page_number()) + "&size=" + str(size) if posts.has_previous() else None,
         "size": size,
         "posts": serializer.data
         })
@@ -276,8 +276,8 @@ def public_posts(request):
     return Response({
         "query": "posts",
         "count": len(queryset),
-        "next": "?page=" + str(posts.next_page_number()) if posts.has_next() else None,
-        "previous": "?page=" + str(posts.previous_page_number()) if posts.has_previous() else None,
+        "next": reverse('api:public_posts') + "?page=" + str(posts.next_page_number()) + "&size=" + str(size) if posts.has_next() else None,
+        "previous": reverse('api:public_posts') + "?page=" + str(posts.previous_page_number()) + "&size=" + str(size) if posts.has_previous() else None,
         "size": size,
         "posts": serializer.data
         })
