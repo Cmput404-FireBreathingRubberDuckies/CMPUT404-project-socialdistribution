@@ -154,3 +154,8 @@ LOGIN_URL = 'socialp2p:login'
 #         'rest_framework.authentication.SessionAuthentication',
 #     )
 # }
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'api.pagination.CustomPagination',
+    'PAGE_SIZE': 100
+}

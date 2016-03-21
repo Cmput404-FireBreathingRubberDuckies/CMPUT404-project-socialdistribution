@@ -19,8 +19,6 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
-
-
 @api_view(['GET', 'POST'])
 def author_list(request):
     if request.method == 'GET':
@@ -147,7 +145,7 @@ def friends(request, author_uuid):
 		friendRequest.save()
 	    return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
 
-# Currently only returning public posts, and friends posts but not friend of friend
+# Currently only returning public, private, and friends posts but not friend of friend
 @api_view(['GET'])
 def posts(request):
 
@@ -155,13 +153,17 @@ def posts(request):
     posts = Post.objects.filter(visibility="PUB")
 
     for i in author.friends.all():
-	friends_posts = Post.objects.filter(author=i, visibility="FRS")
-	posts = posts | friends_posts
+        friends_posts = Post.objects.filter(author=i, visibility="FRS")
+        posts = posts | friends_posts
+
+    private_posts = Post.objects.filter(author=author, visibility="PRV")
+    friends_posts = Post.objects.filter(author=author, visibility="FRS")
+    posts = posts | friends_posts | private_posts
 
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
 
-# Currently only returning public posts, and friends posts but not friend of friend
+# Currently only returning public, private, and friends posts but not friend of friend
 @api_view(['GET'])
 def author_posts(request, author_uuid):
 
@@ -169,10 +171,11 @@ def author_posts(request, author_uuid):
     request_user = User.objects.get(author=request_author)
     current_author = Author.objects.get(user=request.user)
     posts = Post.objects.filter(author=request_author, visibility="PUB")
+    private_posts = Post.objects.filter(author=request_author, visibility="PRV")
 
     if current_author.friends.filter(user=request_user).exists():
 	friend_posts = Post.objects.filter(author=request_author, visibility="FRS")
-    	posts = posts | friend_posts
+    	posts = posts | private_posts | friend_posts
 
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
@@ -205,19 +208,19 @@ def post_detail(request, post_uuid):
     if request.method == 'POST':
         edit_content = request.data.get('post_content')
 	if request.POST.get('check_remove_picture') != '':
-		cloudinary.uploader.destroy(post.image, invalidate = True)
-		post.image = ''
+		if post.image != None:
+			cloudinary.uploader.destroy(post.image, invalidate = True)
+			post.image = ''
 
         if request.POST.get('post_content') != '':
 		post.content = edit_content
 
 	if request.POST.get('post_image') !='':
-           	cloudinary.uploader.destroy(post.image, invalidate = True)
+		if post.image != None:
+           		cloudinary.uploader.destroy(post.image, invalidate = True)
            	ret = cloudinary.uploader.upload(request.FILES['post_image'], invalidate = True)
            	image_id = ret['public_id']
 		post.image = image_id
 	post.save()
 	return HttpResponseRedirect(reverse('socialp2p:profile', args=[post.author.user.username]))
-
-
 
