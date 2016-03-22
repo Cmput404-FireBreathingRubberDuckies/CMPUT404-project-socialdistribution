@@ -99,7 +99,7 @@ def main(request):
     else:
         data = []
         nodes = Node.objects.all()
-        endpoint = 'api/posts'
+        endpoint = '/posts/'
         for node in nodes:
             url = node.host + endpoint
             r = requests.get(url, auth=(node.access_username, node.access_password))

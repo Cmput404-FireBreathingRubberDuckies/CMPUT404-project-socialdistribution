@@ -51,7 +51,7 @@ def author_detail(request, author_uuid):
     try:
         author = Author.objects.get(uuid=author_uuid)
     except Exception as e:
-        endpoint = 'api/author/'
+        endpoint = '/author/'
         nodes = Node.objects.all()
         response_status = 404
         for node in nodes:
@@ -113,40 +113,51 @@ def friend_request(request):
         #serializer = FriendRequestSerializer(requests, many=True)
         #return Response(serializer.data)
     if request.method =='POST':
-	local =  False
-	nodes = Node.objects.all()
-	user_uuid = json.loads(request.POST.get('author'))
-	author_uuid = json.loads(request.POST.get('friend'))	
-	author_host = json.loads(request.POST.get('host'))
-	author_name = request.POST.get('displayname')
-	
-	current_author = Author.objects.get(uuid=user_uuid)
+	if request.is_ajax():
+	    local =  False
+	    user_uuid = json.loads(request.POST.get('author'))
+	    author_uuid = json.loads(request.POST.get('friend'))	
+	    author_host = json.loads(request.POST.get('host'))
+	    author_name = request.POST.get('displayname')
+	    current_author = Author.objects.get(uuid=user_uuid)
 
-	if Author.objects.filter(uuid=author_uuid).exists():
-            friend = Author.objects.get(uuid=author_uuid)
-   	    local = True
+	    if Author.objects.filter(uuid=author_uuid).exists():
+                friend = Author.objects.get(uuid=author_uuid)
+   	        local = True
 
-	if local:
-            if FriendRequest.objects.filter(requester=current_author, receiver=friend).exists():
-                return HttpResponse("Already added Friend")
-            else:
-                friendRequest = FriendRequest(requester=current_author, receiver=friend)
-                friendRequest.save()
+	    if local:
+                if FriendRequest.objects.filter(requester=current_author, receiver=friend).exists():
+                    return HttpResponse("Already added Friend")
+                else:
+                    friendRequest = FriendRequest(requester=current_author, receiver=friend)
+                    friendRequest.save()
+	            serializer = FriendRequestSerializer(friendRequest)
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+	    else:
+	        nodes = Node.objects.all()
+	        tempuser = User(username=author_name, password="temppass")
+	        tempauthor = Author(user=tempuser, uuid=author_uuid, host=author_host)
+	        friendRequest = FriendRequest(requester=current_author, receiver=tempauthor)
 	        serializer = FriendRequestSerializer(friendRequest)
-                return Response(serializer.data, status=status.HTTP_200_OK)
+	        endpoint = '/friendrequest/'
+	        url = author_host + endpoint
+	        for node in nodes:
+                    if node.host == author_host:	
+                        r = requests.get(url, auth=(node.access_username, node.access_password), data=serializer.data)
+	                return Response(serializer.data, status=status.HTTP_200_OK)
+		return HttpResponse("hello")
 	else:
-	    tempuser = User(username=author_name, password="temppass")
-	    tempauthor = Author(user=tempuser, uuid=author_uuid, host=author_host)
-	    friendRequest = FriendRequest(requester=current_author, receiver=tempauthor)
+	    author = request.get_json()['author']
+	    friend = request.get_json()['friend']
+	    author = Author.objects.get(uuid=friend.id)
+	    tempuser = User(username=author.displayname, password="temppass")
+	    tempuser.save()
+	    tempauthor = Author(user=temuser, uuid=author.id)
+	    tempauthor.save()
+	    friendRequest = FriendRequest(requester=tempauthor, receiver=author)   
+	    friendRequest.save()
 	    serializer = FriendRequestSerializer(friendRequest)
-	    endpoint = 'api/friendrequest'
-	    url = author_host + endpoint
-	    for node in nodes:
-                if node.host == author_host:	
-                    r = requests.get(url, auth=(node.access_username, node.access_password), data=serializer.data)
-	            return Response(serializer.data, status=status.HTTP_200_OK)
-		else:
-		    return HttpResponse("hello")
+	    return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET', 'POST', 'DELETE'])
 def friends(request, author_uuid):
