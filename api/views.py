@@ -113,19 +113,40 @@ def friend_request(request):
         #serializer = FriendRequestSerializer(requests, many=True)
         #return Response(serializer.data)
     if request.method =='POST':
-
+	local =  False
+	nodes = Node.objects.all()
 	user_uuid = json.loads(request.POST.get('author'))
-	author_uuid = json.loads(request.POST.get('friend'))
+	author_uuid = json.loads(request.POST.get('friend'))	
+	author_host = json.loads(request.POST.get('host'))
+	author_name = request.POST.get('displayname')
+	
 	current_author = Author.objects.get(uuid=user_uuid)
-	friend = Author.objects.get(uuid=author_uuid)
 
-        if FriendRequest.objects.filter(requester=current_author, receiver=friend).exists():
-            return HttpResponse("Already added Friend")
-        else:
-            friendRequest = FriendRequest(requester=current_author, receiver=friend)
-            friendRequest.save()
+	if Author.objects.filter(uuid=author_uuid).exists():
+            friend = Author.objects.get(uuid=author_uuid)
+   	    local = True
+
+	if local:
+            if FriendRequest.objects.filter(requester=current_author, receiver=friend).exists():
+                return HttpResponse("Already added Friend")
+            else:
+                friendRequest = FriendRequest(requester=current_author, receiver=friend)
+                friendRequest.save()
+	        serializer = FriendRequestSerializer(friendRequest)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+	else:
+	    tempuser = User(username=author_name, password="temppass")
+	    tempauthor = Author(user=tempuser, uuid=author_uuid, host=author_host)
+	    friendRequest = FriendRequest(requester=current_author, receiver=tempauthor)
 	    serializer = FriendRequestSerializer(friendRequest)
-            return Response(serializer.data)
+	    endpoint = 'api/friendrequest'
+	    url = author_host + endpoint
+	    for node in nodes:
+                if node.host == author_host:	
+                    r = requests.get(url, auth=(node.access_username, node.access_password), data=serializer.data)
+	            return Response(serializer.data, status=status.HTTP_200_OK)
+		else:
+		    return HttpResponse("hello")
 
 @api_view(['GET', 'POST', 'DELETE'])
 def friends(request, author_uuid):
@@ -150,7 +171,7 @@ def friends(request, author_uuid):
             friendRequest = FriendRequest.objects.get(requester=author, receiver=current_author)
             friendRequest.accepted = True
             friendRequest.save()
-            return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
+            return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.author.uuid]))
 	elif request.POST.get("delete"):
 	    current_author.friends.remove(author)
             author.friends.remove(current_author)
@@ -162,7 +183,7 @@ def friends(request, author_uuid):
 		friendRequest = FriendRequest.objects.get(requester=author, receiver=current_author)
 		friendRequest.accepted = False
 		friendRequest.save()
-	    return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
+	    return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.author.uuid]))
 
 # Currently only returning public, private, and friends posts but not friend of friend
 @api_view(['GET'])
