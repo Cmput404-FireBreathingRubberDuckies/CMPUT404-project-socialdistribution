@@ -64,6 +64,7 @@ class PostSerializer(serializers.Serializer):
     title = serializers.CharField()
     visibility = serializers.CharField()
     comments = serializers.SerializerMethodField('get_comment')
+    count = serializers.SerializerMethodField('get_num_comments')
 
     def get_content_type(self, post_obj):
         markdown = post_obj.markdown
@@ -73,3 +74,7 @@ class PostSerializer(serializers.Serializer):
         comments = Comment.objects.filter(post=post_obj.id)
         comments = CommentSerializer(comments, many=True)
         return comments.data
+
+    def get_num_comments(self, post_obj):
+        comments = Comment.objects.filter(post=post_obj.id)
+        return len(comments)
