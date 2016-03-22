@@ -171,7 +171,7 @@ def friends(request, author_uuid):
             friendRequest = FriendRequest.objects.get(requester=author, receiver=current_author)
             friendRequest.accepted = True
             friendRequest.save()
-            return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
+            return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.author.uuid]))
 	elif request.POST.get("delete"):
 	    current_author.friends.remove(author)
             author.friends.remove(current_author)
@@ -183,7 +183,7 @@ def friends(request, author_uuid):
 		friendRequest = FriendRequest.objects.get(requester=author, receiver=current_author)
 		friendRequest.accepted = False
 		friendRequest.save()
-	    return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.username]))
+	    return HttpResponseRedirect(reverse('socialp2p:profile', args=[request.user.author.uuid]))
 
 # Currently only returning public, private, and friends posts but not friend of friend
 @api_view(['GET'])
