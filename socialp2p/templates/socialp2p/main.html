@@ -107,14 +107,15 @@
     </div>
     <button class="btn btn-default show_comments">Show Comments</button>
     <div class="comments" style='display: none'>
+	  {% for comment in post.comments %}
           <div class="commenter_profile">
             <!-- this needs to be fixed -->
-
             <span class="time">{{ comment.published }}</span>
           </div>
           <div class="content">
-            <p>{{ post.comments.comment }}</p>
+            <p>{{ comment.comment }}</p>
           </div>
+      {% endfor %}
       <!-- Add new comment -->
       <form action="{% url 'socialp2p:new_comment' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}

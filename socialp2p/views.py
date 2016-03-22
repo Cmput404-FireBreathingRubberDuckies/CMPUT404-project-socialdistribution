@@ -106,7 +106,6 @@ def main(request):
             if r.status_code == 200:
                 p = r.json().get('posts')
                 data += p
-        # data = r.json().get('posts')
 
         author = Author.objects.get(user=request.user)
         private_posts = Post.objects.filter(author=author, visibility='PRIVATE')
