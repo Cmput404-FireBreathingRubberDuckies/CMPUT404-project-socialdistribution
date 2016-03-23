@@ -143,7 +143,7 @@ def friend_request(request):
 	        url = author_host + endpoint
 	        for node in nodes:
                     if node.host == author_host:	
-                        r = requests.get(url, auth=(node.access_username, node.access_password), data=serializer.data)
+                        r = requests.post(url, auth=(node.access_username, node.access_password), data=serializer.data)
 	                return Response(serializer.data, status=status.HTTP_200_OK)
 		return HttpResponse("hello")
 	else:
