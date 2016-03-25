@@ -65,6 +65,9 @@ div.authentication {
   height: 21px;
   color: #1b7fb6;
 }
+.post_title:focus{
+    height:30px;
+}
 /*.post_input{
   width: 100%;
   height: 100px;
@@ -244,6 +247,8 @@ div.edit_toggle{
     border-radius: 35px;
     padding: 10px;
     color: blue;
-    text-shadow: 1px 2px 1px blue;
 }
-
+div.edit_toggle:hover{
+    background-color : blue;
+    color:white;
+}
