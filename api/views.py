@@ -93,7 +93,7 @@ def author_detail(request, author_uuid):
        			author.photo = image_id
 	    		author.save()
 	    	serializer = AuthorSerializer(author)
-	    	return HttpResponseRedirect(reverse('socialp2p:profile', args=[user.username]))
+	    	return HttpResponseRedirect(reverse('socialp2p:profile', args=[user.author.uuid]))
     elif request.method == 'DELETE':
         author.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -353,5 +353,10 @@ def post_detail(request, post_uuid):
            	image_id = ret['public_id']
 		post.image = image_id
 	post.save()
-	return HttpResponseRedirect(reverse('socialp2p:profile', args=[post.author.user.username]))
+	return HttpResponseRedirect(reverse('socialp2p:profile', args=[post.author.uuid]))
+
+    if request.method == 'DELETE':
+	post.delete()
+	return Response(status=status.HTTP_204_NO_CONTENT)
+	
 
