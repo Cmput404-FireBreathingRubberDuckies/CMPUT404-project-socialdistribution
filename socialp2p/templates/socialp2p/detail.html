@@ -2,6 +2,7 @@
 {% load staticfiles %}
 {% load cloudinary %}
 {% block body %}
+{% load tz %}
 <div class="container" id="container">
     <p>username: {{user_profile.displayname}}</p>
     <p>id: {{user_profile.id}}</p>
@@ -13,6 +14,24 @@
             {% csrf_token %}
             <input type="submit" value="Add Friend" />
         </form>
+	{% for post in posts %}
+    	{% if user.author.uuid == post.author.uuid %}
+	{{user.username}}
+    	<div class="posts">
+        	<div class="profile">
+            		<a href="{% url 'socialp2p:profile' post.author.uuid%}">{% cloudinary post.author.photo %}</a>
+            		<a href="{% url 'socialp2p:profile' post.author.uuid%}"><strong class="displayname">{{ post.author.displayname }}</strong></a>
+            	<span class="time">{{ post.datetime|localtime }}</span>
+        	</div>
+        	<div class=content>
+            		<p>{{ post.content }}</p>
+            		{% if post.image %}
+            		{% cloudinary post.image width=700 height=300 crop="fill" %}
+            		{% endif %}
+        	</div>
+    	</div>
+	{% endif %}
+	{% endfor %}
 	<script type='text/javascript'>
     	    $("#add").submit(function(event) {
 

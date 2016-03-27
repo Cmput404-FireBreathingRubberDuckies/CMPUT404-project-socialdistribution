@@ -25,7 +25,7 @@ def profile(request, author_uuid):
             if r.status_code == 200:
                 author = r.json()
                 is_friend = False
-                context = {'user_profile': author, 'is_friend': is_friend}
+                context = {'user_profile': author, 'is_friend': is_friend, 'posts': Post.objects.order_by('-datetime')}
                 return render(request, 'socialp2p/detail.html', context)
             else:
                 return HttpResponseNotFound('<p>User not found</p>')

@@ -165,10 +165,7 @@
             <input class="upload" type="submit" value="Update" />
         </div>
     </form>
-    <form action = "{% url 'api:post_detail' post.uuid %}" method="DELETE" id="delete_post" enctype="multipart/form-data">
-	{% csrf_token %}
-	<input class="delete" type="submit" value="Delete" />
-    </fomr>
+    <input class="delete" type="submit" value="Delete" />
     {% endif %}
     {% endfor %}
 </div>
