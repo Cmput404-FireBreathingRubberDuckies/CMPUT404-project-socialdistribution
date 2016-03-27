@@ -9,7 +9,7 @@ from django.http import HttpResponse
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from django.http import HttpResponseRedirect, HttpResponse
-from socialp2p.models import Author, FriendRequest, Post, Node
+from socialp2p.models import Author, FriendRequest, Post, Node, Comment
 from socialp2p import views
 from api.serializations import *
 from django.contrib.auth.models import User
@@ -140,9 +140,10 @@ def friend_request(request):
 	        friendRequest = FriendRequest(requester=current_author, receiver=tempauthor)
 	        serializer = FriendRequestSerializer(friendRequest)
 	        endpoint = '/friendrequest/'
-	        url = author_host + endpoint
+	        url = 'http://' + author_host + endpoint
+                auth_host_url = 'http://' + author_host + '/api'
 	        for node in nodes:
-                    if node.host == author_host:	
+                    if node.host == auth_host_url:
                         r = requests.post(url, auth=(node.access_username, node.access_password), data=serializer.data)
 	                return Response(serializer.data, status=status.HTTP_200_OK)
 		return HttpResponse("hello")
@@ -355,3 +356,34 @@ def post_detail(request, post_uuid):
 	post.save()
 	return HttpResponseRedirect(reverse('socialp2p:profile', args=[post.author.user.username]))
 
+@api_view(['GET','POST'])
+@authentication_classes((SessionAuthentication, BasicAuthentication))
+@permission_classes((IsAuthenticated,))
+def post_comments(request, post_uuid):
+    if request.method == 'GET':
+        post = Post.objects.filter(uuid=post_uuid)
+        queryset = Comment.objects.filter(post=post)
+
+        page = request.query_params.get('page')
+        size = request.query_params.get('size')
+        size = size if size else 50
+
+        paginator = Paginator(queryset, size)
+
+        try:
+            comments = paginator.page(page)
+        except PageNotAnInteger:
+            comments = paginator.page(1)
+        except EmptyPage:
+            comments = paginator.page(paginator.num_pages)
+
+        serializer = CommentSerializer(comments, many=True)
+
+        return Response({
+            "query": "comments",
+            "count": len(queryset),
+            "next": reverse('api:post_comments', args=[post_uuid]) + "?page=" + str(comments.next_page_number()) + "&size=" + str(size) if comments.has_next() else None,
+            "previous": reverse('api:post_comments', args=[post_uuid]) + "?page=" + str(comments.previous_page_number()) + "&size=" + str(size) if comments.has_previous() else None,
+            "size": size,
+            "comments": serializer.data
+            })

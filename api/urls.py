@@ -15,4 +15,5 @@ urlpatterns = [
     url(r'^friendrequest/$', views.friend_request, name='friend_request'),
     url(r'^posts/$', views.public_posts, name='public_posts'),
     url(r'^posts/(?P<post_uuid>[^/]+)/$', views.post_detail, name='post_detail'),
+    url(r'^posts/(?P<post_uuid>[^/]+)/comments/$', views.post_comments, name='post_comments'),
 ]
