@@ -93,7 +93,7 @@ def author_detail(request, author_uuid):
        			author.photo = image_id
 	    		author.save()
 	    	serializer = AuthorSerializer(author)
-	    	return HttpResponseRedirect(reverse('socialp2p:profile', args=[user.username]))
+	    	return HttpResponseRedirect(reverse('socialp2p:profile', args=[user.author.uuid]))
     elif request.method == 'DELETE':
         author.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -337,24 +337,29 @@ def post_detail(request, post_uuid):
             "posts": [serializer.data]
             })
 
-    if request.method == 'POST':
+    elif request.method == 'POST':
         edit_content = request.data.get('post_content')
-	if request.POST.get('check_remove_picture') != '':
+	if request.POST.get('check_remove_picture') != None:
 		if post.image != None:
 			cloudinary.uploader.destroy(post.image, invalidate = True)
 			post.image = ''
 
-        if request.POST.get('post_content') != '':
+        if request.POST.get('post_content') != None:
 		post.content = edit_content
 
-	if request.POST.get('post_image') !='':
+	if request.POST.get('post_image') != '':
 		if post.image != None:
            		cloudinary.uploader.destroy(post.image, invalidate = True)
            	ret = cloudinary.uploader.upload(request.FILES['post_image'], invalidate = True)
            	image_id = ret['public_id']
 		post.image = image_id
 	post.save()
-	return HttpResponseRedirect(reverse('socialp2p:profile', args=[post.author.user.username]))
+	return HttpResponseRedirect(reverse('socialp2p:profile', args=[post.author.uuid]))
+
+    elif request.method == 'DELETE':
+	post.delete()
+	return Response(status=status.HTTP_204_NO_CONTENT)
+	
 
 @api_view(['GET','POST'])
 @authentication_classes((SessionAuthentication, BasicAuthentication))
