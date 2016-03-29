@@ -151,12 +151,12 @@ def friend_request(request):
 	                return Response(serializer.data, status=status.HTTP_200_OK)
 		return HttpResponse("hello")
 	else:
-	    author = request.get_json()['author']
-	    friend = request.get_json()['friend']
-	    author = Author.objects.get(uuid=friend.id)
-	    tempuser = User(username=author.displayname, password="temppass")
+	    author = request.POST.get('author')
+	    friend = request.POST.get('friend')
+	    author = Author.objects.get(uuid=friend.get('id'))
+	    tempuser = User(username=author_name, password="temppass")
 	    tempuser.save()
-	    tempauthor = Author(user=temuser, uuid=author.id)
+	    tempauthor = Author(user=tempuser, uuid=author_id)
 	    tempauthor.save()
 	    friendRequest = FriendRequest(requester=tempauthor, receiver=author)   
 	    friendRequest.save()
