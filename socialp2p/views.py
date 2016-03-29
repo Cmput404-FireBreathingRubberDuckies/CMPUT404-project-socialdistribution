@@ -27,14 +27,21 @@ def profile(request, author_uuid):
                 is_friend = False
                 context = {'user_profile': author, 'is_friend': is_friend, 'posts': Post.objects.order_by('-datetime')}
                 return render(request, 'socialp2p/detail.html', context)
-            else:
-                return HttpResponseNotFound('<p>User not found</p>')
+
     else:
         author = Author.objects.get(uuid=author_uuid)
+	if author.github != '':
+	    github_url = 'https://api.github.com/users/' + author.github + '/events'
+	    r = requests.get(github_url)
+	    if r.status_code == 200:
+	        activity = r.json()
+	    else:
+		activity = ""
+
         reqs = FriendRequest.objects.filter(receiver=author, accepted=False)
         follow = FriendRequest.objects.filter(requester=author, accepted=False)
         is_friend = False # need to fix this
-        context = {'requests':reqs, 'follow':follow, 'posts': Post.objects.order_by('-datetime')}
+        context = {'requests':reqs, 'follow':follow, 'posts': Post.objects.order_by('-datetime'), "activity" : activity}
         return render(request, 'socialp2p/profile.html', context)
 
 def login_view(request):
@@ -53,7 +60,7 @@ def authenticate_view(request):
             login(request, user)
             return HttpResponseRedirect(reverse('socialp2p:main'))
         else:
-            return
+            return HttpResponse("Account not approved by admin yet. Try again later")
     return HttpResponseRedirect(reverse('socialp2p:login'))
 
 def logout_view(request):
@@ -65,7 +72,8 @@ def signup_view(request):
         return HttpResponseRedirect(reverse('socialp2p:main'))
     if request.method == 'POST':
         user = User.objects.create_user(request.POST['username'], None, request.POST['password'])
-
+	user.is_active = False
+	user.save()
         author = Author(user=user)
         author.save()
 

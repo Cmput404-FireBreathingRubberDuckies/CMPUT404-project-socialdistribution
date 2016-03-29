@@ -77,6 +77,7 @@ def author_detail(request, author_uuid):
 	edit_firstname = request.data.get('edit_firstname')
 	edit_lastname = request.data.get('edit_lastname')
 	edit_email = request.data.get('edit_email')
+	edit_github = request.data.get('edit_github')
 
 	if edit_firstname=='' or edit_lastname=='' or edit_email=='':
 	    return HttpResponse("field cannot be empty")
@@ -85,6 +86,8 @@ def author_detail(request, author_uuid):
 		user.first_name = edit_firstname
 	    	user.last_name = edit_lastname
 	    	user.email = edit_email
+		author.github = edit_github
+		author.save()
 	    	user.save()
         	if request.POST.get('edit_pic') !='':
            		cloudinary.uploader.destroy(author.photo, invalidate = True)
@@ -337,7 +340,7 @@ def post_detail(request, post_uuid):
             "posts": [serializer.data]
             })
 
-    elif request.method == 'POST':
+    elif request.POST.get('Update'):
         edit_content = request.data.get('post_content')
 	if request.POST.get('check_remove_picture') != None:
 		if post.image != None:
@@ -356,9 +359,10 @@ def post_detail(request, post_uuid):
 	post.save()
 	return HttpResponseRedirect(reverse('socialp2p:profile', args=[post.author.uuid]))
 
-    elif request.method == 'DELETE':
+    elif request.POST.get('Delete'):
 	post.delete()
-	return Response(status=status.HTTP_204_NO_CONTENT)
+	print "hello"
+	return HttpResponseRedirect(reverse('socialp2p:profile', args=[post.author.uuid]))
 	
 
 @api_view(['GET','POST'])
