@@ -209,6 +209,18 @@ div.authentication {
   padding: 0;
   margin-bottom: 10px;
 }
+
+.left-column-github {
+  border-right: 1px solid rgba(217,217,217,1);
+  border-left: 1px solid rgba(217,217,217,1);
+  border-bottom: 1px solid rgba(217,217,217,1);
+  border-radius: 4px;
+  padding: 0;
+  margin-bottom: 10px;
+  height: 400px;
+  overflow: scroll;
+}
+
 .left-column-module-header {
   background-color: #222222;
   box-shadow: 0 0 0 1px #222222;
@@ -251,4 +263,13 @@ div.edit_toggle{
 div.edit_toggle:hover{
     background-color : blue;
     color:white;
+}
+
+.github p{
+    padding: 20px 20px;
+    border-width:1px;
+    border-style:solid;
+    border-color:#E1E8ED;
+    box-sizing:border-box;
+    margin-bottom: 10px;
 }

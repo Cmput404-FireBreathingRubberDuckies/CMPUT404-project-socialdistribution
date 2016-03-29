@@ -44,6 +44,24 @@
                 </div>
             {% endif %}
         </div>
+	<div class="left-column-github">
+            <div class="left-column-module-header">
+                <p>Github Activity</p>
+            </div>
+	    {% if activity == '' %}
+            <p>Github Username Not Found<p>
+            {% endif %}
+            <div class='github'>
+                {% for event in activity %}
+                <p>Event: {{event.type}}<br>
+                   Repo: {{event.repo.name}}<br>
+                   {% for commit in event.payload.commits %}
+                   Commits: {{commit.message}}
+                   {% endfor %}
+                   <br>Time: {{event.created_at}}
+                   {% endfor %}</p>
+	    </div>
+        </div>
     </div>
     <div class="col-md-9">
         <form action = "{% url 'api:author_detail' user.author.uuid %}" method="POST" id="edit" enctype="multipart/form-data">
@@ -101,17 +119,6 @@
         document.getElementById("uploadFile").value = this.value.replace(/.*[\/\\]/, '');
     };
     </script>
-    {% if activity == '' %}
-    <p>Github Username Not Found<p>
-    {% endif %}
-    {% for event in activity %}
-    <p>Event: {{event.type}}<p>
-    <p>Repo: {{event.repo.name}}<p>
-    {% for commit in event.payload.commits %}
-    <p>Commits: {{commit.message}}<p>
-    {% endfor %}
-    <p>Time: {{event.created_at}}<p>
-    {% endfor %}
     </div>
 </div>
 <div class="web_content">
