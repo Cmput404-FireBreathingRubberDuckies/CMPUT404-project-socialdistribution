@@ -142,10 +142,11 @@ def friend_request(request):
 	        tempauthor = Author(user=tempuser, uuid=author_uuid, host=author_host)
 	        friendRequest = FriendRequest(requester=current_author, receiver=tempauthor)
 	        serializer = FriendRequestSerializer(friendRequest)
-	        endpoint = '/friendrequest/'
-	        url = 'http://' + author_host + endpoint
-                auth_host_url = 'http://' + author_host + '/api'
+	        endpoint = 'api/friendrequest/'
+	        url = author_host + endpoint
+                auth_host_url = author_host + 'api'
 	        for node in nodes:
+		    print url
                     if node.host == auth_host_url:
                         r = requests.post(url, auth=(node.access_username, node.access_password), data=serializer.data)
 	                return Response(serializer.data, status=status.HTTP_200_OK)
