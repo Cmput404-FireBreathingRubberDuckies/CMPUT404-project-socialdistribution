@@ -150,13 +150,14 @@ def friend_request(request):
                     print url
                     print node.host
                     if node.host == auth_host_url:
-                        r = requests.post(url, auth=(node.access_username, node.access_password), data=serializer.data)
+                        headers = {'Content-type': 'application/json'}
+                        r = requests.post(url, auth=(node.access_username, node.access_password), json=serializer.data, headers=headers)
                         return Response(serializer.data, status=status.HTTP_200_OK)
                 return HttpResponse("hello")
         else:
             author = request.POST.get('author')
             friend = request.POST.get('friend')
-            author = Author.objects.get(uuid=friend.get('id'))
+            author = Author.objects.filter(uuid=friend.get('id'))
             tempuser = User(username=author_name, password="temppass")
             tempuser.save()
             tempauthor = Author(user=tempuser, uuid=author_id)
