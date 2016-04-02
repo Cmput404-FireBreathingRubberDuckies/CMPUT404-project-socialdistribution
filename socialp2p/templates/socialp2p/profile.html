@@ -35,6 +35,7 @@
                     <form class="pull-right" action="{% url 'api:friends' b.requester.uuid %}" method="POST" id="accept">
                         {% csrf_token %}
                         <input class="btn btn-default" type="submit" value="Accept" name="accept"/>
+			<input class="btn btn-default" type="submit" value="Decline" name="decline"/>
                     </form>
                 </div>
             {% endfor %}

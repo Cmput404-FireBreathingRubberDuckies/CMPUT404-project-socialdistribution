@@ -12,7 +12,7 @@ class Author(models.Model):
     host = models.CharField(max_length=100, default="http://socialp2p.herokuapp.com/")
     photo = CloudinaryField('image', default='image/upload/v1457219004/default-avatar.jpg', blank=True)
     friends = models.ManyToManyField('self', related_name="friends", blank=True)
-    github = models.CharField(max_length=100, default="")
+    github = models.CharField(max_length=100, default="", blank=True)
 
     def displayname(self):
         return self.user.username
