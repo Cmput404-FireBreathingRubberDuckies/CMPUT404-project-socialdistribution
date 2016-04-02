@@ -170,7 +170,7 @@ def friend_request(request):
             tempuser.save()
             tempauthor = Author(user=tempuser, uuid=author_id)
             tempauthor.save()
-            friendRequest = FriendRequest(requester=tempauthor, receiver=author)
+            friendRequest = FriendRequest(requester=tempauthor, receiver=local_author)
             friendRequest.save()
             serializer = FriendRequestSerializer(friendRequest)
             return Response(serializer.data, status=status.HTTP_200_OK)
