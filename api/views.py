@@ -157,9 +157,9 @@ def friend_request(request):
         else:
             print request
             print request.body
-            # data = request.json()
-            author = request.body.get('author')
-            friend = request.body.get('friend')
+            data = json.loads(request.body)
+            author = data.get('author')
+            friend = data.get('friend')
             author = Author.objects.get(uuid=friend.get('id'))
             tempuser = User(username=author_name, password="temppass")
             tempuser.save()
