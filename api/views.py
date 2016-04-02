@@ -157,7 +157,7 @@ def friend_request(request):
         else:
             author = request.POST.get('author')
             friend = request.POST.get('friend')
-            author = Author.objects.get(uuid=friend.get('id'))
+            author = Author.objects.filter(uuid=friend.get('id'))
             tempuser = User(username=author_name, password="temppass")
             tempuser.save()
             tempauthor = Author(user=tempuser, uuid=author_id)
