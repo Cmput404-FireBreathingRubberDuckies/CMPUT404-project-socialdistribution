@@ -158,9 +158,14 @@ def friend_request(request):
             print request
             print request.body
             data = json.loads(request.body)
-            author = data.get('author')
+            remote_author = data.get('author')
             friend = data.get('friend')
-            author = Author.objects.get(uuid=friend.get('id'))
+            local_author = Author.objects.get(uuid=friend.get('id'))
+            if remote_author.get('displayname'):
+                author_name = remote_author.get('displayname')
+            if remote_author.get('displayName'):
+                author_name = remote_author.get('displayName')
+            author_id = remote_author.get('id')
             tempuser = User(username=author_name, password="temppass")
             tempuser.save()
             tempauthor = Author(user=tempuser, uuid=author_id)
