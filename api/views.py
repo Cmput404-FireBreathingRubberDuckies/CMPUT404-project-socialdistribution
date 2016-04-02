@@ -151,7 +151,7 @@ def friend_request(request):
                     print node.host
                     if node.host == auth_host_url:
                         headers = {'Content-type': 'application/json'}
-                        r = requests.post(url, auth=(node.access_username, node.access_password), data=serializer.data, headers=headers)
+                        r = requests.post(url, auth=(node.access_username, node.access_password), json=serializer.data, headers=headers)
                         return Response(serializer.data, status=status.HTTP_200_OK)
                 return HttpResponse("hello")
         else:
