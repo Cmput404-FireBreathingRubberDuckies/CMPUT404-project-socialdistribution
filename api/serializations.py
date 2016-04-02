@@ -24,8 +24,8 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 class FriendRequestSerializer(serializers.Serializer):
     query = serializers.SerializerMethodField('friend_request')
-    Author = FriendProfileSerializer(source='requester')
-    Friend = FriendProfileSerializer(source='receiver')
+    author = FriendProfileSerializer(source='requester')
+    friend = FriendProfileSerializer(source='receiver')
 
     def friend_request(self, obj):
         return 'friendrequest'
