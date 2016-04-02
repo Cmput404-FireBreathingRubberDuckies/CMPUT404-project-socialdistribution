@@ -100,9 +100,12 @@ def main(request):
         else:
             ret = cloudinary.uploader.upload(request.FILES['image'])
             image_id = ret['public_id']
-        post = Post(author=Author.objects.get(user=request.user), title=request.POST['post-title'], content=request.POST['content'], markdown=request.POST.get('markdown', False), image=image_id, visibility=request.POST['visibility'])
-        post.save()
-        return HttpResponseRedirect(reverse('socialp2p:main'))
+	if request.POST['content'] != '':
+            post = Post(author=Author.objects.get(user=request.user), title=request.POST['post-title'], content=request.POST['content'], markdown=request.POST.get('markdown', False), image=image_id, visibility=request.POST['visibility'])
+            post.save()
+            return HttpResponseRedirect(reverse('socialp2p:main'))
+	else:
+	    return HttpResponse("Can't post an empty post")
     else:
         data = []
         nodes = Node.objects.all()
@@ -122,7 +125,12 @@ def main(request):
 
         for i in author.friends.all():
             friends_posts = Post.objects.filter(author=i, visibility='FRIENDS')
-            posts = posts | friends_posts
+	    posts = posts | friends_posts
+	    for fof in i.friends.all():
+	        fof_posts = Post.objects.filter(author=fof, visibility="FOAF")
+            	posts = posts | fof_posts
+	
+		
 
         posts = posts.order_by('-datetime')
         authors = Author.objects.order_by('user__username')
@@ -138,3 +146,4 @@ def new_comment(request):
         comment = Comment(author=Author.objects.get(user=request.user), content=content, post=Post.objects.get(uuid=post_uuid))
         comment.save()
         return HttpResponseRedirect(reverse('socialp2p:main'))
+

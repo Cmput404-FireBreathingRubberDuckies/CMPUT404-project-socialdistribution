@@ -92,7 +92,7 @@
   <div class="posts" id="{{ post.uuid }}">
     <div class="profile">
       <a href="{% url 'socialp2p:profile' post.author.id %}">{% cloudinary post.author.photo %}</a>
-      <a href="{% url 'socialp2p:profile' post.author.id %}"><strong class="displayname">{{ post.author.displayname }}</strong></a>
+      <a href="{% url 'socialp2p:profile' post.author.id %}"><strong class="displayname">{{ post.author.displayname }} {{ post.author.displayName }}</strong></a>
       <span class="time">{{ post.datetime|localtime }}</span>
     </div>
     <div class="content">
@@ -111,7 +111,7 @@
 	  {% for comment in post.comments %}
           <div class="commenter_profile">
             <!-- this needs to be fixed -->
-	    <a href="{% url 'socialp2p:profile' comment.author.id%}"><strong class="displayname">{{ comment.author.displayName }}</strong></a>
+	    <a href="{% url 'socialp2p:profile' comment.author.id%}"><strong class="displayname">{{ comment.author.displayName }} {{ comment.author.displayname }}</strong></a>
             <span class="time">{{ comment.published }}</span>
           </div>
           <div class="content">
