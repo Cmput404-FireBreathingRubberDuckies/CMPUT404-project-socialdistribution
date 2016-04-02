@@ -54,15 +54,13 @@
                     <p>Github Username Not Found<p>
                 {% endif %}
                 {% for event in activity %}
-                    <p>
                     Event: {{event.type}}<br>
                     Repo: {{event.repo.name}}<br>
                     {% for commit in event.payload.commits %}
-                    Commits: {{commit.message}}
+                        Commits: {{commit.message}}<br>
                     {% endfor %}
-                    <br>Time: {{event.created_at}}
-                    {% endfor %}
-                    </p>
+                    Time: {{event.created_at}}<br><br>
+                {% endfor %}
 	    </div>
         </div>
     </div>

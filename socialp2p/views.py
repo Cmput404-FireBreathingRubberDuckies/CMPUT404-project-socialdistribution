@@ -30,13 +30,12 @@ def profile(request, author_uuid):
 
     else:
         author = Author.objects.get(uuid=author_uuid)
-	if author.github != '':
-	    github_url = 'https://api.github.com/users/' + author.github + '/events'
-	    r = requests.get(github_url)
-	    if r.status_code == 200:
-	        activity = r.json()
-	    else:
-		activity = ""
+        activity = ""
+        if author.github != '':
+            github_url = 'https://api.github.com/users/' + author.github + '/events'
+            r = requests.get(github_url)
+            if r.status_code == 200:
+                activity = r.json()
 
         reqs = FriendRequest.objects.filter(receiver=author, accepted=False)
         follow = FriendRequest.objects.filter(requester=author, accepted=False)
