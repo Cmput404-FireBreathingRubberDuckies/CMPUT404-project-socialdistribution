@@ -6,6 +6,7 @@ from rest_framework.test import APITestCase, APIClient
 from django.core.urlresolvers import reverse
 from api.serializations import *
 import uuid
+import json
 # Create your tests here.
 
 class Tests(TestCase):
@@ -127,7 +128,7 @@ class Tests(TestCase):
     #Test friend_request_api
     def test_friend_request_api(self):
 
-	ReqUuid = uuid.uuid4()
+       	ReqUuid = uuid.uuid4()
 	RecvUuid = uuid.uuid4()
 
 	ReqUser = User.objects.create_user("Requester", "test@hotmail.com", "testpassword")
@@ -146,18 +147,19 @@ class Tests(TestCase):
 
 	ApiUrl = reverse("api:friend_request")
 	data = {"query":"friends",
-                "author": { "id":str(ReqAuthor.uuid),
+                "author": [{ "id":str(ReqAuthor.uuid),
                             "host":"hello",
                             "displayName": "Enemy",
-                        },
-                "friend":{ "id": str(RecvAuthor.uuid),
+                        }],
+                "friend":[{ "id": str(RecvAuthor.uuid),
                            "host": "hello",
                            "displayName": "Author",
                            "url":"hello",
-                           }
+                           }]
                 }
 	#Test POST method. The POST method create friend request
-	PostResponse = self.client.post(ApiUrl, data, format='json')
+	headers = {'content-type': 'application/json'}
+	PostResponse = self.client.post(ApiUrl, data=data, headers=headers)
 	self.assertEqual(PostResponse.status_code, status.HTTP_200_OK)
     
 
@@ -173,6 +175,9 @@ class Tests(TestCase):
 	friend = User.objects.create_user("testFriend", "testFriend@hotmail.com", "FriendPassword")
 	Friendauthor = Author(user=friend, uuid=Frienduuid)
 	Friendauthor.save()
+
+	author.friends.add(Friendauthor)
+	author.save()
    
 	self.client.login(username=user.username, password="testpassword")
 
@@ -181,10 +186,7 @@ class Tests(TestCase):
 	#Test GET method. The GET method returns a list of friends
 	GetResponse = self.client.get(ApiUrl)
 	self.assertEqual(GetResponse.status_code, status.HTTP_200_OK)
-
-	#Test POST method. The POST method create friend request
-	PostResponse = self.client.get(ApiUrl)
-	self.assertEqual(PostResponse.status_code, status.HTTP_200_OK)
+	self.assertEqual(GetResponse.data.get("authors")[0], Frienduuid)
 
     #Test post api
     def test_post_api(self):
