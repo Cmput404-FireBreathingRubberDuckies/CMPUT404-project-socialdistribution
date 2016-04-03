@@ -18,6 +18,9 @@ import requests
 def profile(request, author_uuid):
     if str(request.user.author.uuid) != str(author_uuid):
         if request.method=='GET':
+	    author = Author.objects.get(uuid=author_uuid)
+	    posts = Post.objects.filter(author=author, visibility="PUBLIC")
+	    print posts
             host = 'http://' + request.get_host()
             headers = {'Cookie': 'sessionid=' + request.COOKIES.get('sessionid')}
             r = requests.get(host + reverse('api:author_detail', args=(author_uuid,)), headers=headers)
@@ -25,7 +28,7 @@ def profile(request, author_uuid):
             if r.status_code == 200:
                 author = r.json()
                 is_friend = False
-                context = {'user_profile': author, 'is_friend': is_friend, 'posts': Post.objects.order_by('-datetime')}
+                context = {'user_profile': author, 'is_friend': is_friend, 'posts': posts}
                 return render(request, 'socialp2p/detail.html', context)
 
     else:
@@ -133,8 +136,6 @@ def main(request):
 	    for fof in i.friends.all():
 	        fof_posts = Post.objects.filter(author=fof, visibility="FOAF")
             	posts = posts | fof_posts
-	
-		
 
         posts = posts.order_by('-datetime')
         authors = Author.objects.order_by('user__username')

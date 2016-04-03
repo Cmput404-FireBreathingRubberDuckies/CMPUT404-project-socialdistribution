@@ -15,6 +15,7 @@
             <input type="submit" value="Add Friend" />
         </form>
 	{% for post in posts %}
+	{{post.content}}
     	{% if user.author.uuid == post.author.uuid %}
 	{{user.username}}
     	<div class="posts">
