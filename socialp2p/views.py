@@ -18,6 +18,11 @@ import requests
 def profile(request, author_uuid):
     if str(request.user.author.uuid) != str(author_uuid):
         if request.method=='GET':
+	    posts = {}
+	    if Author.objects.filter(uuid=author_uuid).exists():
+	        author = Author.objects.get(uuid=author_uuid)
+	        posts = Post.objects.filter(author=author, visibility="PUBLIC")
+	    
             host = 'http://' + request.get_host()
             headers = {'Cookie': 'sessionid=' + request.COOKIES.get('sessionid')}
             r = requests.get(host + reverse('api:author_detail', args=(author_uuid,)), headers=headers)
@@ -25,12 +30,11 @@ def profile(request, author_uuid):
             if r.status_code == 200:
                 author = r.json()
                 is_friend = False
-                context = {'user_profile': author, 'is_friend': is_friend}
+                context = {'user_profile': author, 'is_friend': is_friend, 'posts': posts}
                 return render(request, 'socialp2p/detail.html', context)
 
     else:
         author = Author.objects.get(uuid=author_uuid)
-	posts = Post.objects.filter(author=author, visibility="PUBLIC")
         activity = ""
         if author.github != '':
             github_url = 'https://api.github.com/users/' + author.github + '/events'
@@ -41,7 +45,7 @@ def profile(request, author_uuid):
         reqs = FriendRequest.objects.filter(receiver=author, accepted=False)
         follow = FriendRequest.objects.filter(requester=author, accepted=False)
         is_friend = False # need to fix this
-        context = {'requests':reqs, 'follow':follow, 'posts': posts, "activity" : activity}
+        context = {'requests':reqs, 'follow':follow, 'posts': Post.objects.order_by('-datetime'), "activity" : activity}
         return render(request, 'socialp2p/profile.html', context)
 
 def login_view(request):
