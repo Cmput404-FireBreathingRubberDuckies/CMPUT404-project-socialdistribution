@@ -98,7 +98,7 @@ def main(request):
         if request.POST.get('image') == '':
             image_id = ''
         else:
-            ret = cloudinary.uploader.upload(request.FILES['image'])
+            ret = cloudinary.uploader.upload(request.FILES['image'], type = "authenticated")
             image_id = ret['public_id']
 	if request.POST['content'] != '':
             post = Post(author=Author.objects.get(user=request.user), title=request.POST['post-title'], content=request.POST['content'], markdown=request.POST.get('markdown', False), image=image_id, visibility=request.POST['visibility'])
@@ -129,8 +129,8 @@ def main(request):
 	    for fof in i.friends.all():
 	        fof_posts = Post.objects.filter(author=fof, visibility="FOAF")
             	posts = posts | fof_posts
-	
-		
+
+
 
         posts = posts.order_by('-datetime')
         authors = Author.objects.order_by('user__username')
@@ -146,4 +146,3 @@ def new_comment(request):
         comment = Comment(author=Author.objects.get(user=request.user), content=content, post=Post.objects.get(uuid=post_uuid))
         comment.save()
         return HttpResponseRedirect(reverse('socialp2p:main'))
-
