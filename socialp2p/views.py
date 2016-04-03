@@ -18,6 +18,11 @@ import requests
 def profile(request, author_uuid):
     if str(request.user.author.uuid) != str(author_uuid):
         if request.method=='GET':
+	    posts = {}
+	    if Author.objects.filter(uuid=author_uuid).exists():
+	        author = Author.objects.get(uuid=author_uuid)
+	        posts = Post.objects.filter(author=author, visibility="PUBLIC")
+	    
             host = 'http://' + request.get_host()
             headers = {'Cookie': 'sessionid=' + request.COOKIES.get('sessionid')}
             r = requests.get(host + reverse('api:author_detail', args=(author_uuid,)), headers=headers)
@@ -25,7 +30,7 @@ def profile(request, author_uuid):
             if r.status_code == 200:
                 author = r.json()
                 is_friend = False
-                context = {'user_profile': author, 'is_friend': is_friend, 'posts': Post.objects.order_by('-datetime')}
+                context = {'user_profile': author, 'is_friend': is_friend, 'posts': posts}
                 return render(request, 'socialp2p/detail.html', context)
 
     else:
@@ -70,6 +75,10 @@ def signup_view(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse('socialp2p:main'))
     if request.method == 'POST':
+
+	if User.objects.filter(username=request.POST['username']).exists():
+	    return HttpResponse("Username already taken")
+
         user = User.objects.create_user(request.POST['username'], None, request.POST['password'])
 	user.is_active = False
 	user.save()
@@ -98,14 +107,14 @@ def main(request):
         if request.POST.get('image') == '':
             image_id = ''
         else:
-            ret = cloudinary.uploader.upload(request.FILES['image'])
+            ret = cloudinary.uploader.upload(request.FILES['image'], sign_url=True)
             image_id = ret['public_id']
-	if request.POST['content'] != '':
-            post = Post(author=Author.objects.get(user=request.user), title=request.POST['post-title'], content=request.POST['content'], markdown=request.POST.get('markdown', False), image=image_id, visibility=request.POST['visibility'])
-            post.save()
-            return HttpResponseRedirect(reverse('socialp2p:main'))
-	else:
-	    return HttpResponse("Can't post an empty post")
+    	if request.POST['content'] != '':
+                post = Post(author=Author.objects.get(user=request.user), title=request.POST['post-title'], content=request.POST['content'], markdown=request.POST.get('markdown', False), image=image_id, visibility=request.POST['visibility'])
+                post.save()
+                return HttpResponseRedirect(reverse('socialp2p:main'))
+    	else:
+    	    return HttpResponse("Can't post an empty post")
     else:
         data = []
         nodes = Node.objects.all()
@@ -125,12 +134,11 @@ def main(request):
 
         for i in author.friends.all():
             friends_posts = Post.objects.filter(author=i, visibility='FRIENDS')
-	    posts = posts | friends_posts
+	    friends_fof_posts = Post.objects.filter(author=i, visibility='FOAF')
+	    posts = posts | friends_posts | friends_fof_posts
 	    for fof in i.friends.all():
-	        fof_posts = Post.objects.filter(author=fof, visibility="FOAF")
+	        fof_posts = Post.objects.filter(author=fof, visibility='FOAF')
             	posts = posts | fof_posts
-	
-		
 
         posts = posts.order_by('-datetime')
         authors = Author.objects.order_by('user__username')
@@ -146,4 +154,3 @@ def new_comment(request):
         comment = Comment(author=Author.objects.get(user=request.user), content=content, post=Post.objects.get(uuid=post_uuid))
         comment.save()
         return HttpResponseRedirect(reverse('socialp2p:main'))
-

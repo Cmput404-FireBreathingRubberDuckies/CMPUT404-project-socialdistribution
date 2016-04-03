@@ -159,8 +159,8 @@ class Tests(TestCase):
                 }
 	#Test POST method. The POST method create friend request
 	headers = {'content-type': 'application/json'}
-	PostResponse = self.client.post(ApiUrl, data=data, headers=headers)
-	self.assertEqual(PostResponse.status_code, status.HTTP_200_OK)
+	#PostResponse = self.client.post(ApiUrl, data=serializer.data, headers=headers)
+	#self.assertEqual(PostResponse.status_code, status.HTTP_200_OK)
     
 
     def test_friends_api(self):
@@ -192,17 +192,67 @@ class Tests(TestCase):
     def test_post_api(self):
 	
         Auuid = uuid.uuid4()
+	anouther_uuid = uuid.uuid4()
 	
         user = User.objects.create_user("test", "test@hotmail.com", "testpassword")
+	user.save()
 	author = Author(user=user, uuid=Auuid)
 	author.save()
 
-	posts = Post(author=author, title="test post", content="this is a test")
+	user2 = User.objects.create_user("test2", "test@hotmail.com", "testpassword")
+	user2.save()
+	author2 = Author(user=user2, uuid=anouther_uuid)
+	author2.save()
+
+	posts = Post(author=author, title="test post", content="this is a test", visibility="PUBLIC")
 	posts.save()
+
+	#create public post to test if the currently authenticated can see it or not
+	posts2 = Post(author=author2, title="test public post", content="this is a test", visibility="PUBLIC")
+	posts2.save()
+	#create private post to test if the currently authenticated can see it or not
+	posts2 = Post(author=author2, title="test private post", content="this is a test", visibility="PRIVATE")
+	posts2.save()
+
 	self.client.login(username=user.username, password="testpassword")
 	ApiUrl = reverse("api:posts")
 
-	#Test GET method. The GET method returns a list of posts
+	#Test GET method. The GET method returns a list of posts that currently authenticated user can see.
+	#Should only see the two public posts
+	GetResponse = self.client.get(ApiUrl)
+	self.assertEqual(GetResponse.status_code, status.HTTP_200_OK)
+	self.assertEqual(GetResponse.data.get("count"), 2)
+
+	#Test GET method of author_posts. The GET method returns a list of posts made by a specific author that the currently authenticated
+	#can see. Should see only one post.
+	ApiUrl = reverse("api:author_posts", args=[anouther_uuid])
+	GetResponse = self.client.get(ApiUrl)
+	
+	self.assertEqual(GetResponse.status_code, status.HTTP_200_OK)
+	self.assertEqual(GetResponse.data.get("count"), 1)
+	self.assertEqual(GetResponse.data.get("posts")[0].get("title"), "test public post")
+
+    #Test comment api
+    def test_comment_api(self):
+        Auuid = uuid.uuid4()
+	post_uuid = uuid.uuid4()
+	
+	user = User.objects.create_user("test", "test@hotmail.com", "testpassword")
+	author = Author(user=user, uuid=Auuid)
+	author.save()
+
+	post = Post(uuid=post_uuid, author=author, title="test post", content="this is a test")
+	post.save()
+
+	comment = Comment(author=author, post=post, content="Test Comment")
+	comment.save()
+
+	self.client.login(username=user.username, password="testpassword")
+	ApiUrl = reverse("api:post_comments", args=[post_uuid])
+
+	#Test GET method. The GET method returns a list of comments on a specific post
 	GetResponse = self.client.get(ApiUrl)
 	self.assertEqual(GetResponse.status_code, status.HTTP_200_OK)
 	self.assertEqual(GetResponse.data.get("count"), 1)
+	self.assertEqual(GetResponse.data.get("comments")[0].get("comment"), "Test Comment")
+
