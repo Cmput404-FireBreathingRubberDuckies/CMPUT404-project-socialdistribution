@@ -132,9 +132,10 @@ def main(request):
 
         for i in author.friends.all():
             friends_posts = Post.objects.filter(author=i, visibility='FRIENDS')
-	    posts = posts | friends_posts
+	    friends_fof_posts = Post.objects.filter(author=i, visibility='FOAF')
+	    posts = posts | friends_posts | friends_fof_posts
 	    for fof in i.friends.all():
-	        fof_posts = Post.objects.filter(author=fof, visibility="FOAF")
+	        fof_posts = Post.objects.filter(author=fof, visibility='FOAF')
             	posts = posts | fof_posts
 
         posts = posts.order_by('-datetime')
