@@ -261,13 +261,14 @@ def author_posts(request, author_uuid):
     current_author = Author.objects.get(user=request.user)
 
     queryset = Post.objects.filter(author=request_author, visibility="PUBLIC")
-    private_posts = Post.objects.filter(author=request_author, visibility="PRIVATE")
-
-    if current_author.friends.filter(user=request_user).exists():
-        friend_posts = Post.objects.filter(author=request_author, visibility="FRIENDS")
-        queryset = queryset | private_posts | friend_posts
+    if current_author.uuid == request_author.uuid:
+        private_posts = Post.objects.filter(author=request_author, visibility="PRIVATE")
+	friend_posts = Post.objects.filter(author=request_author, visibility="FRIENDS")
+	queryset = queryset | private_posts | friend_posts
     else:
-        queryset = queryset | private_posts
+        if current_author.friends.filter(user=request_user).exists():
+            friend_posts = Post.objects.filter(author=request_author, visibility="FRIENDS")
+            queryset = queryset | friend_posts
 
     page = request.query_params.get('page')
     size = request.query_params.get('size')
