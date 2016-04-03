@@ -59,7 +59,7 @@
       <div><p>{{ post.content }}</p></div>
       {% endif %}
       {% if post.image %}
-      {% cloudinary post.image width=700 height=300 crop="fill" type="authenticated" %}
+      {% cloudinary post.image width=700 height=300 crop="fill" type="authenticated"%}
       {% endif %}
     </div>
     <button class="btn btn-default show_comments">Show Comments</button>
