@@ -98,7 +98,7 @@ def main(request):
         if request.POST.get('image') == '':
             image_url = ''
         else:
-            ret = cloudinary.uploader.upload(request.FILES['image'], type = "authenticated")
+            ret = cloudinary.uploader.upload(request.FILES['image'], sign_url=True)
             image_url = ret['secure_url']
     	if request.POST['content'] != '':
                 post = Post(author=Author.objects.get(user=request.user), title=request.POST['post-title'], content=request.POST['content'], markdown=request.POST.get('markdown', False), image=image_url, visibility=request.POST['visibility'])
