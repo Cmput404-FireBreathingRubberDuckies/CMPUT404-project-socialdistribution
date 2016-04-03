@@ -40,14 +40,15 @@
    		var user_uuid = "{{user.author.uuid}}"
 		var author_uuid = "{{user_profile.id}}"
 		var author_host = "{{user_profile.host}}"
-		var author_displayname = "{{user_profile.displayName}}"
+		var author_displayName = "{{user_profile.displayName}}"
+		var author_displayname = "{{user_profile.displayname}}"
 
       	        var $form = $( this ),
                     url = $form.attr( 'action' ); 	       
       	        $.ajax({
 		    type:"POST", 
 		    url,
-		    data : {csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value, author : JSON.stringify(user_uuid), friend : JSON.stringify(author_uuid), host : JSON.stringify(author_host), displayname : author_displayname},
+		    data : {csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value, author : JSON.stringify(user_uuid), friend : JSON.stringify(author_uuid), host : JSON.stringify(author_host), displayname : author_displayname, displayName : author_displayName},
     		    dataType : "json",
 		    success: function( data ){
            	        alert("Added Friend");

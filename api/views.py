@@ -121,7 +121,13 @@ def friend_request(request):
             user_uuid = json.loads(request.POST.get('author'))
             author_uuid = json.loads(request.POST.get('friend'))
             author_host = json.loads(request.POST.get('host'))
-            author_name = request.POST.get('displayname')
+
+	    if request.POST.get('displayname'):
+                author_name = request.POST.get('displayname')
+            if request.POST.get('displayName'):
+                author_name = request.POST.get('displayName')
+
+	    author_url = request.POST.get('author_url')
             current_author = Author.objects.get(uuid=user_uuid)
 
             if Author.objects.filter(uuid=author_uuid).exists():
@@ -138,20 +144,22 @@ def friend_request(request):
                     return Response(serializer.data, status=status.HTTP_200_OK)
             else:
                 nodes = Node.objects.all()
-                tempuser = User(username=author_name, password="temppass")
+                tempuser = User(username=author_name, password='temppass')
                 tempauthor = Author(user=tempuser, uuid=author_uuid, host=author_host)
                 friendRequest = FriendRequest(requester=current_author, receiver=tempauthor)
                 serializer = FriendRequestSerializer(friendRequest)
-                endpoint = '/api/friendrequest'
+		if author_host == 'project-c404.rhcloud.com/api/':
+		    endpoint = 'friendrequest'
+		    auth_host_url = 'http://' + author_host
+		else:
+		    endpoint = '/api/friendrequest'
+		    auth_host_url = 'http://' + author_host + '/api'
                 url = 'http://' + author_host + endpoint
-                print author_host
-                auth_host_url = 'http://' + author_host + '/api'
                 for node in nodes:
-                    print url
-                    print node.host
                     if node.host == auth_host_url:
                         headers = {'Content-type': 'application/json'}
                         r = requests.post(url, auth=(node.access_username, node.access_password), json=serializer.data, headers=headers)
+			print r.text
                         return Response(serializer.data, status=status.HTTP_200_OK)
                 return HttpResponse("hello")
         else:
