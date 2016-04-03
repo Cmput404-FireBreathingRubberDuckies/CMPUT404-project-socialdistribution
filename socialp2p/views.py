@@ -70,6 +70,10 @@ def signup_view(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse('socialp2p:main'))
     if request.method == 'POST':
+
+	if User.objects.filter(username=request.POST['username']).exists():
+	    return HttpResponse("Username already taken")
+
         user = User.objects.create_user(request.POST['username'], None, request.POST['password'])
 	user.is_active = False
 	user.save()
