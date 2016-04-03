@@ -408,3 +408,17 @@ def post_comments(request, post_uuid):
             "size": size,
             "comments": serializer.data
             })
+
+    elif request.method == 'POST':
+        data = json.loads(request.body)
+
+        # comment_content = data.get('comment')
+        # uuid = data.get('id')
+        # author = data.get('author')
+
+        # comment = Comment()
+        #         content = request.POST.get('content')
+        # post_uuid = request.POST.get('post')
+        # comment = Comment(author=Author.objects.get(user=request.user), content=content, post=Post.objects.get(uuid=post_uuid))
+        # comment.save()
+        return Response({"message": "ok"})
