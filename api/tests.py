@@ -147,20 +147,20 @@ class Tests(TestCase):
 
 	ApiUrl = reverse("api:friend_request")
 	data = {"query":"friends",
-                "author": [{ "id":str(ReqAuthor.uuid),
+                "author": { "id":str(ReqAuthor.uuid),
                             "host":"hello",
                             "displayName": "Enemy",
-                        }],
-                "friend":[{ "id": str(RecvAuthor.uuid),
+                        },
+                "friend":{ "id": str(RecvAuthor.uuid),
                            "host": "hello",
                            "displayName": "Author",
                            "url":"hello",
-                           }]
+                           }
                 }
 	#Test POST method. The POST method create friend request
 	headers = {'content-type': 'application/json'}
-	#PostResponse = self.client.post(ApiUrl, data=serializer.data, headers=headers)
-	#self.assertEqual(PostResponse.status_code, status.HTTP_200_OK)
+	PostResponse = self.client.post(ApiUrl, data=serializer.data, headers=headers)
+	self.assertEqual(PostResponse.status_code, status.HTTP_200_OK)
     
 
     def test_friends_api(self):

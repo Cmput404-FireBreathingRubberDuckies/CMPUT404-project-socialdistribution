@@ -159,21 +159,20 @@ def friend_request(request):
                     if node.host == auth_host_url:
                         headers = {'Content-type': 'application/json'}
                         r = requests.post(url, auth=(node.access_username, node.access_password), json=serializer.data, headers=headers)
-			print r.text
                         return Response(serializer.data, status=status.HTTP_200_OK)
                 return HttpResponse("hello")
         else:
-            print request
-            print request.body
-            data = json.loads(request.body)
-            remote_author = data.get('author')
-            friend = data.get('friend')
-            local_author = Author.objects.get(uuid=friend.get('id'))
+            remote_author = request.data.get('author')
+	    author_id = request.data.get('author').get('id')
+            friend_id = request.data.get('friend').get('id')
+	    local_author = Author.objects.get(uuid=friend_id)
+
+	    print local_author.user.username
             if remote_author.get('displayname'):
                 author_name = remote_author.get('displayname')
             if remote_author.get('displayName'):
                 author_name = remote_author.get('displayName')
-            author_id = remote_author.get('id')
+		
             tempuser = User(username=author_name, password="temppass")
             tempuser.save()
             tempauthor = Author(user=tempuser, uuid=author_id)
@@ -181,7 +180,7 @@ def friend_request(request):
             friendRequest = FriendRequest(requester=tempauthor, receiver=local_author)
             friendRequest.save()
             serializer = FriendRequestSerializer(friendRequest)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_200_OK)
 
 @api_view(['GET', 'POST', 'DELETE'])
 def friends(request, author_uuid):
