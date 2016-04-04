@@ -155,14 +155,10 @@ def friend_request(request):
 		    endpoint = '/api/friendrequest'
 		    auth_host_url = 'http://' + author_host + '/api'
                 url = 'http://' + author_host + endpoint
-	 	print url
                 for node in nodes:
-		    print node.host
-		    print auth_host_url
                     if node.host == auth_host_url:
                         headers = {'Content-type': 'application/json'}
                         r = requests.post(url, auth=(node.access_username, node.access_password), json=serializer.data, headers=headers)
-			print r.status_code
                         return Response(serializer.data, status=status.HTTP_200_OK)
                 return HttpResponse("hello")
         else:
