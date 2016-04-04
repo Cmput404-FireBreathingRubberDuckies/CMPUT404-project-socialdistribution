@@ -93,7 +93,7 @@
     <div class="profile">
       <a href="{% url 'socialp2p:profile' post.author.id %}">{% cloudinary post.author.photo %}</a>
       <a href="{% url 'socialp2p:profile' post.author.id %}"><strong class="displayname">{{ post.author.displayname }} {{ post.author.displayName }}</strong></a>
-      <span class="time">{{ post.datetime|localtime }}</span>
+      <span class="time">{{ post.published }}</span>
     </div>
     <div class="content">
       <h2>{{ post.title }}</h2>
@@ -110,7 +110,6 @@
     <div class="comments" style='display: none'>
 	  {% for comment in post.comments %}
           <div class="commenter_profile">
-            <!-- this needs to be fixed -->
 	    <a href="{% url 'socialp2p:profile' comment.author.id%}"><strong class="displayname">{{ comment.author.displayName }} {{ comment.author.displayname }}</strong></a>
             <span class="time">{{ comment.published }}</span>
           </div>
@@ -118,7 +117,6 @@
             <p>{{ comment.comment }}</p>
           </div>
       {% endfor %}
-      <!-- Add new comment -->
       <form action="{% url 'socialp2p:new_comment' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <textarea name="content" class="post_input form-control" placeholder="Add comment here ..." rows="2" id="comment_text"></textarea>
