@@ -167,7 +167,6 @@ def friend_request(request):
             friend_id = request.data.get('friend').get('id')
 	    local_author = Author.objects.get(uuid=friend_id)
 
-	    print local_author.user.username
             if remote_author.get('displayname'):
                 author_name = remote_author.get('displayname')
             if remote_author.get('displayName'):

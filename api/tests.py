@@ -146,20 +146,10 @@ class Tests(TestCase):
 	serializer = FriendRequestSerializer(friendrequest)
 
 	ApiUrl = reverse("api:friend_request")
-	data = {"query":"friends",
-                "author": { "id":str(ReqAuthor.uuid),
-                            "host":"hello",
-                            "displayName": "Enemy",
-                        },
-                "friend":{ "id": str(RecvAuthor.uuid),
-                           "host": "hello",
-                           "displayName": "Author",
-                           "url":"hello",
-                           }
-                }
+
 	#Test POST method. The POST method create friend request
 	headers = {'content-type': 'application/json'}
-	PostResponse = self.client.post(ApiUrl, data=serializer.data, headers=headers)
+	PostResponse = self.client.post(ApiUrl, json=serializer.data, headers=headers)
 	self.assertEqual(PostResponse.status_code, status.HTTP_200_OK)
     
 
@@ -193,6 +183,7 @@ class Tests(TestCase):
 	
         Auuid = uuid.uuid4()
 	anouther_uuid = uuid.uuid4()
+	post_uuid = uuid.uuid4()
 	
         user = User.objects.create_user("test", "test@hotmail.com", "testpassword")
 	user.save()
@@ -204,7 +195,7 @@ class Tests(TestCase):
 	author2 = Author(user=user2, uuid=anouther_uuid)
 	author2.save()
 
-	posts = Post(author=author, title="test post", content="this is a test", visibility="PUBLIC")
+	posts = Post(uuid=post_uuid, author=author, title="test post", content="this is a test", visibility="PUBLIC")
 	posts.save()
 
 	#create public post to test if the currently authenticated can see it or not
@@ -231,6 +222,13 @@ class Tests(TestCase):
 	self.assertEqual(GetResponse.status_code, status.HTTP_200_OK)
 	self.assertEqual(GetResponse.data.get("count"), 1)
 	self.assertEqual(GetResponse.data.get("posts")[0].get("title"), "test public post")
+
+	#Test GET method of post_detail. The GET method return a specific post
+	ApiUrl = reverse("api:post_detail", args=[post_uuid])
+	GetResponse = self.client.get(ApiUrl)
+	
+	self.assertEqual(GetResponse.status_code, status.HTTP_200_OK)
+	self.assertEqual(GetResponse.data.get("posts")[0].get("id"), str(post_uuid))
 
     #Test comment api
     def test_comment_api(self):
