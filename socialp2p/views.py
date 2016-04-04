@@ -111,6 +111,9 @@ def main(request):
             image_id = ret['public_id']
     	if request.POST['content'] != '':
                 post = Post(author=Author.objects.get(user=request.user), title=request.POST['post-title'], content=request.POST['content'], markdown=request.POST.get('markdown', False), image=image_id, visibility=request.POST['visibility'])
+		if request.POST['visibility'] == 'ONL':
+		    share_to_author = Author.objects.get(uuid=request.POST['share_to'])
+		    post.user_can_view = share_to_author
                 post.save()
                 return HttpResponseRedirect(reverse('socialp2p:main'))
     	else:
@@ -129,8 +132,10 @@ def main(request):
         author = Author.objects.get(user=request.user)
         private_posts = Post.objects.filter(author=author, visibility='PRIVATE')
         my_friend_posts = Post.objects.filter(author=author, visibility='FRIENDS')
+	my_other_posts = Post.objects.filter(author=author, visibility='ONL')
+	local_public_posts = Post.objects.filter(author=author, visibility='SERVERONLY')
         posts = Post.objects.filter(visibility='PUBLIC')
-        posts = posts | private_posts | my_friend_posts
+        posts = posts | private_posts | my_friend_posts | my_other_posts | local_public_posts
 
         for i in author.friends.all():
             friends_posts = Post.objects.filter(author=i, visibility='FRIENDS')
@@ -139,6 +144,10 @@ def main(request):
 	    for fof in i.friends.all():
 	        fof_posts = Post.objects.filter(author=fof, visibility='FOAF')
             	posts = posts | fof_posts
+	
+	
+	ONL_posts = Post.objects.filter(user_can_view=author, visibility='ONL')
+	posts = posts | ONL_posts
 
         posts = posts.order_by('-datetime')
         authors = Author.objects.order_by('user__username')
