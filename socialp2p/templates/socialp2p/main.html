@@ -120,7 +120,7 @@
       <form action="{% url 'socialp2p:new_comment' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <textarea name="content" class="post_input form-control" placeholder="Add comment here ..." rows="2" id="comment_text"></textarea>
-        <input type="text" name="post" value="{{ post.uuid }}" style="display:none">
+        <input type="text" name="post" value="{{ post.id }}" style="display:none">
         <button class="btn btn-default" type="submit" id="comment_button">Reply</button>
       </form>
     </div>
