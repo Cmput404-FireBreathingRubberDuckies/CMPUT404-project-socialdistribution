@@ -26,7 +26,7 @@
                 <div class=content>
                     <p>{{ post.content }}</p>
                     {% if post.image %}
-                    {% cloudinary post.image width=700 height=300 crop="fill" %}
+                    {% cloudinary post.image width=700 crop="fill" sign_url=True %}
                     {% endif %}
                 </div>
                 <button class="btn btn-default show_comments">Show Comments</button>
@@ -66,7 +66,7 @@
                     <div class=content>
                         <p>{{ post.content }}</p>
                         {% if post.image %}
-                        {% cloudinary post.image width=700 height=300 crop="fill" %}
+                        {% cloudinary post.image width=700 crop="fill" sign_url=True %}
                         {% endif %}
                     </div>
                     <button class="btn btn-default show_comments">Show Comments</button>
