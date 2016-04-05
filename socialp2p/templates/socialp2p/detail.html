@@ -5,15 +5,20 @@
 {% block body %}
 <div class="container" id="container">
     <div class="web_content">
-    <p>username: {{user_profile.displayname}} {{user_profile.displayName}}</p>
-    <p>id: {{user_profile.id}}</p>
-    <p>host: {{user_profile.host}}</p>
-    <p>url: {{user_profile.url}}</p>
+	<table class="user_info">
+	<tr>
+    <th>username: </th><th>{{user_profile.displayname}} {{user_profile.displayName}}</th>
+	</tr>
+    <tr><td>id: </td><td>{{user_profile.id}}</td></tr>
+    <tr><td>host: </td><td>{{user_profile.host}}</td></tr>
+    <tr><td>url: </td><td>{{user_profile.url}}</td></tr>
+	</table>
+
     {% cloudinary user_profile.author.photo %}
     {% if not is_friend %}
         <form action="{% url 'api:friend_request' %}" method="POST" id="add">
             {% csrf_token %}
-            <input type="submit" value="Add Friend" />
+            <input class="Add_friend" type="submit" value="Add Friend" />
         </form>
         {% for post in posts %}
             {% if post.visibility == "PUBLIC" %}

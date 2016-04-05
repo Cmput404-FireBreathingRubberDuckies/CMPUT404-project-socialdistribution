@@ -289,12 +289,28 @@ li.profile-icon:hover {
 	display: inline;
 }
 .delete:hover{	background-color: #00bfff;}
+
+.Add_friend{
+    border: none;
+    text-align: center;
+	background-color: #e0e0e0;
+	margin:auto;
+    padding: 3px 5px 3px 5px;
+    text-decoration: none;
+	font-size: 18px;
+	display: inline;
+}
+.Add_friend:hover{	background-color: #00bfff;}
 table{
   	width: 500px;
     margin: auto;
 }
-th,tr {
+
+th,td,tr {
 	text-align: center;
+}
+th{
+font-size: 20px;
 }
 
 .github p{
