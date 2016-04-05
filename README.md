@@ -34,3 +34,5 @@ Contributors:
 Demo Video
 ==========
 [Cmput404ProjectVideo](https://archive.org/embed/Cmput404Project)
+[![Demo Video](CMPUT404-project-socialdistribution/img/DemoVideoScreenshot.png)](https://archive.org/embed/Cmput404Project)
+
