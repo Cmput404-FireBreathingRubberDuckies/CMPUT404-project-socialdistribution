@@ -61,12 +61,12 @@ div.authentication {
   line-height: 16px;
   font-family: Tahoma;
   float: left;
-  width: 200px;
+  width: 300px;
   height: 21px;
   color: #1b7fb6;
 }
-.post_title:focus{
-    height:30px;
+#post_text:focus{
+    height:300px;
 }
 /*.post_input{
   width: 100%;
@@ -255,14 +255,62 @@ li.profile-icon:hover {
 }
 
 /* work only with edit in profile */
-div.edit_toggle{
-    border-radius: 35px;
-    padding: 10px;
-    color: blue;
+.edit_toggle{
+    border: none;
+	background-color: #e0e0e0;
+ 	color: black;
+	margin:auto;
+    text-align: center;
+    padding: 3px 5px 3px 5px;
+    text-decoration: none;
+	font-size: 18px;
+	display: inline;
 }
-div.edit_toggle:hover{
-    background-color : blue;
-    color:white;
+.edit_toggle:hover{background-color: #00bfff;}
+.upload{
+    border: none;
+    text-align: center;
+	background-color: #e0e0e0;
+	margin:auto;
+    padding: 3px 5px 3px 5px;
+    text-decoration: none;
+	font-size: 18px;
+	display: inline;
+}
+.upload:hover{	background-color: #00bfff;}
+.delete{
+    border: none;
+    text-align: center;
+	background-color: #e0e0e0;
+	margin:auto;
+    padding: 3px 5px 3px 5px;
+    text-decoration: none;
+	font-size: 18px;
+	display: inline;
+}
+.delete:hover{	background-color: #00bfff;}
+
+.Add_friend{
+    border: none;
+    text-align: center;
+	background-color: #e0e0e0;
+	margin:auto;
+    padding: 3px 5px 3px 5px;
+    text-decoration: none;
+	font-size: 18px;
+	display: inline;
+}
+.Add_friend:hover{	background-color: #00bfff;}
+table{
+  	width: 500px;
+    margin: auto;
+}
+
+th,td,tr {
+	text-align: center;
+}
+th{
+font-size: 20px;
 }
 
 .github p{

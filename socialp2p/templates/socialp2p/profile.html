@@ -142,9 +142,11 @@
             {% endif %}
         </div>
     </div>
-    <div class='edit_toggle'>
-        <p>Edit</p>
-    </div>
+	<table class='in_line'>
+    	<tr>
+
+		<th>
+	<div>
     <form action = "{% url 'api:post_detail' post.uuid %}" method="POST" id="edit_post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class='edit_area' style='display:none'>
@@ -157,10 +159,23 @@
                 </div>
                 <input type='checkbox' name='check_remove_picture'/>Remove Picture<br>
             </div>
-            <input class="upload" type="submit" value="Update" name="Update"/>
-        </div>
-    	<input class="delete" type="submit" value="Delete" name="Delete" />
+		<table>
+			<th><input class="upload" type="submit" value="Update" name="Update"/></th>
+	 	    <th><input class="delete" type="submit" value="Delete" name="Delete" /></th>
+		
+		</table>        
+		</div>
     </form>
+	</div>
+
+		</th>
+		<th>
+		<button type="button" class="edit_toggle">edit</button>
+		</th>
+		</tr>
+	</table>
+
+
     {% endif %}
     {% endfor %}
 </div>
