@@ -157,9 +157,11 @@ def friend_request(request):
                 url = 'http://' + author_host + endpoint
                 for node in nodes:
                     if node.host == auth_host_url:
+                        print "URL: ", url
                         headers = {'Content-type': 'application/json'}
                         r = requests.post(url, auth=(node.access_username, node.access_password), json=serializer.data, headers=headers)
-                        print r.text
+                        print "RESPONSE TEXT: ", r.text
+                        print "STATUS CODE: ", r.status_code
                         return Response(serializer.data, status=status.HTTP_200_OK)
                 return HttpResponse(status=status.HTTP_403_FORBIDDEN)
         else:
