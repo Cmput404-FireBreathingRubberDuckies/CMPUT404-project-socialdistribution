@@ -89,7 +89,7 @@
 
   <!-- pull remote posts -->
   {% for post in remote_posts %}
-  <div class="posts" id="{{ post.uuid }}">
+  <div class="posts" id="{{ post.id }}">
     <div class="profile">
       <a href="{% url 'socialp2p:profile' post.author.id %}">{% cloudinary post.author.photo %}</a>
       <a href="{% url 'socialp2p:profile' post.author.id %}"><strong class="displayname">{{ post.author.displayname }} {{ post.author.displayName }}</strong></a>
