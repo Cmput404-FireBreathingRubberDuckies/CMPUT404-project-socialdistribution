@@ -160,7 +160,7 @@ def friend_request(request):
                         headers = {'Content-type': 'application/json'}
                         r = requests.post(url, auth=(node.access_username, node.access_password), json=serializer.data, headers=headers)
                         return Response(serializer.data, status=status.HTTP_200_OK)
-                return HttpResponse("hello")
+                return HttpResponse(status=status.HTTP_403_FORBIDDEN)
         else:
             remote_author = request.data.get('author')
 	    author_id = request.data.get('author').get('id')
@@ -266,15 +266,31 @@ def author_posts(request, author_uuid):
     request_user = User.objects.get(author=request_author)
     current_author = Author.objects.get(user=request.user)
 
-    queryset = Post.objects.filter(author=request_author, visibility="PUBLIC")
+    queryset = Post.objects.filter(author=request_author, visibility='PUBLIC')
     if current_author.uuid == request_author.uuid:
-        private_posts = Post.objects.filter(author=request_author, visibility="PRIVATE")
-	friend_posts = Post.objects.filter(author=request_author, visibility="FRIENDS")
-	queryset = queryset | private_posts | friend_posts
+        private_posts = Post.objects.filter(author=request_author, visibility='PRIVATE')
+	friend_posts = Post.objects.filter(author=request_author, visibility='FRIENDS')
+	my_other_posts = Post.objects.filter(author=request_author, visibility='ONL')
+	local_public_posts = Post.objects.filter(author=request_author, visibility='SERVERONLY')
+	fof_posts = Post.objects.filter(author=request_author, visibility='FOAF')
+	queryset = queryset | private_posts | friend_posts | my_other_posts | local_public_posts | fof_posts
     else:
+	for friend in current_author.friends.all():
+	    for i in friend.friends.all():
+		if str(i.uuid) == str(author_uuid):
+	            fof_posts = Post.objects.filter(author=i, visibility='FOAF')
+                    queryset = queryset | fof_posts
+
         if current_author.friends.filter(user=request_user).exists():
             friend_posts = Post.objects.filter(author=request_author, visibility="FRIENDS")
             queryset = queryset | friend_posts
+
+	if current_author.host == request_author.host:
+	    local_public_posts = Post.objects.filter(author=request_author, visibility='SERVERONLY')
+	    queryset = queryset | local_public_host
+
+	only_me_post = Post.objects.filter(author=request_author, visibility='ONL', user_can_view=current_author)
+	queryset = queryset | only_me_post
 
     page = request.query_params.get('page')
     size = request.query_params.get('size')
