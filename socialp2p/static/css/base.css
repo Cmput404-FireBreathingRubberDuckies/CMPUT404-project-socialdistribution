@@ -266,7 +266,7 @@ li.profile-icon:hover {
 	font-size: 18px;
 	display: inline;
 }
-.edit_toggle:hover{background-color: #00bfff;}
+.edit_toggle:hover{background-color: #f5f8fa;}
 .upload{
     border: none;
     text-align: center;
@@ -277,7 +277,7 @@ li.profile-icon:hover {
 	font-size: 18px;
 	display: inline;
 }
-.upload:hover{	background-color: #00bfff;}
+.upload:hover{	background-color: #f5f8fa;}
 .delete{
     border: none;
     text-align: center;
@@ -288,7 +288,7 @@ li.profile-icon:hover {
 	font-size: 18px;
 	display: inline;
 }
-.delete:hover{	background-color: #00bfff;}
+.delete:hover{	background-color: #f5f8fa;}
 
 .Add_friend{
     border: none;
@@ -300,7 +300,7 @@ li.profile-icon:hover {
 	font-size: 18px;
 	display: inline;
 }
-.Add_friend:hover{	background-color: #00bfff;}
+.Add_friend:hover{	background-color: #f5f8fa;}
 table{
   	width: 500px;
     margin: auto;
@@ -320,4 +320,9 @@ font-size: 20px;
     border-color:#E1E8ED;
     box-sizing:border-box;
     margin-bottom: 10px;
+}
+
+#Add_friend_button{
+
+  text-align: center;
 }
