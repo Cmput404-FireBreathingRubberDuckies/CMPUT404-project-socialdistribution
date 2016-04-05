@@ -34,8 +34,12 @@
  		    <a href="{% url 'socialp2p:profile' b.requester.uuid%}">{% cloudinary b.requester.photo %}<strong class="displayname">{{ b.requester.displayname }}</strong></a>
                     <form class="pull-right" action="{% url 'api:friends' b.requester.uuid %}" method="POST" id="accept">
                         {% csrf_token %}
-                        <input class="btn btn-default" type="submit" value="Accept" name="accept"/>
-			<input class="btn btn-default" type="submit" value="Decline" name="decline"/>
+                        <button type="submit" class="btn btn-default" value="Accept" name="accept">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                        <button type="submit" class="btn btn-default" value="Decline" name="decline">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </button>
                     </form>
                 </div>
             {% endfor %}
@@ -134,7 +138,7 @@
         <div class=content>
             <p>{{ post.content }}</p>
             {% if post.image %}
-            {% cloudinary post.image width=700 height=300 crop="fill" %}
+            {% cloudinary post.image width=700 crop="fill" sign_url=True %}
             {% endif %}
         </div>
     </div>

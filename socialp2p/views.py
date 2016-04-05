@@ -18,18 +18,20 @@ import requests
 def profile(request, author_uuid):
     if str(request.user.author.uuid) != str(author_uuid):
         if request.method=='GET':
-	    posts = {}
-	    if Author.objects.filter(uuid=author_uuid).exists():
-	        author = Author.objects.get(uuid=author_uuid)
-	        posts = Post.objects.filter(author=author, visibility="PUBLIC")
-	    
+            posts = {}
+            is_friend = False
+            if Author.objects.filter(uuid=author_uuid).exists():
+                author = Author.objects.get(uuid=author_uuid)
+                posts = Post.objects.filter(author=author).order_by('-datetime')
+                if author.friends.filter(uuid=request.user.author.uuid).exists():
+                    is_friend = True
+
             host = 'http://' + request.get_host()
             headers = {'Cookie': 'sessionid=' + request.COOKIES.get('sessionid')}
             r = requests.get(host + reverse('api:author_detail', args=(author_uuid,)), headers=headers)
 
             if r.status_code == 200:
                 author = r.json()
-                is_friend = False
                 context = {'user_profile': author, 'is_friend': is_friend, 'posts': posts}
                 return render(request, 'socialp2p/detail.html', context)
 
