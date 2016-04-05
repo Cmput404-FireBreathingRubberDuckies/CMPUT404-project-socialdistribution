@@ -33,6 +33,5 @@ Contributors:
 
 Demo Video
 ==========
-[Cmput404ProjectVideo](https://archive.org/embed/Cmput404Project)
 [![Demo Video](https://github.com/CMPUT404-FireBreathingRubberDuckies/CMPUT404-project-socialdistribution/blob/master/img/DemoVideoScreenshot.png)](https://archive.org/embed/Cmput404Project)
 
