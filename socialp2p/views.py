@@ -21,7 +21,8 @@ def profile(request, author_uuid):
 	    posts = {}
 	    if Author.objects.filter(uuid=author_uuid).exists():
 	        author = Author.objects.get(uuid=author_uuid)
-	        posts = Post.objects.filter(author=author, visibility="PUBLIC")
+	        posts = Post.objects.filter(author=author).order_by('-datetime')
+		
 	    
             host = 'http://' + request.get_host()
             headers = {'Cookie': 'sessionid=' + request.COOKIES.get('sessionid')}

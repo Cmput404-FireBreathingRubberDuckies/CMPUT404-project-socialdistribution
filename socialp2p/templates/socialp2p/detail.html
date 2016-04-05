@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load cloudinary %}
-{% block body %}
 {% load tz %}
+{% block body %}
 <div class="container" id="container">
+    <div class="web_content">
     <p>username: {{user_profile.displayname}} {{user_profile.displayName}}</p>
     <p>id: {{user_profile.id}}</p>
     <p>host: {{user_profile.host}}</p>
@@ -14,48 +15,65 @@
             {% csrf_token %}
             <input type="submit" value="Add Friend" />
         </form>
-	{% for post in posts %}
-	{{post.content}}
-    	{% if user.author.uuid == post.author.uuid %}
-	{{user.username}}
-    	<div class="posts">
-        	<div class="profile">
-            		<a href="{% url 'socialp2p:profile' post.author.uuid%}">{% cloudinary post.author.photo %}</a>
-            		<a href="{% url 'socialp2p:profile' post.author.uuid%}"><strong class="displayname">{{ post.author.displayname }}</strong></a>
-            	<span class="time">{{ post.datetime|localtime }}</span>
-        	</div>
-        	<div class=content>
-            		<p>{{ post.content }}</p>
-            		{% if post.image %}
-            		{% cloudinary post.image width=700 height=300 crop="fill" %}
-            		{% endif %}
-        	</div>
-    	</div>
-	{% endif %}
-	{% endfor %}
-	<script type='text/javascript'>
-    	    $("#add").submit(function(event) {
+    	<script type='text/javascript'>
+        	    $("#add").submit(function(event) {
 
-      	        event.preventDefault();
-   		var user_uuid = "{{user.author.uuid}}"
-		var author_uuid = "{{user_profile.id}}"
-		var author_host = "{{user_profile.host}}"
-		var author_displayName = "{{user_profile.displayName}}"
-		var author_displayname = "{{user_profile.displayname}}"
+          	        event.preventDefault();
+       		var user_uuid = "{{user.author.uuid}}"
+    		var author_uuid = "{{user_profile.id}}"
+    		var author_host = "{{user_profile.host}}"
+    		var author_displayName = "{{user_profile.displayName}}"
+    		var author_displayname = "{{user_profile.displayname}}"
 
-      	        var $form = $( this ),
-                    url = $form.attr( 'action' ); 	       
-      	        $.ajax({
-		    type:"POST", 
-		    url,
-		    data : {csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value, author : JSON.stringify(user_uuid), friend : JSON.stringify(author_uuid), host : JSON.stringify(author_host), displayname : author_displayname, displayName : author_displayName},
-    		    dataType : "json",
-		    success: function( data ){
-           	        alert("Added Friend");
-    		    } 
-	  	});
-    	     });
-	</script>
+          	        var $form = $( this ),
+                        url = $form.attr( 'action' ); 	       
+          	        $.ajax({
+    		    type:"POST", 
+    		    url,
+    		    data : {csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value, author : JSON.stringify(user_uuid), friend : JSON.stringify(author_uuid), host : JSON.stringify(author_host), displayname : author_displayname, displayName : author_displayName},
+        		    dataType : "json",
+    		    success: function( data ){
+               	        alert("Added Friend");
+        		    } 
+    	  	});
+        	     });
+    	</script>
+        {% for post in posts %}
+            {% if post.visibility == "PUBLIC" %}
+            <div class="posts">
+                <div class="profile">
+                    <a href="{% url 'socialp2p:profile' post.author.uuid%}">{% cloudinary post.author.photo %}</a>
+                    <a href="{% url 'socialp2p:profile' post.author.uuid%}"><strong class="displayname">{{ post.author.displayname }}</strong></a>
+                    <span class="time">{{ post.datetime|localtime }}</span>
+                </div>
+                <div class=content>
+                    <p>{{ post.content }}</p>
+                    {% if post.image %}
+                    {% cloudinary post.image width=700 height=300 crop="fill" %}
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% elif is_friend %}
+        {% for post in posts %}
+            {% if post.visibility == "FOAF" or post.visibility == "PUBLIC" or post.visibility == "FRIENDS" or post.visibility == "LFS" %}
+                <div class="posts">
+                    <div class="profile">
+                        <a href="{% url 'socialp2p:profile' post.author.uuid%}">{% cloudinary post.author.photo %}</a>
+                        <a href="{% url 'socialp2p:profile' post.author.uuid%}"><strong class="displayname">{{ post.author.displayname }}</strong></a>
+                        <span class="time">{{ post.datetime|localtime }}</span>
+                    </div>
+                    <div class=content>
+                        <p>{{ post.content }}</p>
+                        {% if post.image %}
+                        {% cloudinary post.image width=700 height=300 crop="fill" %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
     {% endif %}
+</div>
 </div>
 {% endblock %}
