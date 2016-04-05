@@ -23,6 +23,10 @@ def profile(request, author_uuid):
 	        author = Author.objects.get(uuid=author_uuid)
 	        posts = Post.objects.filter(author=author).order_by('-datetime')
 		
+            is_friend = False
+            if author.friends.filter(uuid=request.user.author.uuid).exists():
+                print("they are friends")
+                is_friend = True
 	    
             host = 'http://' + request.get_host()
             headers = {'Cookie': 'sessionid=' + request.COOKIES.get('sessionid')}
@@ -30,7 +34,6 @@ def profile(request, author_uuid):
 
             if r.status_code == 200:
                 author = r.json()
-                is_friend = False
                 context = {'user_profile': author, 'is_friend': is_friend, 'posts': posts}
                 return render(request, 'socialp2p/detail.html', context)
 

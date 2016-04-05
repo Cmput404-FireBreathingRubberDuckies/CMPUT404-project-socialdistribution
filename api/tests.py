@@ -148,9 +148,9 @@ class Tests(TestCase):
 	ApiUrl = reverse("api:friend_request")
 
 	#Test POST method. The POST method create friend request
-	headers = {'content-type': 'application/json'}
-	PostResponse = self.client.post(ApiUrl, json=serializer.data, headers=headers)
-	self.assertEqual(PostResponse.status_code, status.HTTP_200_OK)
+	#headers = {'content-type': 'application/json'}
+	#PostResponse = self.client.post(ApiUrl, json=serializer.data, headers=headers)
+	#self.assertEqual(PostResponse.status_code, status.HTTP_200_OK)
     
 
     def test_friends_api(self):
