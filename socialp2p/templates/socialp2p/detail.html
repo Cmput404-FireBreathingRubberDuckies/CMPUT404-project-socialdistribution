@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load cloudinary %}
-{% block body %}
 {% load tz %}
+{% block body %}
 <div class="container" id="container">
+    <div class="web_content">
     <p>username: {{user_profile.displayname}} {{user_profile.displayName}}</p>
     <p>id: {{user_profile.id}}</p>
     <p>host: {{user_profile.host}}</p>
@@ -14,48 +15,118 @@
             {% csrf_token %}
             <input type="submit" value="Add Friend" />
         </form>
-	{% for post in posts %}
-	{{post.content}}
-    	{% if user.author.uuid == post.author.uuid %}
-	{{user.username}}
-    	<div class="posts">
-        	<div class="profile">
-            		<a href="{% url 'socialp2p:profile' post.author.uuid%}">{% cloudinary post.author.photo %}</a>
-            		<a href="{% url 'socialp2p:profile' post.author.uuid%}"><strong class="displayname">{{ post.author.displayname }}</strong></a>
-            	<span class="time">{{ post.datetime|localtime }}</span>
-        	</div>
-        	<div class=content>
-            		<p>{{ post.content }}</p>
-            		{% if post.image %}
-            		{% cloudinary post.image width=700 height=300 crop="fill" %}
-            		{% endif %}
-        	</div>
-    	</div>
-	{% endif %}
-	{% endfor %}
-	<script type='text/javascript'>
-    	    $("#add").submit(function(event) {
-
-      	        event.preventDefault();
-   		var user_uuid = "{{user.author.uuid}}"
-		var author_uuid = "{{user_profile.id}}"
-		var author_host = "{{user_profile.host}}"
-		var author_displayName = "{{user_profile.displayName}}"
-		var author_displayname = "{{user_profile.displayname}}"
-
-      	        var $form = $( this ),
-                    url = $form.attr( 'action' ); 	       
-      	        $.ajax({
-		    type:"POST", 
-		    url,
-		    data : {csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value, author : JSON.stringify(user_uuid), friend : JSON.stringify(author_uuid), host : JSON.stringify(author_host), displayname : author_displayname, displayName : author_displayName},
-    		    dataType : "json",
-		    success: function( data ){
-           	        alert("Added Friend");
-    		    } 
-	  	});
-    	     });
-	</script>
+        {% for post in posts %}
+            {% if post.visibility == "PUBLIC" %}
+            <div class="posts">
+                <div class="profile">
+                    <a href="{% url 'socialp2p:profile' post.author.uuid%}">{% cloudinary post.author.photo %}</a>
+                    <a href="{% url 'socialp2p:profile' post.author.uuid%}"><strong class="displayname">{{ post.author.displayname }}</strong></a>
+                    <span class="time">{{ post.datetime|localtime }}</span>
+                </div>
+                <div class=content>
+                    <p>{{ post.content }}</p>
+                    {% if post.image %}
+                    {% cloudinary post.image width=700 crop="fill" sign_url=True %}
+                    {% endif %}
+                </div>
+                <button class="btn btn-default show_comments">Show Comments</button>
+                <div class="comments" style='display: none'>
+                  {% for comment in comments %}
+                    {% if comment.post.uuid == post.uuid %}
+                      <div class="commenter_profile">
+                        <a href="{% url 'socialp2p:profile' comment.author.uuid%}">{% cloudinary comment.author.photo %}</a>
+                        <a href="{% url 'socialp2p:profile' comment.author.uuid%}"><strong class="displayname">{{ comment.author.displayname }}</strong></a>
+                        <span class="time">{{ comment.datetime|localtime }}</span>
+                      </div>
+                      <div class="content">
+                        <p>{{ comment.content }}</p>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                  <!-- Add new comment -->
+                  <form action="{% url 'socialp2p:new_comment' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <textarea name="content" class="post_input form-control" placeholder="Add comment here ..." rows="2" id="comment_text"></textarea>
+                    <input type="text" name="post" value="{{ post.uuid }}" style="display:none">
+                    <button class="btn btn-default" type="submit" id="comment_button">Reply</button>
+                  </form>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% elif is_friend %}
+        {% for post in posts %}
+            {% if post.visibility == "FOAF" or post.visibility == "PUBLIC" or post.visibility == "FRIENDS" or post.visibility == "LFS" %}
+                <div class="posts">
+                    <div class="profile">
+                        <a href="{% url 'socialp2p:profile' post.author.uuid%}">{% cloudinary post.author.photo %}</a>
+                        <a href="{% url 'socialp2p:profile' post.author.uuid%}"><strong class="displayname">{{ post.author.displayname }}</strong></a>
+                        <span class="time">{{ post.datetime|localtime }}</span>
+                    </div>
+                    <div class=content>
+                        <p>{{ post.content }}</p>
+                        {% if post.image %}
+                        {% cloudinary post.image width=700 crop="fill" sign_url=True %}
+                        {% endif %}
+                    </div>
+                    <button class="btn btn-default show_comments">Show Comments</button>
+                    <div class="comments" style='display: none'>
+                      {% for comment in comments %}
+                        {% if comment.post.uuid == post.uuid %}
+                          <div class="commenter_profile">
+                            <a href="{% url 'socialp2p:profile' comment.author.uuid%}">{% cloudinary comment.author.photo %}</a>
+                            <a href="{% url 'socialp2p:profile' comment.author.uuid%}"><strong class="displayname">{{ comment.author.displayname }}</strong></a>
+                            <span class="time">{{ comment.datetime|localtime }}</span>
+                          </div>
+                          <div class="content">
+                            <p>{{ comment.content }}</p>
+                          </div>
+                        {% endif %}
+                      {% endfor %}
+                      <!-- Add new comment -->
+                      <form action="{% url 'socialp2p:new_comment' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <textarea name="content" class="post_input form-control" placeholder="Add comment here ..." rows="2" id="comment_text"></textarea>
+                        <input type="text" name="post" value="{{ post.uuid }}" style="display:none">
+                        <button class="btn btn-default" type="submit" id="comment_button">Reply</button>
+                      </form>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
     {% endif %}
+    <script >
+        $("#add").submit(function(event) {
+
+            event.preventDefault();
+        var user_uuid = "{{user.author.uuid}}"
+        var author_uuid = "{{user_profile.id}}"
+        var author_host = "{{user_profile.host}}"
+        var author_displayName = "{{user_profile.displayName}}"
+        var author_displayname = "{{user_profile.displayname}}"
+
+                var $form = $( this ),
+                    url = $form.attr( 'action' );          
+                $.ajax({
+            type:"POST", 
+            url,
+            data : {csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value, author : JSON.stringify(user_uuid), friend : JSON.stringify(author_uuid), host : JSON.stringify(author_host), displayname : author_displayname, displayName : author_displayName},
+                dataType : "json",
+            success: function( data ){
+                    alert("Added Friend");
+                } 
+        });
+             });
+
+        $(".show_comments").click(function() {
+            if ($(this).siblings(".comments").is(":hidden")) {
+                $(this).text("Hide Comments");
+            } else {
+                $(this).text("Show Comments");
+            }
+            $(this).siblings(".comments").slideToggle();
+        });
+    </script>
+    </div>
 </div>
 {% endblock %}

@@ -22,7 +22,7 @@ def profile(request, author_uuid):
             is_friend = False
             if Author.objects.filter(uuid=author_uuid).exists():
                 author = Author.objects.get(uuid=author_uuid)
-                posts = Post.objects.filter(author=author, visibility="PUBLIC")
+                posts = Post.objects.filter(author=author).order_by('-datetime')
                 if author.friends.filter(uuid=request.user.author.uuid).exists():
                     is_friend = True
 
