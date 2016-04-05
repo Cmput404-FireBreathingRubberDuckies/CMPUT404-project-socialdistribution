@@ -18,14 +18,14 @@ class FriendProfileSerializer(serializers.ModelSerializer):
 class AuthorSerializer(serializers.ModelSerializer):
     friends = FriendProfileSerializer(many=True)
     id = serializers.CharField(source='uuid')
-    profile_image_url = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
 
-    def get_profile_image_url(self, author_obj):
+    def get_image(self, author_obj):
         if author_obj.photo:
             return author_obj.photo.url
     class Meta:
         model = Author
-        fields = ('id', 'host', 'displayname', 'profile_image_url', 'url','friends')
+        fields = ('id', 'host', 'displayname', 'image', 'url', 'friends')
 
 class FriendRequestSerializer(serializers.Serializer):
     query = serializers.SerializerMethodField('friend_request')
@@ -70,7 +70,7 @@ class PostSerializer(serializers.Serializer):
     visibility = serializers.CharField()
     comments = serializers.SerializerMethodField('get_comment')
     count = serializers.SerializerMethodField('get_num_comments')
-    image_url = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
 
     def get_content_type(self, post_obj):
         markdown = post_obj.markdown
@@ -85,6 +85,6 @@ class PostSerializer(serializers.Serializer):
         comments = Comment.objects.filter(post=post_obj.id)
         return len(comments)
 
-    def get_image_url(self, post_obj):
+    def get_image(self, post_obj):
         if post_obj.image:
             return post_obj.image.url

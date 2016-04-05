@@ -46,7 +46,6 @@ def profile(request, author_uuid):
 
         reqs = FriendRequest.objects.filter(receiver=author, accepted=False)
         follow = FriendRequest.objects.filter(requester=author, accepted=False)
-        is_friend = False # need to fix this
         context = {'requests':reqs, 'follow':follow, 'posts': Post.objects.order_by('-datetime'), "activity" : activity}
         return render(request, 'socialp2p/profile.html', context)
 
