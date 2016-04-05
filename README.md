@@ -30,3 +30,7 @@ Contributors:
     Liwen Chen
     Ji Cheng
     Xiaohui Ma
+
+Demo Video
+==========
+[Cmput404ProjectVideo](https://archive.org/embed/Cmput404Project)
