@@ -122,12 +122,12 @@ def friend_request(request):
             author_uuid = json.loads(request.POST.get('friend'))
             author_host = json.loads(request.POST.get('host'))
 
-	    if request.POST.get('displayname'):
+            if request.POST.get('displayname'):
                 author_name = request.POST.get('displayname')
             if request.POST.get('displayName'):
                 author_name = request.POST.get('displayName')
 
-	    author_url = request.POST.get('author_url')
+            author_url = request.POST.get('author_url')
             current_author = Author.objects.get(uuid=user_uuid)
 
             if Author.objects.filter(uuid=author_uuid).exists():
@@ -148,30 +148,31 @@ def friend_request(request):
                 tempauthor = Author(user=tempuser, uuid=author_uuid, host=author_host)
                 friendRequest = FriendRequest(requester=current_author, receiver=tempauthor)
                 serializer = FriendRequestSerializer(friendRequest)
-		if author_host == 'project-c404.rhcloud.com/api':
-		    endpoint = '/friendrequest'
-		    auth_host_url = 'http://' + author_host
-		else:
-		    endpoint = '/api/friendrequest'
-		    auth_host_url = 'http://' + author_host + '/api'
+                if author_host == 'project-c404.rhcloud.com/api':
+                    endpoint = '/friendrequest'
+                    auth_host_url = 'http://' + author_host
+                else:
+                    endpoint = '/api/friendrequest'
+                    auth_host_url = 'http://' + author_host + '/api'
                 url = 'http://' + author_host + endpoint
                 for node in nodes:
                     if node.host == auth_host_url:
                         headers = {'Content-type': 'application/json'}
                         r = requests.post(url, auth=(node.access_username, node.access_password), json=serializer.data, headers=headers)
+                        print r.text
                         return Response(serializer.data, status=status.HTTP_200_OK)
                 return HttpResponse(status=status.HTTP_403_FORBIDDEN)
         else:
             remote_author = request.data.get('author')
-	    author_id = request.data.get('author').get('id')
+            author_id = request.data.get('author').get('id')
             friend_id = request.data.get('friend').get('id')
-	    local_author = Author.objects.get(uuid=friend_id)
+            local_author = Author.objects.get(uuid=friend_id)
 
             if remote_author.get('displayname'):
                 author_name = remote_author.get('displayname')
             if remote_author.get('displayName'):
                 author_name = remote_author.get('displayName')
-		
+
             tempuser = User(username=author_name, password="temppass")
             tempuser.save()
             tempauthor = Author(user=tempuser, uuid=author_id)
